@@ -1,4 +1,8 @@
 {
   "name": "web-client",
-  "packageManager": "yarn@3.0.2"
+  "packageManager": "yarn@3.0.2",
+  "dependencies": {
+    "babel-cli": "6",
+    "babel-preset-react-app": "3"
+  }
 }
