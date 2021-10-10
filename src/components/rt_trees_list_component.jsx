@@ -27,7 +27,7 @@ class TreesList extends React.Component {
     const rows = [];
 
     for (const tree of trees) {
-      const path = "/tree?id=" + tree.id;
+      const path = "/tree?id=" + tree.id + "&projectId=" + this.props.projectId;
       rows.push(<tr key={tree.id}><td><a href={path}>{tree.title}</a></td></tr>)
 
     }
