@@ -27,7 +27,7 @@ class ProjectsList extends React.Component {
     const rows = [];
 
     for (const projectId of projectIds) {
-      const path = "/projects/" + projectId;
+      const path = "/projects?id=" + projectId;
       rows.push(<tr key={projectId}><td><a href={path}>{projectId}</a></td></tr>)
     }
 

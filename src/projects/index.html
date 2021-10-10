@@ -10,13 +10,22 @@
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 </head>
 <body>
-  <h1>riskytrees - Now in technicolor</h1>
+  <h1>Trees</h1>
 
-  <div id="rt_projects_list_component">
+  <div id="rt_trees_list_component">
 
   </div>
 
+  <script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const trees_list = document.getElementById("rt_trees_list_component");
+    console.log(urlParams.get('id'))
+    trees_list.setAttribute("projectId", urlParams.get('id'));
+  </script>
+
   <!-- Load our React component. -->
-  <script src="./components/rt_projects_list_component.js"></script>
+  <script src="../components/rt_trees_list_component.js"></script>
 </body>
 </html>
