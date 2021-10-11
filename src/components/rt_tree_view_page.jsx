@@ -1,4 +1,52 @@
 
+class TreeViewer extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log(this.props.treeData)
+    this.state = { data: JSON.parse(this.props.treeData) };
+
+  }
+
+  componentDidMount() {
+    const nodes = [];
+
+    for (const node of this.state.data.nodes) {
+      nodes.push({
+        id: node.id,
+        label: node.title
+      })
+    }
+
+    // create an array with nodes
+     const visNodes = new vis.DataSet(nodes);
+
+     // create an array with edges
+     var edges = new vis.DataSet([
+     ]);
+
+     // create a network
+     var container = document.getElementById("mynetwork");
+     var data = {
+       nodes: visNodes,
+       edges: edges,
+     };
+     var options = {};
+     var network = new vis.Network(container, data, options);
+
+  }
+
+  render() {
+    return (
+      <>
+
+        <div id="mynetwork"></div>
+
+      </>
+    )
+  }
+}
+
+
 class TreeViewPage extends React.Component {
   constructor(props) {
     super(props);
@@ -14,13 +62,16 @@ class TreeViewPage extends React.Component {
     let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/trees/" + this.props.treeId);
     let data = await response.json();
     this.setState({
-      treeData: data
+      treeData: data.result
     })
   }
 
   render() {
     return (
+      <>
         <div>{JSON.stringify(this.state.treeData)}</div>
+        {this.state.treeData.nodes && <TreeViewer id="tree_viewer" treeData={JSON.stringify(this.state.treeData)} /> }
+      </>
     )
   }
 }
