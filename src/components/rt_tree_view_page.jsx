@@ -29,8 +29,7 @@ class TreeViewer extends React.Component {
      const visNodes = new vis.DataSet(nodes);
 
      // create an array with edges
-     var visEdges = new vis.DataSet([
-     ]);
+     var visEdges = new vis.DataSet(edges);
 
      // create a network
      var container = document.getElementById("mynetwork");
@@ -38,7 +37,20 @@ class TreeViewer extends React.Component {
        nodes: visNodes,
        edges: visEdges,
      };
-     var options = {};
+     const options = {
+      layout: {
+        hierarchical: {
+          direction: 'UD',
+          sortMethod: 'directed',
+          nodeSpacing: 150,
+          levelSeparation: 100
+        }
+      },
+      interaction: { dragNodes: false },
+      physics: {
+        enabled: false
+      }
+    }
      var network = new vis.Network(container, data, options);
 
   }
