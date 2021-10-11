@@ -9,26 +9,34 @@ class TreeViewer extends React.Component {
 
   componentDidMount() {
     const nodes = [];
+    const edges = [];
 
     for (const node of this.state.data.nodes) {
       nodes.push({
         id: node.id,
         label: node.title
       })
+
+      for (const child of node.children) {
+        edges.push({
+          from: node.id,
+          to: child
+        })
+      }
     }
 
     // create an array with nodes
      const visNodes = new vis.DataSet(nodes);
 
      // create an array with edges
-     var edges = new vis.DataSet([
+     var visEdges = new vis.DataSet([
      ]);
 
      // create a network
      var container = document.getElementById("mynetwork");
      var data = {
        nodes: visNodes,
-       edges: edges,
+       edges: visEdges,
      };
      var options = {};
      var network = new vis.Network(container, data, options);
