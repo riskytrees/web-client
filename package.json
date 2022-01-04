@@ -1,6 +1,6 @@
 {
   "name": "web-client",
-  "packageManager": "yarn@3.0.2",
+  "packageManager": "yarn@3.1.1",
   "dependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
