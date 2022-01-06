@@ -12,6 +12,10 @@
 <body>
   <h1>Trees</h1>
 
+  <div id="rt_create_tree_component">
+
+  </div>
+
   <div id="rt_trees_list_component">
 
   </div>
@@ -21,11 +25,16 @@
     const urlParams = new URLSearchParams(queryString);
 
     const trees_list = document.getElementById("rt_trees_list_component");
-    console.log(urlParams.get('id'))
+    const create_tree_widet = document.getElementById("rt_create_tree_component");
+
     trees_list.setAttribute("projectId", urlParams.get('id'));
+    create_tree_widet.setAttribute("projectId", urlParams.get('id'));
+
   </script>
 
   <!-- Load our React component. -->
   <script src="../components/rt_trees_list_component.js"></script>
+  <script src="../components/rt_create_tree_component.js"></script>
+
 </body>
 </html>
