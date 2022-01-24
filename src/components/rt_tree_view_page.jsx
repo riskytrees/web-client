@@ -1,3 +1,4 @@
+import Grid from "@mui/material/Grid";
 
 class TreeViewer extends React.Component {
   constructor(props) {
@@ -90,7 +91,18 @@ class TreeViewPage extends React.Component {
     return (
       <>
         <div>{JSON.stringify(this.state.treeData)}</div>
-        {this.state.treeData.nodes && <TreeViewer id="tree_viewer" treeData={JSON.stringify(this.state.treeData)} /> }
+
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+            Tree Viewer Pane
+          </Grid>
+          <Grid item xs={4}>
+            {this.state.treeData.nodes && <TreeViewer id="tree_viewer" treeData={JSON.stringify(this.state.treeData)} /> }
+          </Grid>
+          <Grid item xs={4}>
+            Node Editor Pane
+          </Grid>
+        </Grid>
       </>
     )
   }
