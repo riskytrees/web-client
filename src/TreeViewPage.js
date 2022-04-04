@@ -2,6 +2,7 @@ import React from 'react';
 import Grid from "@mui/material/Grid";
 
 import TreeViewer from './TreeViewer';
+import NodePane from './NodePane';
 
 class TreeViewPage extends React.Component {
   constructor(props) {
@@ -29,17 +30,23 @@ class TreeViewPage extends React.Component {
 
     return (
       <>
-        <div>{JSON.stringify(this.state.treeData)}</div>
+        <div class='RiskyNavBar'>
+        </div>
 
           <Grid container spacing={2}>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
+              <div class='RiskyPane'>
               Tree Viewer Pane
+              </div>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               {this.state.treeData && this.state.treeData.nodes && <TreeViewer id="tree_viewer" treeData={JSON.stringify(this.state.treeData)} /> }
             </Grid>
-            <Grid item xs={4}>
-              Node Editor Pane
+            <Grid item xs={3}>
+              <div class='RiskyPane'>
+                <NodePane>
+                </NodePane>
+              </div>
             </Grid>
           </Grid>
       </>

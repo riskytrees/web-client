@@ -63,7 +63,7 @@ class TreeViewer extends React.Component {
     return (
       <>
 
-        <div id="mynetwork" style={{height: 500}}></div>
+        <div id="mynetwork" class='RiskyTree'></div>
 
       </>
     )
