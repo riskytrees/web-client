@@ -1,4 +1,6 @@
-import Grid from "@mui/material/Grid";
+import * as Grid from "@mui/material";
+import React from 'react';
+import vis from 'vis-network';
 
 class TreeViewer extends React.Component {
   constructor(props) {
@@ -108,5 +110,4 @@ class TreeViewPage extends React.Component {
   }
 }
 
-const domContainer = document.querySelector('#rt_tree_view_page');
-ReactDOM.render(<TreeViewPage treeId={domContainer.getAttribute("treeId")} projectId={domContainer.getAttribute("projectId")} />, domContainer);
+export default TreeViewer;

@@ -1,3 +1,4 @@
+import React from 'react';
 
 class TreesList extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class TreesList extends React.Component {
     const rows = [];
 
     for (const tree of trees) {
-      const path = "../tree/index.html?id=" + tree.id + "&projectId=" + this.props.projectId;
+      const path = "../tree?id=" + tree.id + "&projectId=" + this.props.projectId;
       rows.push(<tr key={tree.id}><td><a href={path}>{tree.title}</a></td></tr>)
 
     }
@@ -43,5 +44,4 @@ class TreesList extends React.Component {
   }
 }
 
-const domContainer = document.querySelector('#rt_trees_list_component');
-ReactDOM.render(<TreesList projectId={domContainer.getAttribute("projectId")} />, domContainer);
+export default TreesList;
