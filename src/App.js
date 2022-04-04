@@ -1,6 +1,6 @@
 import HomePage from './HomePage';
 import Projects from './Projects';
-import TreeViewer from './TreeViewer';
+import TreeViewPage from './TreeViewPage';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ function App() {
         </Route>
         <Route path="/projects" element={<Projects />}>
         </Route>
-        <Route path="/tree" element={<TreeViewer />}>
+        <Route path="/tree" element={<TreeViewPage />}>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,6 +1,7 @@
-import * as Grid from "@mui/material";
 import React from 'react';
-import vis from 'vis-network';
+import { Network } from "vis-network/peer";
+import { DataSet } from "vis-data/peer";
+
 
 class TreeViewer extends React.Component {
   constructor(props) {
@@ -29,10 +30,10 @@ class TreeViewer extends React.Component {
     }
 
     // create an array with nodes
-     const visNodes = new vis.DataSet(nodes);
+    const visNodes = new DataSet(nodes);
 
      // create an array with edges
-     var visEdges = new vis.DataSet(edges);
+     var visEdges = new DataSet(edges);
 
      // create a network
      var container = document.getElementById("mynetwork");
@@ -54,7 +55,7 @@ class TreeViewer extends React.Component {
         enabled: false
       }
     }
-     var network = new vis.Network(container, data, options);
+     var network = new Network(container, data, options);
 
   }
 
@@ -62,49 +63,8 @@ class TreeViewer extends React.Component {
     return (
       <>
 
-        <div id="mynetwork"></div>
+        <div id="mynetwork" style={{height: 500}}></div>
 
-      </>
-    )
-  }
-}
-
-
-class TreeViewPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { treeData: {} };
-
-    this.loadTree()
-  }
-
-  async loadTree() {
-    const projectId = this.props.projectId;
-    const treeId = this.props.treeId;
-
-    let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/trees/" + this.props.treeId);
-    let data = await response.json();
-    this.setState({
-      treeData: data.result
-    })
-  }
-
-  render() {
-    return (
-      <>
-        <div>{JSON.stringify(this.state.treeData)}</div>
-
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            Tree Viewer Pane
-          </Grid>
-          <Grid item xs={4}>
-            {this.state.treeData.nodes && <TreeViewer id="tree_viewer" treeData={JSON.stringify(this.state.treeData)} /> }
-          </Grid>
-          <Grid item xs={4}>
-            Node Editor Pane
-          </Grid>
-        </Grid>
       </>
     )
   }
