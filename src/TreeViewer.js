@@ -8,7 +8,6 @@ class TreeViewer extends React.Component {
     super(props);
     console.log(this.props.treeData)
     this.state = { data: JSON.parse(this.props.treeData) };
-
   }
 
   componentDidMount() {
@@ -55,8 +54,22 @@ class TreeViewer extends React.Component {
         enabled: false
       }
     }
-     var network = new Network(container, data, options);
+    let network = new Network(container, data, options);
+    network.on('click', (properties) => {
+       var id = properties.nodes[0];
+       let selectedNodes = [];
+       for (const node of nodes) {
+         if (node.id === id) {
+           this.nodeClicked(node);
+         }
+       }
+    });
+  }
 
+  nodeClicked(node) {
+    if (this.props.onNodeClicked) {
+      this.props.onNodeClicked(node);
+    }
   }
 
   render() {

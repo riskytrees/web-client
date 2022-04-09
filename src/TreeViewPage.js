@@ -8,6 +8,8 @@ class TreeViewPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { treeData: {} };
+    this.onNodeClicked = this.onNodeClicked.bind(this);
+
     this.loadTree()
 
   }
@@ -26,6 +28,10 @@ class TreeViewPage extends React.Component {
     })
   }
 
+  onNodeClicked(data) {
+    console.log(data);
+  }
+
   render() {
 
     return (
@@ -40,7 +46,7 @@ class TreeViewPage extends React.Component {
               </div>
             </Grid>
             <Grid item xs={6}>
-              {this.state.treeData && this.state.treeData.nodes && <TreeViewer id="tree_viewer" treeData={JSON.stringify(this.state.treeData)} /> }
+              {this.state.treeData && this.state.treeData.nodes && <TreeViewer id="tree_viewer" onNodeClicked={this.onNodeClicked} treeData={JSON.stringify(this.state.treeData)} /> }
             </Grid>
             <Grid item xs={3}>
               <div class='RiskyPane'>
