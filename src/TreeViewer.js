@@ -6,18 +6,22 @@ import { DataSet } from "vis-data/peer";
 class TreeViewer extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props.treeData)
-    this.state = { data: JSON.parse(this.props.treeData) };
+    this.state = { data: this.props.treeData };
+
+    this.loadAndRender = this.loadAndRender.bind(this);
+
   }
 
-  componentDidMount() {
+  loadAndRender() {
+    console.log("render")
     const nodes = [];
     const edges = [];
 
     for (const node of this.state.data.nodes) {
       nodes.push({
         id: node.id,
-        label: node.title
+        label: node.title,
+        description: node.description
       })
 
       for (const child of node.children) {
@@ -64,11 +68,29 @@ class TreeViewer extends React.Component {
          }
        }
     });
+
+  }
+
+  componentDidMount() {
+    this.loadAndRender()
   }
 
   nodeClicked(node) {
     if (this.props.onNodeClicked) {
       this.props.onNodeClicked(node);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log(JSON.stringify(prevProps))
+
+    console.log(JSON.stringify(this.props))
+
+    if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+      console.log("test")
+      if (this.props.treeData) {
+        this.setState ({ data: this.props.treeData }, this.loadAndRender);
+      }
     }
   }
 
