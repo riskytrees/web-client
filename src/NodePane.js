@@ -17,12 +17,24 @@ class NodePane extends React.Component {
     this.state = { nodeId: null, nodeTitle: '', nodeDescription: '' };
 
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
+    this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
+
   }
 
   async handleNodeNameChange(event) {
     await this.setState({
       nodeTitle: event.target.value,
       nodeDescription: this.state.nodeDescription,
+      nodeId: this.state.nodeId
+    });
+
+    this.triggerOnNodeChanged();
+  }
+
+  async handleNodeDescriptionChange(event) {
+    await this.setState({
+      nodeTitle: this.state.nodeTitle,
+      nodeDescription: event.target.value,
       nodeId: this.state.nodeId
     });
 
@@ -58,19 +70,7 @@ class NodePane extends React.Component {
       <>
       <Stack>
       <TextField label="Node Name" onChange={this.handleNodeNameChange} variant="filled" value={this.state.nodeTitle} />
-      <FormControl>
-        <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="female"
-          name="radio-buttons-group"
-        >
-          <FormControlLabel value="female" control={<Radio />} label="Female" />
-          <FormControlLabel value="male" control={<Radio />} label="Male" />
-          <FormControlLabel value="other" control={<Radio />} label="Other" />
-        </RadioGroup>
-      </FormControl>
-      <TextField label="Description" variant="filled" />
+      <TextField label="Description" onChange={this.handleNodeDescriptionChange} variant="filled" value={this.state.nodeDescription} />
 
       </Stack>
 
