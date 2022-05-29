@@ -21,7 +21,8 @@ class TreeViewer extends React.Component {
       nodes.push({
         id: node.id,
         label: node.title,
-        description: node.description
+        description: node.description,
+        modelAttributes: node.modelAttributes
       })
 
       for (const child of node.children) {

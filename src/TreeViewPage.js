@@ -52,6 +52,9 @@ class TreeViewPage extends React.Component {
         const treeData = JSON.parse(JSON.stringify(this.state.treeData));
         treeData.nodes[idx]['title'] = newNodeData['title'];
         treeData.nodes[idx]['description'] = newNodeData['description'];
+        treeData.nodes[idx]['modelAttributes'] = newNodeData['modelAttributes'];
+
+        console.log("Tree Update")
         console.log(treeData)
         this.setState({
           treeData: treeData,
@@ -62,6 +65,7 @@ class TreeViewPage extends React.Component {
   }
 
   onNodeClicked(data) {
+    console.log(data)
     this.setState({
       treeData: this.state.treeData,
       selectedNode: data
