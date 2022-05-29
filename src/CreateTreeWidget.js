@@ -1,3 +1,4 @@
+import React from 'react';
 
 class CreateTreeWidget extends React.Component {
   constructor(props) {
@@ -6,6 +7,7 @@ class CreateTreeWidget extends React.Component {
   }
 
   async createTree() {
+
     const title = document.getElementById("treeNameField").value;
     const projectId = this.props.projectId;
 
@@ -16,9 +18,9 @@ class CreateTreeWidget extends React.Component {
         title
       })
     });
-    let data = await response.json();
+    const data = await response.json();
 
-    location.reload()
+    window.location.reload();
   }
 
   render() {
@@ -34,5 +36,4 @@ class CreateTreeWidget extends React.Component {
   }
 }
 
-const createButtonContainer = document.querySelector('#rt_create_tree_component');
-ReactDOM.render(<CreateTreeWidget projectId={domContainer.getAttribute("projectId")} />, createButtonContainer);
+export default CreateTreeWidget;

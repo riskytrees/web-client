@@ -1,3 +1,4 @@
+import React from 'react';
 
 class CreateProjectButton extends React.Component {
   constructor(props) {
@@ -17,8 +18,7 @@ class CreateProjectButton extends React.Component {
     });
     let data = await response.json();
 
-    location.reload()
-
+    window.location.reload()
   }
 
   render() {
@@ -34,5 +34,4 @@ class CreateProjectButton extends React.Component {
   }
 }
 
-const createButtonContainer = document.querySelector('#rt_create_project_button_component');
-ReactDOM.render(<CreateProjectButton />, createButtonContainer);
+export default CreateProjectButton;

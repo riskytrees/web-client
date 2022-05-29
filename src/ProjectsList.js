@@ -1,3 +1,4 @@
+import React from 'react';
 
 class ProjectsList extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class ProjectsList extends React.Component {
     const rows = [];
 
     for (const project of projects) {
-      const path = "projects/index.html?id=" + project.projectId;
+      const path = "projects?id=" + project.projectId;
       rows.push(<tr key={project.projectId}><td><a href={path}>{project.name} - {project.projectId}</a></td></tr>)
     }
 
@@ -42,5 +43,4 @@ class ProjectsList extends React.Component {
   }
 }
 
-const domContainer = document.querySelector('#rt_projects_list_component');
-ReactDOM.render(<ProjectsList />, domContainer);
+export default ProjectsList;
