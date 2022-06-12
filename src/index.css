@@ -28,7 +28,3 @@ code {
   height: calc(100vh - 50px);
 }
 
-/* Text Colors */
-body, #root, .MuiFormLabel-root.MuiInputLabel-root, .MuiInputBase-input.MuiOutlinedInput-input {
-  color: rgb(211, 211, 211)
-}

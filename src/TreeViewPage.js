@@ -10,6 +10,7 @@ class TreeViewPage extends React.Component {
     this.state = { treeData: {}, selectedNode: null };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
+    this.onAddNode = this.onAddNode.bind(this);
     this.localTreeNodeUpdate = this.localTreeNodeUpdate.bind(this);
     this.updateTree = this.updateTree.bind(this);
 
@@ -76,6 +77,33 @@ class TreeViewPage extends React.Component {
     this.localTreeNodeUpdate(data)
   }
 
+  onAddNode(parentNodeId) {
+    const treeData = JSON.parse(JSON.stringify(this.state.treeData));
+
+    let uuid = crypto.randomUUID();
+
+
+    treeData['nodes'].push({
+      title: "New Node",
+      description: "",
+      modelAttributes: {},
+      conditionAttribute: "",
+      id: uuid,
+      children: []
+    });
+
+    for (const [idx, node] of treeData.nodes.entries()) {
+      if (node.id === parentNodeId) {
+        treeData.nodes[idx]['children'].push(uuid);
+      }
+    }
+
+    this.setState({
+      treeData: treeData,
+      selectedNode: this.state.selectedNode
+    }, this.updateTree);
+  }
+
   render() {
 
     return (
@@ -94,7 +122,7 @@ class TreeViewPage extends React.Component {
             </Grid>
             <Grid item xs={3}>
               <div class='RiskyPane'>
-                <NodePane onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}>
+                <NodePane triggerAddNode={this.onAddNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}>
                 </NodePane>
               </div>
             </Grid>
