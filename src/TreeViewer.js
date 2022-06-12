@@ -13,7 +13,6 @@ class TreeViewer extends React.Component {
   }
 
   loadAndRender() {
-    console.log("render")
     const nodes = [];
     const edges = [];
 

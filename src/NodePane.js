@@ -9,6 +9,8 @@ import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 
+import { Button } from '@mui/material';
+
 import Stack from "@mui/material/Stack";
 
 class NodePane extends React.Component {
@@ -19,6 +21,13 @@ class NodePane extends React.Component {
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
     this.handleAttributeChange = this.handleAttributeChange.bind(this);
+    this.handleAddNode = this.handleAddNode.bind(this);
+  }
+
+  async handleAddNode(event) {
+    if (this.props.triggerAddNode) {
+      this.props.triggerAddNode(this.state.nodeId);
+    }
   }
 
   async handleNodeNameChange(event) {
@@ -127,6 +136,7 @@ class NodePane extends React.Component {
       <TextField label="Node Name" onChange={this.handleNodeNameChange} variant="filled" value={this.state.nodeTitle} />
       <TextField label="Description" onChange={this.handleNodeDescriptionChange} variant="filled" value={this.state.nodeDescription} />
       <div>{this.renderAttributes()}</div>
+      <Button onClick={this.handleAddNode}>Add Node</Button>
       </Stack>
 
       </>

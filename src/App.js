@@ -4,19 +4,32 @@ import TreeViewPage from './TreeViewPage';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import { createTheme, ThemeProvider }  from "@mui/material";
+
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
 function App() {
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />}>
-        </Route>
-        <Route path="/projects" element={<Projects />}>
-        </Route>
-        <Route path="/tree" element={<TreeViewPage />}>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme} >
+
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />}>
+          </Route>
+          <Route path="/projects" element={<Projects />}>
+          </Route>
+          <Route path="/tree" element={<TreeViewPage />}>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+
     </>
   );
 }
