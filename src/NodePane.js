@@ -22,11 +22,18 @@ class NodePane extends React.Component {
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
     this.handleAttributeChange = this.handleAttributeChange.bind(this);
     this.handleAddNode = this.handleAddNode.bind(this);
+    this.handleDeleteNode = this.handleDeleteNode.bind(this);
   }
 
   async handleAddNode(event) {
-    if (this.props.triggerAddNode) {
-      this.props.triggerAddNode(this.state.nodeId);
+    if (this.props.triggerAddDeleteNode) {
+      this.props.triggerAddDeleteNode(this.state.nodeId, true);
+    }
+  }
+
+  async handleDeleteNode(event) {
+    if (this.props.triggerAddDeleteNode) {
+      this.props.triggerAddDeleteNode(this.state.nodeId, false);
     }
   }
 
@@ -137,6 +144,8 @@ class NodePane extends React.Component {
       <TextField label="Description" onChange={this.handleNodeDescriptionChange} variant="filled" value={this.state.nodeDescription} />
       <div>{this.renderAttributes()}</div>
       <Button onClick={this.handleAddNode}>Add Node</Button>
+      <Button onClick={this.handleDeleteNode}>Delete Node</Button>
+
       </Stack>
 
       </>

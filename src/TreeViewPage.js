@@ -10,7 +10,7 @@ class TreeViewPage extends React.Component {
     this.state = { treeData: {}, selectedNode: null };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
-    this.onAddNode = this.onAddNode.bind(this);
+    this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
     this.localTreeNodeUpdate = this.localTreeNodeUpdate.bind(this);
     this.updateTree = this.updateTree.bind(this);
 
@@ -77,25 +77,41 @@ class TreeViewPage extends React.Component {
     this.localTreeNodeUpdate(data)
   }
 
-  onAddNode(parentNodeId) {
+  onAddOrDeleteNode(parentNodeId, isAddAction) {
     const treeData = JSON.parse(JSON.stringify(this.state.treeData));
-
     let uuid = crypto.randomUUID();
 
+    if (isAddAction) {
+      treeData['nodes'].push({
+        title: "New Node",
+        description: "",
+        modelAttributes: {},
+        conditionAttribute: "",
+        id: uuid,
+        children: []
+      });
+  
+    }
 
-    treeData['nodes'].push({
-      title: "New Node",
-      description: "",
-      modelAttributes: {},
-      conditionAttribute: "",
-      id: uuid,
-      children: []
-    });
+    let nodeToDelete = null;
 
     for (const [idx, node] of treeData.nodes.entries()) {
       if (node.id === parentNodeId) {
-        treeData.nodes[idx]['children'].push(uuid);
+        if (isAddAction) {
+          treeData.nodes[idx]['children'].push(uuid);
+        } else {
+          // Delete
+          nodeToDelete = idx;
+        }
       }
+
+      if (node.children.includes(parentNodeId)) {
+        treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
+      }
+    }
+
+    if (nodeToDelete !== null) {
+      treeData.nodes.splice(nodeToDelete, 1);
     }
 
     this.setState({
@@ -122,7 +138,7 @@ class TreeViewPage extends React.Component {
             </Grid>
             <Grid item xs={3}>
               <div class='RiskyPane'>
-                <NodePane triggerAddNode={this.onAddNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}>
+                <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}>
                 </NodePane>
               </div>
             </Grid>
