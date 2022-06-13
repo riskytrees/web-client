@@ -1,5 +1,6 @@
 import React from 'react';
 import Grid from "@mui/material/Grid";
+import {Stack} from "@mui/material";
 
 import TreeViewer from './TreeViewer';
 import NodePane from './NodePane';
@@ -127,22 +128,16 @@ class TreeViewPage extends React.Component {
         <div class='RiskyNavBar'>
         </div>
 
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
-              <div class='RiskyPane'>
-              Tree Viewer Pane
-              </div>
-            </Grid>
-            <Grid item xs={6}>
-              {this.state.treeData && this.state.treeData.nodes && <TreeViewer id="tree_viewer" onNodeClicked={this.onNodeClicked} treeData={this.state.treeData} /> }
-            </Grid>
-            <Grid item xs={3}>
-              <div class='RiskyPane'>
-                <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}>
-                </NodePane>
-              </div>
-            </Grid>
-          </Grid>
+          <Stack container spacing={2} direction="row">
+            <div class='RiskyPane'>
+            Tree Viewer Pane
+            </div>
+            {this.state.treeData && this.state.treeData.nodes && <TreeViewer id="tree_viewer" onNodeClicked={this.onNodeClicked} treeData={this.state.treeData} /> }
+            <div class='RiskyPane'>
+              <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}>
+              </NodePane>
+            </div>
+          </Stack>
       </>
     )
   }
