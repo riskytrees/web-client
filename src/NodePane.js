@@ -8,7 +8,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
-
+import Box from '@mui/material/Box';
+import Grid from "@mui/material/Grid";
 import { Button } from '@mui/material';
 
 import Stack from "@mui/material/Stack";
@@ -23,6 +24,7 @@ class NodePane extends React.Component {
     this.handleAttributeChange = this.handleAttributeChange.bind(this);
     this.handleAddNode = this.handleAddNode.bind(this);
     this.handleDeleteNode = this.handleDeleteNode.bind(this);
+    this.createAttribute = this.createAttribute.bind(this);
   }
 
   async handleAddNode(event) {
@@ -62,7 +64,10 @@ class NodePane extends React.Component {
   async handleAttributeChange(event) {
     const newModelAttributes = { ...this.state.modelAttributes };
 
-    if (newModelAttributes[event.target.id]['value_string']) {
+    
+    if (!newModelAttributes[event.target.id]) {
+      newModelAttributes[event.target.id] = {'value_string': event.target.value};
+    } else if (newModelAttributes[event.target.id]['value_string']) {
       newModelAttributes[event.target.id]['value_string'] = event.target.value;
     } else if (newModelAttributes[event.target.id]['value_int']) {
       newModelAttributes[event.target.id]['value_int'] = Number(event.target.value);
@@ -75,9 +80,9 @@ class NodePane extends React.Component {
       nodeDescription: this.state.nodeDescription,
       nodeId: this.state.nodeId,
       modelAttributes: newModelAttributes
-    });
+    }, () => this.triggerOnNodeChanged() );
 
-    this.triggerOnNodeChanged();
+
 
   }
 
@@ -128,12 +133,69 @@ class NodePane extends React.Component {
     if (this.state.modelAttributes) {
       for (const [key, value] of Object.entries(this.state.modelAttributes)) {
         attributes.push(
-          <TextField id={key} key={key} label={key} onChange={this.handleAttributeChange} variant="filled" value={this.getAttributeValue(value)} />
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <TextField id={key} key={key} label={key} onChange={this.handleAttributeChange} variant="filled" value={this.getAttributeValue(value)} /> 
+
+            </Grid>      
+            <Grid item xs={6}>
+              <Button onClick={() => {
+                this.deleteAttribute(key);
+              }}>Delete</Button>
+
+            </Grid>      
+
+          </Grid>
         )
       }
     }
 
     return attributes;
+  }
+
+  renderAddDeleteFields() {
+    return (
+      <>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <TextField label="Name" variant="filled" id='newAttributeNameField' />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField label="Value" variant="filled" id='newAttributeValueField' />
+        </Grid>
+        <Grid item xs={2}> </Grid>
+        <Grid item xs={8}>
+          <Button onClick={this.createAttribute}>Create Attribute</Button>
+        </Grid>
+        <Grid item xs={2}> </Grid>
+
+      </Grid>      
+
+      </>
+    )
+  }
+
+  createAttribute() {
+    const newAttributeNameField = document.getElementById('newAttributeNameField');
+    const newAttributeValueField = document.getElementById('newAttributeValueField');
+
+    console.log(newAttributeNameField.value);
+    console.log(newAttributeValueField.value);
+
+    this.handleAttributeChange({ target: { id: newAttributeNameField.value, value: newAttributeValueField.value } });
+  }
+
+  deleteAttribute(key) {
+    const newModelAttributes = { ...this.state.modelAttributes };
+
+    delete newModelAttributes[key];
+
+    this.setState({
+      nodeTitle: this.state.nodeTitle,
+      nodeDescription: this.state.nodeDescription,
+      nodeId: this.state.nodeId,
+      modelAttributes: newModelAttributes
+    }, () => this.triggerOnNodeChanged() );
   }
 
   render() {
@@ -143,6 +205,15 @@ class NodePane extends React.Component {
       <TextField label="Node Name" onChange={this.handleNodeNameChange} variant="filled" value={this.state.nodeTitle} />
       <TextField label="Description" onChange={this.handleNodeDescriptionChange} variant="filled" value={this.state.nodeDescription} />
       <div>{this.renderAttributes()}</div>
+
+      <Box height={"20px"}></Box>
+
+      {this.renderAddDeleteFields()}
+
+
+      <Box height={"20px"}></Box>
+
+
       <Button onClick={this.handleAddNode}>Add Node</Button>
       <Button onClick={this.handleDeleteNode}>Delete Node</Button>
 
