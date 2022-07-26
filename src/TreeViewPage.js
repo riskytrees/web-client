@@ -15,7 +15,7 @@ import NodePane from './NodePane';
 class TreeViewPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { treeData: {}, selectedNode: null, modalOpen: false };
+    this.state = { treeData: {}, selectedNode: null, modalOpen: false, models: [], selectedModel: "" };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -23,9 +23,24 @@ class TreeViewPage extends React.Component {
     this.updateTree = this.updateTree.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.modelDropdownChanged = this.modelDropdownChanged.bind(this);
 
     this.loadTree()
+    this.getListOfModels();
+    this.getCurrentModel();
+  }
 
+  async getCurrentModel() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+
+    let response = await fetch("http://localhost:8000/projects/" + projectId + "/model");
+    let data = await response.json();
+    this.setState({
+      selectedModel: data.result.modelId
+    })
   }
 
   async loadTree() {
@@ -138,7 +153,45 @@ class TreeViewPage extends React.Component {
     this.setState({modalOpen: false})
   }
 
+  async getListOfModels() {
+
+    let response = await fetch("http://localhost:8000/models/");
+    let data = await response.json();
+    this.setState({
+      models: data.result.models
+    })
+  }
+
+  modelDropdownChanged(event) {
+    this.updateModel(event.target.value)
+  };
+
+  async updateModel(modelId) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+    const treeId = urlParams.get('id');
+
+    let response = await fetch("http://localhost:8000/projects/" + projectId + "/model", {
+      method: 'PUT',
+      body: JSON.stringify({
+        modelId: modelId
+      })
+    });
+    this.setState({
+      selectedModel: modelId
+    })
+  }
+
   render() {
+    const modelDropdownItems = [];
+
+    if (this.state.models) {
+      for (const [idx, model] of this.state.models.entries()) {
+        modelDropdownItems.push(<MenuItem key={model.id} value={model.id}>{model.title}</MenuItem>)
+      }
+    }
 
     return (
       <>
@@ -170,13 +223,12 @@ class TreeViewPage extends React.Component {
           <Select
             labelId="model-dropdown-label"
             id="model-dropdown"
-            value={null}
+            value={this.state.selectedModel}
             label="Config"
-            onChange={null}
+            onChange={this.modelDropdownChanged}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {modelDropdownItems}
+            
           </Select>
           </Box>
         </Modal>
