@@ -124,7 +124,7 @@ class NodePane extends React.Component {
     }
     
 
-    return "Error"
+    return '';
   }
  
   renderAttributes() {

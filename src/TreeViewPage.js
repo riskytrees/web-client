@@ -43,6 +43,42 @@ class TreeViewPage extends React.Component {
     })
   }
 
+  async populateModelAttributes(modelId) {
+    const treeData = JSON.parse(JSON.stringify(this.state.treeData));
+    let relevantProperties = [];
+
+    // For now, add empty attributes for the appropriate model.
+    if (modelId === 'b9ff54e0-37cf-41d4-80ea-f3a9b1e3af74') {
+      // Attacker likelihood
+      relevantProperties = ['likelihoodOfFalure'];
+    } else if (modelId === 'f1644cb9-b2a5-4abb-813f-98d0277e42f2') {
+      // Attacker Risk
+      for (const [idx, node] of treeData.nodes.entries()) {
+        relevantProperties =  ['likelihoodOfFalure', 'benefitOfSuccess']
+      }
+    } else if (modelId === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
+      // EVITA
+      relevantProperties = ['safetyImpact', 'financialImpact', 'privacyImpact', 'operationalImpact'];
+      relevantProperties.concat(['time', 'expertise', 'knowledge', 'windowOfOpportunity', 'equipmentRequired']);
+    }
+
+    for (const [idx, node] of treeData.nodes.entries()) {
+      for (const modelProp of relevantProperties) {
+        if (treeData.nodes[idx]['modelAttributes'][modelProp] === undefined) {
+          treeData.nodes[idx]['modelAttributes'][modelProp] = {
+            value_int: null,
+            value_float: null,
+            value_string: null
+          };
+        }
+      }
+    }
+
+    this.setState({
+      treeData
+    }, this.updateTree);
+  }
+
   async loadTree() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -181,7 +217,11 @@ class TreeViewPage extends React.Component {
     });
     this.setState({
       selectedModel: modelId
+    }, () => {
+      this.populateModelAttributes(modelId);
     })
+
+    
   }
 
   render() {
