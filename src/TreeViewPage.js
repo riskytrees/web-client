@@ -50,11 +50,11 @@ class TreeViewPage extends React.Component {
     // For now, add empty attributes for the appropriate model.
     if (modelId === 'b9ff54e0-37cf-41d4-80ea-f3a9b1e3af74') {
       // Attacker likelihood
-      relevantProperties = ['likelihoodOfFalure'];
+      relevantProperties = ['likelihoodOfSuccess'];
     } else if (modelId === 'f1644cb9-b2a5-4abb-813f-98d0277e42f2') {
-      // Attacker Risk
+      // Risk of Attack
       for (const [idx, node] of treeData.nodes.entries()) {
-        relevantProperties =  ['likelihoodOfFalure', 'benefitOfSuccess']
+        relevantProperties =  ['likelihoodOfSuccess', 'impactToDefender']
       }
     } else if (modelId === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
       // EVITA
