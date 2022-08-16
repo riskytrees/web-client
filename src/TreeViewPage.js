@@ -24,6 +24,7 @@ class TreeViewPage extends React.Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.modelDropdownChanged = this.modelDropdownChanged.bind(this);
+    this.handleTreeNameChanged = this.handleTreeNameChanged.bind(this);
 
     this.loadTree()
     this.getListOfModels();
@@ -50,11 +51,11 @@ class TreeViewPage extends React.Component {
     // For now, add empty attributes for the appropriate model.
     if (modelId === 'b9ff54e0-37cf-41d4-80ea-f3a9b1e3af74') {
       // Attacker likelihood
-      relevantProperties = ['likelihoodOfFalure'];
+      relevantProperties = ['likelihoodOfSuccess'];
     } else if (modelId === 'f1644cb9-b2a5-4abb-813f-98d0277e42f2') {
-      // Attacker Risk
+      // Risk of Attack
       for (const [idx, node] of treeData.nodes.entries()) {
-        relevantProperties =  ['likelihoodOfFalure', 'benefitOfSuccess']
+        relevantProperties =  ['likelihoodOfSuccess', 'impactToDefender']
       }
     } else if (modelId === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
       // EVITA
@@ -224,6 +225,22 @@ class TreeViewPage extends React.Component {
     
   }
 
+  handleTreeNameChanged(event) {
+    const proposedName = event.target.value;
+    const treeData = JSON.parse(JSON.stringify(this.state.treeData));
+
+    treeData.title = proposedName;
+
+    this.setState({
+      treeData
+    }, this.updateTree);
+
+  }
+
+  getTreeName() {
+    return this.state.treeData.title;
+  }
+
   render() {
     const modelDropdownItems = [];
 
@@ -237,7 +254,7 @@ class TreeViewPage extends React.Component {
       <>
         <div class='RiskyNavBar'>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Button onClick={this.handleOpen} variant="text">TODO</Button>
+            <Button onClick={this.handleOpen} variant="text">{this.getTreeName()}</Button>
           </Box>
 
           <Modal
@@ -247,7 +264,7 @@ class TreeViewPage extends React.Component {
           aria-describedby="modal-modal-description"
           >
           <Box>
-          <TextField label="Tree Name" variant="filled" />
+          <TextField label="Tree Name" variant="filled" onChange={this.handleTreeNameChanged} value={this.getTreeName()} />
           <Select
             labelId="config-dropdown-label"
             id="config-dropdown"
@@ -255,9 +272,9 @@ class TreeViewPage extends React.Component {
             label="Config"
             onChange={null}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value={10}>Config One</MenuItem>
+            <MenuItem value={20}>Config Two</MenuItem>
+            <MenuItem value={30}>Config Three</MenuItem>
           </Select>
 
           <Select
