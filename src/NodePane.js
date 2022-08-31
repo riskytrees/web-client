@@ -11,13 +11,14 @@ import Radio from "@mui/material/Radio";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
 import { Button } from '@mui/material';
-
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Stack from "@mui/material/Stack";
 
 class NodePane extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null };
+    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '' };
 
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
@@ -25,6 +26,11 @@ class NodePane extends React.Component {
     this.handleAddNode = this.handleAddNode.bind(this);
     this.handleDeleteNode = this.handleDeleteNode.bind(this);
     this.createAttribute = this.createAttribute.bind(this);
+    this.getNodeType = this.getNodeType.bind(this);
+    this.nodeTypeDropdownChanged = this.nodeTypeDropdownChanged.bind(this);
+    this.isConditionNode = this.isConditionNode.bind(this);
+    this.getConditionValue = this.getConditionValue.bind(this);
+    this.handleConditionFieldChanged = this.handleConditionFieldChanged.bind(this);
   }
 
   async handleAddNode(event) {
@@ -81,9 +87,10 @@ class NodePane extends React.Component {
       nodeTitle: this.state.nodeTitle,
       nodeDescription: this.state.nodeDescription,
       nodeId: this.state.nodeId,
-      modelAttributes: newModelAttributes
-    }, () => {this.triggerOnNodeChanged()} );
 
+      modelAttributes: newModelAttributes,
+      conditionAttribute: this.state.conditionAttribute
+    }, () => this.triggerOnNodeChanged() );
 
 
   }
@@ -96,7 +103,8 @@ class NodePane extends React.Component {
         title: this.state.nodeTitle,
         description: this.state.nodeDescription,
         id: "" + this.state.nodeId,
-        modelAttributes: this.state.modelAttributes
+        modelAttributes: this.state.modelAttributes,
+        conditionAttribute: this.state.conditionAttribute
       });
     }
   }
@@ -104,13 +112,15 @@ class NodePane extends React.Component {
   componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       if (this.props.currentNode) {
+        console.log("didUpdate")
         console.log(this.props.currentNode)
 
         this.setState({
           nodeTitle: "" + this.props.currentNode.label,
           nodeDescription: "" + this.props.currentNode.description,
           nodeId: "" + this.props.currentNode.id,
-          modelAttributes: this.props.currentNode.modelAttributes
+          modelAttributes: this.props.currentNode.modelAttributes,
+          conditionAttribute: this.props.currentNode.conditionAttribute
         });
       }
     }
@@ -133,24 +143,27 @@ class NodePane extends React.Component {
  
   renderAttributes() {
     const attributes = [];
+    const attributesToIgnore = ['node_type'];
 
     if (this.state.modelAttributes) {
       for (const [key, value] of Object.entries(this.state.modelAttributes)) {
-        attributes.push(
-          <Grid container spacing={1}>
-            <Grid item xs={6}>
-              <TextField id={key} key={key} label={key} onChange={this.handleAttributeChange} variant="filled" value={this.getAttributeValue(value)} /> 
-
-            </Grid>      
-            <Grid item xs={6}>
-              <Button onClick={() => {
-                this.deleteAttribute(key);
-              }}>Delete</Button>
-
-            </Grid>      
-
-          </Grid>
-        )
+        if (!attributesToIgnore.includes(key)) {
+          attributes.push(
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
+                <TextField id={key} key={key} label={key} onChange={this.handleAttributeChange} variant="filled" value={this.getAttributeValue(value)} /> 
+  
+              </Grid>      
+              <Grid item xs={6}>
+                <Button onClick={() => {
+                  this.deleteAttribute(key);
+                }}>Delete</Button>
+  
+              </Grid>      
+  
+            </Grid>
+          )
+        }
       }
     }
 
@@ -202,12 +215,87 @@ class NodePane extends React.Component {
     }, () => this.triggerOnNodeChanged() );
   }
 
+  getNodeType() {
+    if (this.state.modelAttributes && this.state.modelAttributes['node_type']) {
+      return this.state.modelAttributes['node_type']['value_string'];
+    }
+
+    return null;
+  }
+
+  getConditionValue() {
+    if (this.state.conditionAttribute) {
+      return this.state.conditionAttribute;
+    }
+
+    return null;
+  }
+
+  nodeTypeDropdownChanged(event) {
+    const newType = event.target.value;
+
+    this.handleAttributeChange({
+      target: {
+        id: 'node_type',
+        value: newType
+      }
+    })
+
+    if (newType === 'condition' && !this.getConditionValue()) {
+      this.handleAttributeChange({
+        target: {
+          id: 'condition_value',
+          value: ''
+        }
+      })
+    }
+  }
+
+  isConditionNode() {
+    const nodeType = this.getNodeType();
+
+    return (nodeType === 'condition');
+  }
+
+  handleConditionFieldChanged(event) {
+    const newCondition = event.target.value;
+
+    this.setState({
+      conditionAttribute: newCondition
+    }, () => this.triggerOnNodeChanged() );
+  }
+
+  renderConditionSettingsIfApplicable() {
+    if (this.isConditionNode()) {
+      return <TextField label="Condition" onChange={this.handleConditionFieldChanged} variant="filled" value={this.getConditionValue()} />
+    }
+
+    return null;
+  }
+
   render() {
     return (
       <>
       <Stack>
       <TextField label="Node Name" onChange={this.handleNodeNameChange} variant="filled" value={this.state.nodeTitle} />
+      <Select
+            labelId="node-type-dropdown-label"
+            id="node-type-dropdown"
+            value={this.getNodeType()}
+            label="Node Type"
+            onChange={this.nodeTypeDropdownChanged}
+      >
+            <MenuItem value={"and"}>And</MenuItem>
+            <MenuItem value={"or"}>Or</MenuItem>
+            <MenuItem value={"condition"}>Condition</MenuItem>
+      </Select>
+
+      <div>{this.renderConditionSettingsIfApplicable()}</div>
+
+
       <TextField label="Description" onChange={this.handleNodeDescriptionChange} variant="filled" value={this.state.nodeDescription} />
+
+   
       <div>{this.renderAttributes()}</div>
 
       <Box height={"20px"}></Box>

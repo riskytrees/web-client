@@ -116,6 +116,7 @@ class TreeViewPage extends React.Component {
         treeData.nodes[idx]['title'] = newNodeData['title'];
         treeData.nodes[idx]['description'] = newNodeData['description'];
         treeData.nodes[idx]['modelAttributes'] = newNodeData['modelAttributes'];
+        treeData.nodes[idx]['conditionAttribute'] = newNodeData['conditionAttribute'];
 
         console.log("Tree Update")
         console.log(treeData)
