@@ -21,7 +21,8 @@ class TreeViewer extends React.Component {
         id: node.id,
         label: node.title,
         description: node.description,
-        modelAttributes: node.modelAttributes
+        modelAttributes: node.modelAttributes,
+        conditionAttribute: node.conditionAttribute
       })
 
       for (const child of node.children) {
