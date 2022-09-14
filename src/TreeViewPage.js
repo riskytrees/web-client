@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import {Stack} from "@mui/material";
 
 import TreeViewer from './TreeViewer';
+import TreeViewPane from './TreeViewPane';
 import NodePane from './NodePane';
 
 class TreeViewPage extends React.Component {
@@ -295,7 +296,8 @@ class TreeViewPage extends React.Component {
 
           <Stack container spacing={2} direction="row">
             <div class='RiskyPane'>
-            Tree Viewer Pane
+              <TreeViewPane nodes={this.state.treeData ? this.state.treeData.nodes : []}>
+              </TreeViewPane>
             </div>
             {this.state.treeData && this.state.treeData.nodes && <TreeViewer id="tree_viewer" onNodeClicked={this.onNodeClicked} treeData={this.state.treeData} /> }
             <div class='RiskyPane'>
