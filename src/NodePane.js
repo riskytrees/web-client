@@ -68,16 +68,18 @@ class NodePane extends React.Component {
   }
 
   async handleAttributeChange(event) {
+    console.log(event)
     const newModelAttributes = { ...this.state.modelAttributes };
 
+    console.log(event.target.value)
     
     if (!newModelAttributes[event.target.id]) {
       newModelAttributes[event.target.id] = {'value_string': event.target.value};
     } else if (newModelAttributes[event.target.id]['value_string']) {
       newModelAttributes[event.target.id]['value_string'] = event.target.value;
-    } else if (newModelAttributes[event.target.id]['value_int']) {
+    } else if ((typeof(newModelAttributes[event.target.id]['value_int']) == "number")) {
       newModelAttributes[event.target.id]['value_int'] = Number(event.target.value);
-    } else if (newModelAttributes[event.target.id]['value_float']) {
+    } else if ((typeof(newModelAttributes[event.target.id]['value_float']) == "number")) {
       newModelAttributes[event.target.id]['value_float'] = Number(event.target.value);
     }
 
@@ -90,11 +92,12 @@ class NodePane extends React.Component {
     }, () => this.triggerOnNodeChanged() );
 
 
-
   }
 
   triggerOnNodeChanged() {
     if (this.props.onNodeChanged) {
+      console.log("Change")
+      console.log(this.state.modelAttributes)
       this.props.onNodeChanged({
         title: this.state.nodeTitle,
         description: this.state.nodeDescription,
