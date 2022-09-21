@@ -67,15 +67,17 @@ class TreeViewPane extends React.Component {
     })
   }
 
-  generateLineItem(node) {
+  generateLineItem(node, level) {
     const toReturn = [];
     const key = "line-" + node.id;
 
-    toReturn.push(<ListItemButton id={key} key={key} onClick={() => {
+    const indentClass = 'RiskyIndentLevel' + level.toString()
+
+    toReturn.push(<ListItemButton sx={{ ml: (level * 10).toString() + 'px' }} alignItems="flex-start" id={key} key={key} onClick={() => {
         this.lineItemClicked(key)
     }}>
         <ListItemIcon></ListItemIcon>
-        <ListItemText primary={node.title} />
+        <ListItemText primary={node.title}/>
         {this.state[key] ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>)
 
@@ -85,7 +87,7 @@ class TreeViewPane extends React.Component {
                     {
                         node.children.map(child => {
                             const node = this.findNodeWithId(child);
-                            return this.generateLineItem(node)
+                            return this.generateLineItem(node, level + 1)
                         })
                     }
                 </List>
@@ -125,7 +127,7 @@ class TreeViewPane extends React.Component {
             console.log("Found root")
     
         
-            return this.generateLineItem(rootNode)
+            return this.generateLineItem(rootNode, 0)
         }
     }
 
@@ -137,13 +139,12 @@ class TreeViewPane extends React.Component {
     return (
       <>
         <List
-            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-            component="nav"
+            sx={{ width: '100%', maxWidth: 360 }}
             aria-labelledby="nested-list-subheader"
             disablePadding
             subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                    Nested List Items
+                <ListSubheader id="nested-list-subheader">
+                    Tree Viewer
                 </ListSubheader>
             }
         >
