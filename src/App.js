@@ -6,11 +6,34 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { createTheme, ThemeProvider }  from "@mui/material";
 
-
 const theme = createTheme({
   palette: {
     mode: 'dark',
   },
+  components: {
+    MuiListSubheader: {
+      styleOverrides: {
+        root: {
+          background: "transparent",
+          fontSize: "24px"
+        }
+      } 
+    },
+    MuiListItemText: {
+      styleOverrides: {
+        root: {
+          color: "white"
+        }
+      }
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          padding: 0
+        }
+      }
+    }
+  }
 });
 
 function App() {

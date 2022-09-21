@@ -87,7 +87,6 @@ class NodePane extends React.Component {
       nodeTitle: this.state.nodeTitle,
       nodeDescription: this.state.nodeDescription,
       nodeId: this.state.nodeId,
-
       modelAttributes: newModelAttributes,
       conditionAttribute: this.state.conditionAttribute
     }, () => this.triggerOnNodeChanged() );
