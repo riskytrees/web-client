@@ -1,5 +1,5 @@
 import HomePage from './HomePage';
-import Projects from './Projects';
+import Projects from './Projects.tsx';
 import TreeViewPage from './TreeViewPage';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';

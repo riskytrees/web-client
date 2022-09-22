@@ -16,7 +16,7 @@ class ProjectsList extends React.Component {
     if (data['result']['projects']) {
       for (const project of data['result']['projects']) {
         this.setState({
-          projects: this.state.projects.concat(project)
+          projects: this.state['projects'].concat(project)
         })
       }
     }
@@ -24,8 +24,8 @@ class ProjectsList extends React.Component {
 
   render() {
 
-    const projects = this.state.projects;
-    const rows = [];
+    const projects = this.state['projects'];
+    const rows: JSX.Element[] = [];
 
     for (const project of projects) {
       const path = "projects?id=" + project.projectId;

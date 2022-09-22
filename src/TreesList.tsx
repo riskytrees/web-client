@@ -1,6 +1,10 @@
 import React from 'react';
 
-class TreesList extends React.Component {
+class TreesList extends React.Component<{
+  projectId: string;
+}, {
+  trees: any[];
+}> {
   constructor(props) {
     super(props);
     this.state = { trees: [] };
@@ -25,7 +29,7 @@ class TreesList extends React.Component {
   render() {
 
     const trees = this.state.trees;
-    const rows = [];
+    const rows: JSX.Element[] = [];
 
     for (const tree of trees) {
       const path = "../tree?id=" + tree.id + "&projectId=" + this.props.projectId;
