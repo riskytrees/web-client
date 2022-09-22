@@ -8,7 +8,17 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from "@mui/material/Stack";
 
-class NodePane extends React.Component {
+class NodePane extends React.Component<{
+  currentNode: Record<string, any>;
+  triggerAddDeleteNode: Function;
+  onNodeChanged: Function;
+}, {
+  nodeId: string | null;
+  nodeTitle: string;
+  nodeDescription: string;
+  modelAttributes: any | null;
+  conditionAttribute: string;
+}> {
   constructor(props) {
     super(props);
     this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '' };
@@ -134,7 +144,7 @@ class NodePane extends React.Component {
   }
  
   renderAttributes() {
-    const attributes = [];
+    const attributes: JSX.Element[] = [];
     const attributesToIgnore = ['node_type'];
 
     if (this.state.modelAttributes) {
@@ -185,13 +195,15 @@ class NodePane extends React.Component {
   }
 
   createAttribute() {
-    const newAttributeNameField = document.getElementById('newAttributeNameField');
-    const newAttributeValueField = document.getElementById('newAttributeValueField');
+    const newAttributeNameField = document.getElementById('newAttributeNameField') as HTMLInputElement;
+    const newAttributeValueField = document.getElementById('newAttributeValueField') as HTMLInputElement;
 
-    console.log(newAttributeNameField.value);
-    console.log(newAttributeValueField.value);
-
-    this.handleAttributeChange({ target: { id: newAttributeNameField.value, value: newAttributeValueField.value } });
+    if (newAttributeNameField && newAttributeValueField) {
+      console.log(newAttributeNameField.value);
+      console.log(newAttributeValueField.value);
+  
+      this.handleAttributeChange({ target: { id: newAttributeNameField.value, value: newAttributeValueField.value } });
+    }
   }
 
   deleteAttribute(key) {

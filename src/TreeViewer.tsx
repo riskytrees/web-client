@@ -3,7 +3,16 @@ import { Network } from "vis-network/peer";
 import { DataSet } from "vis-data/peer";
 
 
-class TreeViewer extends React.Component {
+class TreeViewer extends React.Component<{
+  treeData: {
+    nodes: any[]
+  };
+  onNodeClicked: Function;
+}, {
+  data: {
+    nodes: any[]
+  };
+}> {
   constructor(props) {
     super(props);
     this.state = { data: this.props.treeData };
@@ -25,8 +34,8 @@ class TreeViewer extends React.Component {
   }
 
   loadAndRender() {
-    const nodes = [];
-    const edges = [];
+    const nodes: Record<string, any>[] = [];
+    const edges: Record<string, any>[] = [];
 
     for (const node of this.state.data.nodes) {
       nodes.push({
@@ -73,17 +82,19 @@ class TreeViewer extends React.Component {
         enabled: false
       }
     }
-    let network = new Network(container, data, options);
-    network.on('click', (properties) => {
-       var id = properties.nodes[0];
-       let selectedNodes = [];
-       for (const node of nodes) {
-         if (node.id === id) {
-           this.nodeClicked(node);
-         }
-       }
-    });
 
+    if (container) {
+      let network = new Network(container, data, options);
+      network.on('click', (properties) => {
+         var id = properties.nodes[0];
+         let selectedNodes = [];
+         for (const node of nodes) {
+           if (node.id === id) {
+             this.nodeClicked(node);
+           }
+         }
+      });
+    }
   }
 
   componentDidMount() {
@@ -113,7 +124,7 @@ class TreeViewer extends React.Component {
     return (
       <>
 
-        <div id="mynetwork" class='RiskyTree'></div>
+        <div id="mynetwork" className='RiskyTree'></div>
 
       </>
     )
