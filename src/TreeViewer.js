@@ -12,6 +12,18 @@ class TreeViewer extends React.Component {
 
   }
 
+  getShapeForNodeType(nodeModelAttributes) {
+
+    if (nodeModelAttributes && nodeModelAttributes['node_type'] && nodeModelAttributes['node_type']['value_string']) {
+      if (nodeModelAttributes['node_type']['value_string'] === 'and') {
+        return 'triangle';
+      } else if (nodeModelAttributes['node_type']['value_string'] === 'or') {
+        return 'triangleDown';
+      }
+    }
+    return 'square';
+  }
+
   loadAndRender() {
     const nodes = [];
     const edges = [];
@@ -22,7 +34,9 @@ class TreeViewer extends React.Component {
         label: node.title,
         description: node.description,
         modelAttributes: node.modelAttributes,
-        conditionAttribute: node.conditionAttribute
+        conditionAttribute: node.conditionAttribute,
+        size: 15,
+        shape: this.getShapeForNodeType(node.modelAttributes)
       })
 
       for (const child of node.children) {
