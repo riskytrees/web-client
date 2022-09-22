@@ -13,10 +13,27 @@ import TreeViewer from './TreeViewer';
 import TreeViewPane from './TreeViewPane';
 import NodePane from './NodePane';
 
-class TreeViewPage extends React.Component {
+class TreeViewPage extends React.Component<{
+
+}, {
+  treeData: {
+    title: string;
+    nodes: {
+      id: string;
+      title: string;
+    }[];
+  };
+  selectedNode: {
+    id: string;
+    title: string;
+  } | null;
+  modalOpen: boolean;
+  models: any[];
+  selectedModel: string;
+}> {
   constructor(props) {
     super(props);
-    this.state = { treeData: {}, selectedNode: null, modalOpen: false, models: [], selectedModel: "" };
+    this.state = { treeData: { title: '', nodes: [] }, selectedNode: null, modalOpen: false, models: [], selectedModel: "" };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -47,7 +64,7 @@ class TreeViewPage extends React.Component {
 
   async populateModelAttributes(modelId) {
     const treeData = JSON.parse(JSON.stringify(this.state.treeData));
-    let relevantProperties = [];
+    let relevantProperties: string[] = [];
 
     // For now, add empty attributes for the appropriate model.
     if (modelId === 'b9ff54e0-37cf-41d4-80ea-f3a9b1e3af74') {
@@ -244,7 +261,7 @@ class TreeViewPage extends React.Component {
   }
 
   render() {
-    const modelDropdownItems = [];
+    const modelDropdownItems: JSX.Element[] = [];
 
     if (this.state.models) {
       for (const [idx, model] of this.state.models.entries()) {
@@ -254,7 +271,7 @@ class TreeViewPage extends React.Component {
 
     return (
       <>
-        <div class='RiskyNavBar'>
+        <div className='RiskyNavBar'>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Button onClick={this.handleOpen} variant="text">{this.getTreeName()}</Button>
           </Box>
@@ -272,7 +289,7 @@ class TreeViewPage extends React.Component {
             id="config-dropdown"
             value={null}
             label="Config"
-            onChange={null}
+            onChange={undefined}
           >
             <MenuItem value={10}>Config One</MenuItem>
             <MenuItem value={20}>Config Two</MenuItem>
@@ -294,15 +311,15 @@ class TreeViewPage extends React.Component {
 
         </div>
 
-          <Stack container spacing={2} direction="row">
-            <div class='RiskyPane'>
-              <TreeViewPane nodes={this.state.treeData ? this.state.treeData.nodes : []}>
-              </TreeViewPane>
+          <Stack spacing={2} direction="row">
+            <div className='RiskyPane'>
+              <TreeViewPane nodes={this.state.treeData ? this.state.treeData.nodes : []}/>
             </div>
-            {this.state.treeData && this.state.treeData.nodes && <TreeViewer id="tree_viewer" onNodeClicked={this.onNodeClicked} treeData={this.state.treeData} /> }
-            <div class='RiskyPane'>
-              <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}>
-              </NodePane>
+            {this.state.treeData && this.state.treeData.nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeData={this.state.treeData} /> }
+            <div className='RiskyPane'>
+              {this.state.selectedNode &&
+              <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}/>
+              }
             </div>
           </Stack>
       </>

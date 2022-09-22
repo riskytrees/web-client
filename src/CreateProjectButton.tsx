@@ -7,18 +7,20 @@ class CreateProjectButton extends React.Component {
   }
 
   async createProject() {
-    const title = document.getElementById("createProjectButtonField").value;
+    const createProjectButtonField = document.getElementById("createProjectButtonField") as HTMLInputElement;
+    if (createProjectButtonField) {
+      const title = createProjectButtonField.value;
 
-    console.log("Create Project")
-    let response = await fetch("http://localhost:8000/projects", {
-      method: 'POST',
-      body: JSON.stringify({
-        title
-      })
-    });
-    let data = await response.json();
-
-    window.location.reload()
+      let response = await fetch("http://localhost:8000/projects", {
+        method: 'POST',
+        body: JSON.stringify({
+          title
+        })
+      });
+      let data = await response.json();
+  
+      window.location.reload()
+    }
   }
 
   render() {

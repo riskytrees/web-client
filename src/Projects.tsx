@@ -16,9 +16,9 @@ class Projects extends React.Component {
       <>
       <h1>Trees</h1>
 
-      <CreateTreeWidget id="rt_create_tree_component" />
+      <CreateTreeWidget projectId={this.state['projectId']}/>
 
-      <TreesList id="rt_trees_list_component" projectId={this.state.projectId} />
+      <TreesList projectId={this.state['projectId']} />
 
       <script>
 

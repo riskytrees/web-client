@@ -1,13 +1,5 @@
 import React from 'react';
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Popover from '@mui/material/Popover';
-import TextField from '@mui/material/TextField';
-import Modal from '@mui/material/Modal';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import {ListItemIcon, Stack} from "@mui/material"
+import {ListItemIcon} from "@mui/material"
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -16,10 +8,12 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
-import TreeViewer from './TreeViewer';
-import NodePane from './NodePane';
 
-class TreeViewPane extends React.Component {
+class TreeViewPane extends React.Component<{
+  nodes: any[];
+}, {
+  nodes: any[];
+}> {
   constructor(props) {
     super(props);
     this.state = { nodes: [] };
@@ -68,7 +62,7 @@ class TreeViewPane extends React.Component {
   }
 
   generateLineItem(node, level) {
-    const toReturn = [];
+    const toReturn: JSX.Element[] = [];
     const key = "line-" + node.id;
 
     const indentClass = 'RiskyIndentLevel' + level.toString()
@@ -106,7 +100,7 @@ class TreeViewPane extends React.Component {
         console.log(this.state.nodes)
     
         // Find the root node
-        const children = [];
+        const children: string[] = [];
         let rootNode = null;
     
         for (const node of this.state.nodes) {
@@ -124,9 +118,6 @@ class TreeViewPane extends React.Component {
     
     
         if (rootNode) {
-            console.log("Found root")
-    
-        
             return this.generateLineItem(rootNode, 0)
         }
     }
