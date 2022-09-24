@@ -80,13 +80,6 @@ const theme = createTheme({
   components: baseComponents
 });
 
-const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-  components: baseComponents
-});
-
 function App() {
   return (
     <>
