@@ -1,7 +1,9 @@
 import React from 'react';
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
@@ -12,6 +14,12 @@ import {Stack} from "@mui/material";
 import TreeViewer from './TreeViewer';
 import TreeViewPane from './TreeViewPane';
 import NodePane from './NodePane';
+
+declare module '@mui/material/Paper' {
+  interface PaperPropsVariantOverrides {
+    riskypane: true;
+  }
+}
 
 class TreeViewPage extends React.Component<{
 
@@ -270,7 +278,9 @@ class TreeViewPage extends React.Component<{
 
     return (
       <>
-        <div className='RiskyNavBar'>
+      
+        
+        <AppBar>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Button onClick={this.handleOpen} variant="text">{this.getTreeName()}</Button>
           </Box>
@@ -308,18 +318,20 @@ class TreeViewPage extends React.Component<{
           </Box>
         </Modal>
 
-        </div>
+        </AppBar>
 
-          <Stack spacing={2} direction="row">
-            <div className='RiskyPane'>
+          <Stack direction="row">
+            <Paper variant="riskypane">
               <TreeViewPane nodes={this.state.treeData ? this.state.treeData.nodes : []}/>
-            </div>
+            </Paper>
             {this.state.treeData && this.state.treeData.nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeData={this.state.treeData} /> }
-            <div className='RiskyPane'>
+
+            <Paper variant="riskypane">
               {
+
               <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}/>
               }
-            </div>
+            </Paper>
           </Stack>
       </>
     )
