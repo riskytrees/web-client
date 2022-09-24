@@ -25,7 +25,7 @@ class TreeViewPage extends React.Component<{
   };
   selectedNode: {
     id: string;
-    title: string;
+    label: string;
   } | null;
   modalOpen: boolean;
   models: any[];
@@ -149,7 +149,6 @@ class TreeViewPage extends React.Component<{
   onNodeClicked(data) {
     console.log(data)
     this.setState({
-      treeData: this.state.treeData,
       selectedNode: data
     });
   }
@@ -317,7 +316,7 @@ class TreeViewPage extends React.Component<{
             </div>
             {this.state.treeData && this.state.treeData.nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeData={this.state.treeData} /> }
             <div className='RiskyPane'>
-              {this.state.selectedNode &&
+              {
               <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}/>
               }
             </div>

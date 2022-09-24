@@ -111,10 +111,15 @@ class NodePane extends React.Component<{
     }
   }
 
+  componentDidLoad() {
+
+  }
+
   componentDidUpdate(prevProps) {
+    console.log("Did Update")
+    console.log(this.props)
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       if (this.props.currentNode) {
-        console.log("didUpdate")
         console.log(this.props.currentNode)
 
         this.setState({
@@ -224,7 +229,7 @@ class NodePane extends React.Component<{
       return this.state.modelAttributes['node_type']['value_string'];
     }
 
-    return null;
+    return '';
   }
 
   getConditionValue() {
