@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 
 class CreateTreeWidget extends React.Component<{
@@ -23,6 +24,27 @@ class CreateTreeWidget extends React.Component<{
         })
       });
       const data = await response.json();
+
+      console.log(data)
+
+      const newRootNodeId = uuidv4();
+      data['result']['nodes'] = [
+        {
+          title: "New Root node",
+          description: "This is the root node",
+          modelAttributes: {},
+          conditionAttribute: "",
+          id: newRootNodeId,
+          children: []
+        }
+      ]
+
+      data['result']['rootNodeId'] = newRootNodeId;
+
+      let addNodeResponse = await fetch("http://localhost:8000/projects/" + projectId + '/trees/' + data['result']['id'], {
+        method: 'PUT',
+        body: JSON.stringify(data['result'])
+      });
   
       window.location.reload();
     }
