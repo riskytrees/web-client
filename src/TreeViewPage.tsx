@@ -12,17 +12,12 @@ import {Stack} from "@mui/material";
 import TreeViewer from './TreeViewer';
 import TreeViewPane from './TreeViewPane';
 import NodePane from './NodePane';
+import TreeData from './interfaces/TreeData';
 
 class TreeViewPage extends React.Component<{
 
 }, {
-  treeData: {
-    title: string;
-    nodes: {
-      id: string;
-      title: string;
-    }[];
-  };
+  treeData: TreeData;
   selectedNode: {
     id: string;
     label: string;
