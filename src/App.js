@@ -1,7 +1,7 @@
 import HomePage from './HomePage';
 import Projects from './Projects.tsx';
 import TreeViewPage from './TreeViewPage';
-
+import { RiskyColors } from './colors.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { createTheme, ThemeProvider }  from "@mui/material";
@@ -18,14 +18,15 @@ const baseComponents = {
   MuiListItemText: {
     styleOverrides: {
       root: {
-        color: "white"
+        color: RiskyColors.uiColors.mainText,
       }
     }
   },
   MuiListItemButton: {
     styleOverrides: {
       root: {
-        padding: 0
+        padding: 0,
+        backgroundColor: RiskyColors.uiColors.mainNodeBackground,
       }
     }
   },
@@ -42,7 +43,7 @@ variants: [
   {
     props: { variant: 'riskypane' },
     style: {
-      backgroundColor: 'rgb(42, 42, 42)',
+      backgroundColor: RiskyColors.uiColors.paneBackground,
       height: 'calc(100vh - 60px)',
       padding: '15px',
       width: '316px',
@@ -56,21 +57,14 @@ variants: [
       root: {
         width: '100%',
         height: '60px',
-        backgroundColor: 'rgb(48, 48, 48)',
+        backgroundColor: RiskyColors.uiColors.headerBackground,
         backgroundImage: 'none',
         boxShadow: '2px 2px 4px 0px rgb(5 5 5 / 10%)',
 
       },
 },
   },
-  MuiStack: {
-    styleOverrides: {
-      root: {
-    
 
-      },
-},
-  }
 };
 
 const theme = createTheme({
