@@ -14,6 +14,8 @@ import {Stack} from "@mui/material";
 import TreeViewer from './TreeViewer';
 import TreeViewPane from './TreeViewPane';
 import NodePane from './NodePane';
+import TreeData from './interfaces/TreeData';
+import { RiskyRisk } from './Risk';
 
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
@@ -24,13 +26,7 @@ declare module '@mui/material/Paper' {
 class TreeViewPage extends React.Component<{
 
 }, {
-  treeData: {
-    title: string;
-    nodes: {
-      id: string;
-      title: string;
-    }[];
-  };
+  treeData: TreeData;
   selectedNode: {
     id: string;
     label: string;
@@ -39,6 +35,8 @@ class TreeViewPage extends React.Component<{
   models: any[];
   selectedModel: string;
 }> {
+  riskEngine: RiskyRisk;
+
   constructor(props) {
     super(props);
     this.state = { treeData: { title: '', nodes: [] }, selectedNode: null, modalOpen: false, models: [], selectedModel: "" };
@@ -55,6 +53,8 @@ class TreeViewPage extends React.Component<{
     this.loadTree()
     this.getListOfModels();
     this.getCurrentModel();
+
+    this.riskEngine = new RiskyRisk(this.state.treeData);
   }
 
   async getCurrentModel() {
@@ -117,10 +117,16 @@ class TreeViewPage extends React.Component<{
     let data = await response.json();
     this.setState({
       treeData: data.result
+    }, () => {
+      this.riskEngine = new RiskyRisk(this.state.treeData);
     })
+    
   }
 
+  // Called when any portion of the tree is updated and needs to be synced
   async updateTree() {
+    this.riskEngine = new RiskyRisk(this.state.treeData);
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -292,7 +298,7 @@ class TreeViewPage extends React.Component<{
           aria-describedby="modal-modal-description"
           >
           <Box>
-          <TextField label="Tree Name" variant="filled" onChange={this.handleTreeNameChanged} value={this.getTreeName()} />
+          <TextField label="Tree Name" variant="outlined" onChange={this.handleTreeNameChanged} defaultValue={this.getTreeName()} />
           <Select
             labelId="config-dropdown-label"
             id="config-dropdown"
@@ -328,8 +334,7 @@ class TreeViewPage extends React.Component<{
 
             <Paper variant="riskypane">
               {
-
-              <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode}/>
+              <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null , this.state.selectedModel)}/>
               }
             </Paper>
           </Stack>

@@ -8,10 +8,13 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from "@mui/material/Stack";
 
+import { NodeRiskResult } from './Risk';
+
 class NodePane extends React.Component<{
   currentNode: Record<string, any>;
   triggerAddDeleteNode: Function;
   onNodeChanged: Function;
+  currentNodeRisk: NodeRiskResult;
 }, {
   nodeId: string | null;
   nodeTitle: string;
@@ -74,17 +77,15 @@ class NodePane extends React.Component<{
     console.log(event)
     const newModelAttributes = { ...this.state.modelAttributes };
 
-    console.log(event.target.value)
     
-    if (!newModelAttributes[event.target.id]) {
-      newModelAttributes[event.target.id] = {'value_string': event.target.value};
-    } else if (newModelAttributes[event.target.id]['value_string']) {
-      newModelAttributes[event.target.id]['value_string'] = event.target.value;
-    } else if ((typeof(newModelAttributes[event.target.id]['value_int']) == "number")) {
-      newModelAttributes[event.target.id]['value_int'] = Number(event.target.value);
-    } else if ((typeof(newModelAttributes[event.target.id]['value_float']) == "number")) {
-      newModelAttributes[event.target.id]['value_float'] = Number(event.target.value);
+    if (event.target.value === '' || Number.isNaN(event.target.value) || event.target.value.endsWith('.')) {
+      newModelAttributes[event.target.id] = {'value_string': event.target.value, 'value_int': null, 'value_float': null};
+    } else if (Number.isInteger(Number(event.target.value))) {
+      newModelAttributes[event.target.id] = {'value_string': null, 'value_int': Number(event.target.value), 'value_float': null};
+    } else {
+      newModelAttributes[event.target.id] = {'value_string': null, 'value_int': null, 'value_float': Number(event.target.value)};
     }
+
 
     this.setState({
       nodeTitle: this.state.nodeTitle,
@@ -99,8 +100,6 @@ class NodePane extends React.Component<{
 
   triggerOnNodeChanged() {
     if (this.props.onNodeChanged) {
-      console.log("Change")
-      console.log(this.state.modelAttributes)
       this.props.onNodeChanged({
         title: this.state.nodeTitle,
         description: this.state.nodeDescription,
@@ -137,9 +136,9 @@ class NodePane extends React.Component<{
     if (valueDict) {
       if (valueDict['value_string']) {
         return "" + valueDict['value_string'];
-      } else if (valueDict['value_int']) {
+      } else if (typeof(valueDict['value_int']) === 'number') {
         return Number(valueDict['value_int']);
-      } else if (valueDict['value_float']) {
+      } else if (typeof(valueDict['value_float']) === 'number') {
         return Number(valueDict['value_float']);
       }
     }
@@ -311,6 +310,12 @@ class NodePane extends React.Component<{
 
       {this.renderAddDeleteFields()}
 
+      <Box height={"20px"}></Box>
+
+
+      <TextField InputProps={{
+            readOnly: true,
+          }} label="Computed Risk" value={this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : ''}></TextField>
 
       <Box height={"20px"}></Box>
 
