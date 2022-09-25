@@ -51,6 +51,6 @@ it('Lets you compute attacker likelihood at node locations', () => {
 
     tree['nodes'][0]['modelAttributes']['node_type']['value_string'] = 'or';
 
-    expect(riskyRisk.computeRiskForNode("000", attackerLikelihoodModel)['computed']['likelihoodOfSuccess']).toEqual(1);
+    expect(riskyRisk.computeRiskForNode("000", attackerLikelihoodModel)['computed']['likelihoodOfSuccess']).toEqual(0.75);
 
 });

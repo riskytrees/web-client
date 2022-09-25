@@ -1,5 +1,10 @@
 import TreeData from './interfaces/TreeData';
 
+export interface NodeRiskResult {
+    computed: Record<string, Record<string, any>>;
+    interface: Record<string, any>
+}
+
 export class RiskyRisk {
     constructor(private treeData: TreeData ) {
     }
@@ -46,15 +51,21 @@ export class RiskyRisk {
                 result = node.modelAttributes['likelihoodOfSuccess']['value_float'];
             } else {
                 // Need to inherit from children
-                const nodeType = node.modelAttributes['node_type']['value_string'];
+                let nodeType = '';
+                if (node.modelAttributes['node_type']) {
+                    nodeType = node.modelAttributes['node_type']['value_string'];
+                }
     
                 const childLikelihoodValues = node.children.map(childId => this.computeAttackerLikelihood(childId));
     
                 if (nodeType === 'and') {
                     result = childLikelihoodValues.reduce((acc, val) => acc * val['computed']['likelihoodOfSuccess'], 1);
-                } else if (nodeType === 'or') {
+                } else {
                     // Assumes mutual exclusion. Max of 1
-                    result = Math.min(1.0, childLikelihoodValues.reduce((acc, val) => acc + val['computed']['likelihoodOfSuccess'], 0));
+                    result = Math.min(1.0, childLikelihoodValues.reduce((acc, val) => {
+                        const jointProb = acc * val['computed']['likelihoodOfSuccess'];
+                        return acc + val['computed']['likelihoodOfSuccess'] - jointProb;
+                    }, 0));
                 }
             }
         }
