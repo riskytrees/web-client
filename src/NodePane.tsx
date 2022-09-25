@@ -78,7 +78,7 @@ class NodePane extends React.Component<{
     const newModelAttributes = { ...this.state.modelAttributes };
 
     
-    if (event.target.value === '' || Number.isNaN(event.target.value) || event.target.value.endsWith('.')) {
+    if (event.target.value === '' || Number.isNaN(Number(event.target.value)) || event.target.value.endsWith('.')) {
       newModelAttributes[event.target.id] = {'value_string': event.target.value, 'value_int': null, 'value_float': null};
     } else if (Number.isInteger(Number(event.target.value))) {
       newModelAttributes[event.target.id] = {'value_string': null, 'value_int': Number(event.target.value), 'value_float': null};
