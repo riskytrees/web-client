@@ -27,8 +27,7 @@ export class RiskyRisk {
             return this.computeAttackRisk(nodeId);
         } else if (riskModel === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
             // EVITA
-            const relevantProperties = ['safetyImpact', 'financialImpact', 'privacyImpact', 'operationalImpact'];
-            relevantProperties.concat(['time', 'expertise', 'knowledge', 'windowOfOpportunity', 'equipmentRequired']);
+            return this.computeEVITARisk(nodeId);
         }
     }
 
@@ -40,6 +39,140 @@ export class RiskyRisk {
         }
 
         return null;
+    }
+
+    getInheritedEVITAValue(children, nodeType: string, attribute: string) {
+        let result = null
+        if (nodeType === 'and') {
+            result = children.reduce((l, r) => l.computed[attribute]['value_int'] > r.computed[attribute]['value_int'] ? l.computed[attribute]['value_int'] : r.computed[attribute]['value_int'])
+        } else if (nodeType === 'or') {
+            result = children.reduce((l, r) => l.computed[attribute]['value_int'] < r.computed[attribute]['value_int'] ? l.computed[attribute]['value_int'] : r.computed[attribute]['value_int'])
+        }
+
+        return result;
+    }
+
+    getEVITARiskLevel(combinedAttackProbability: number, severity: number) {
+        if (combinedAttackProbability === null || severity === null) {
+            return null;
+        }
+
+        const evitaTable = [
+            [0, 0, 1, 2, 3],
+            [0, 1, 2, 3, 4],
+            [1, 2, 3, 4, 5],
+            [2, 3, 4, 5, 6]
+        ];  
+
+        return evitaTable[severity - 1][combinedAttackProbability - 1];
+    }
+
+    computeEVITARisk(nodeId: string) {
+        const node = this.getNode(nodeId);
+
+        // Severity
+        let safetyImpact =  null;
+        let financialImpact = null;
+        let privacyImpact = null;
+        let operationalImpact = null;
+
+        // Attack Potential
+        let time = null;
+        let expertise = null;
+        let knowledge = null;
+        let windowOfOpportunity = null;
+        let equipmentRequired = null;
+
+        // Risk
+        let riskFinancial = null;
+        let riskOperational = null;
+        let riskPrivacy = null;
+        let riskSafety = null;
+
+        if (node) {
+            safetyImpact = node.modelAttributes['safetyImpact'] ? node.modelAttributes['safetyImpact']['value_int'] : null;
+            financialImpact = node.modelAttributes['financialImpact'] ? node.modelAttributes['financialImpact']['value_int'] : null;
+            privacyImpact = node.modelAttributes['privacyImpact'] ? node.modelAttributes['privacyImpact']['value_int'] : null;
+            operationalImpact = node.modelAttributes['operationalImpact'] ? node.modelAttributes['operationalImpact']['value_int'] : null;
+
+            const childValues = node.children.map(childId => this.computeEVITARisk(childId));
+            let nodeType = node.modelAttributes['node_type'] ? node.modelAttributes['node_type']['value_string'] : null; 
+
+            if (node.modelAttributes['time']) {
+                time = node.modelAttributes['time'];
+            } else {
+                time = this.getInheritedEVITAValue(childValues, nodeType, 'time');
+            }
+
+            if (node.modelAttributes['expertise']) {
+                expertise = node.modelAttributes['expertise'];
+            } else {
+                expertise = this.getInheritedEVITAValue(childValues, nodeType, 'expertise');
+            }
+
+            if (node.modelAttributes['knowledge']) {
+                knowledge = node.modelAttributes['knowledge'];
+            } else {
+                knowledge = this.getInheritedEVITAValue(childValues, nodeType, 'knowledge');
+            }
+
+            if (node.modelAttributes['windowOfOpportunity']) {
+                windowOfOpportunity = node.modelAttributes['windowOfOpportunity'];
+            } else {
+                windowOfOpportunity = this.getInheritedEVITAValue(childValues, nodeType, 'windowOfOpportunity');
+            }
+
+            if (node.modelAttributes['equipmentRequired']) {
+                equipmentRequired = node.modelAttributes['equipmentRequired'];
+            } else {
+                // TODO inherit
+                equipmentRequired = this.getInheritedEVITAValue(childValues, nodeType, 'equipmentRequired');
+            }
+        }
+
+        let totalAttackPotential = time + expertise + knowledge + windowOfOpportunity + equipmentRequired;
+        let attackProbability = null;
+        if (totalAttackPotential >= 25) {
+            attackProbability = 1;
+        } else if (totalAttackPotential >= 20) {
+            attackProbability = 2;
+        } else if (totalAttackPotential >= 14) {
+            attackProbability = 3;
+        } else if (totalAttackPotential >= 10) {
+            attackProbability = 2;
+        } else {
+            attackProbability = 1;
+        }
+
+        riskFinancial = this.getEVITARiskLevel(attackProbability, financialImpact);
+        riskOperational = this.getEVITARiskLevel(attackProbability, operationalImpact);
+        riskPrivacy = this.getEVITARiskLevel(attackProbability, privacyImpact);
+        riskSafety = this.getEVITARiskLevel(attackProbability, safetyImpact);
+
+        return {
+            computed: {
+                safetyImpact,
+                financialImpact,
+                privacyImpact,
+                operationalImpact,
+
+                time,
+                expertise,
+                knowledge,
+                windowOfOpportunity,
+                equipmentRequired,
+
+                riskFinancial,
+                riskOperational,
+                riskPrivacy,
+                riskSafety,
+
+                singleValueDisplay: 'RF' + riskFinancial + ' RO' + riskOperational + ' RP' + riskPrivacy + ' RS' + riskSafety
+            },
+            interface: {
+                primary: 'singleValueDisplay'
+            }
+        }
     }
 
     computeAttackRisk(nodeId: string) {
