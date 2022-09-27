@@ -1,7 +1,7 @@
 import TreeData from './interfaces/TreeData';
 
 export interface NodeRiskResult {
-    computed: Record<string, Record<string, any>>;
+    computed: Record<string, string | number>;
     interface: Record<string, any>
 }
 
@@ -24,7 +24,7 @@ export class RiskyRisk {
             return this.computeAttackerLikelihood(nodeId);
         } else if (riskModel === 'f1644cb9-b2a5-4abb-813f-98d0277e42f2') {
             // Risk of Attack
-            const relevantProperties = ['likelihoodOfSuccess', 'impactToDefender']
+            return this.computeAttackRisk(nodeId);
         } else if (riskModel === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
             // EVITA
             const relevantProperties = ['safetyImpact', 'financialImpact', 'privacyImpact', 'operationalImpact'];
@@ -40,6 +40,29 @@ export class RiskyRisk {
         }
 
         return null;
+    }
+
+    computeAttackRisk(nodeId: string) {
+        const node = this.getNode(nodeId);
+        const likelihood = this.computeAttackerLikelihood(nodeId).computed.likelihoodOfSuccess;
+        let impact = null;
+
+        if (node) {
+            if (node.modelAttributes['impactToDefender']) {
+                impact = node.modelAttributes['impactToDefender']['value_float'];
+            }
+        }
+
+        return {
+            computed: {
+                likelihoodOfSuccess: likelihood,
+                impactToDefender: impact,
+                risk: impact ? likelihood * impact : null
+            },
+            interface: {
+                primary: 'risk'
+            }
+        }
     }
 
     computeAttackerLikelihood(nodeId: string) {
@@ -72,7 +95,7 @@ export class RiskyRisk {
 
         return {
             computed: {
-                likelihoodOfSuccess: result
+                likelihoodOfSuccess: result as number
             },
             interface: {
                 primary: 'likelihoodOfSuccess'
