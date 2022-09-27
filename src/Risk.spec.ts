@@ -104,3 +104,74 @@ it('Lets you compute attack risk at node locations', () => {
     expect(riskyRisk.computeRiskForNode("000", attackRiskModel)['computed']['risk']).toEqual(75);
 
 });
+
+it('Lets you compute evita risk at node locations', () => {
+    const evitaRiskModel = 'bf4397f7-93ae-4502-a4a2-397f40f5cc49';
+
+    const tree = {
+        title: "test",
+        nodes: [{
+            id: '000',
+            title: "root",
+            children: ["001", "002"],
+            modelAttributes: {
+                'node_type': {
+                    'value_string': 'and'
+                }, 'safetyImpact': {
+                    'value_int': 1
+                }, 'privacyImpact': {
+                    'value_int': 2
+                }, 'financialImpact': {
+                    'value_int': 3
+                }, 'operationalImpact': {
+                    'value_int': 4
+                }
+            }
+        }, {
+            id: '001',
+            title: "child",
+            children: [],
+            modelAttributes: {
+                'time': {
+                    'value_int': 4
+                }, 'expertise': {
+                    'value_int': 4
+                }, 'knowledge': {
+                    'value_int': 4
+                }, 'windowOfOpportunity': {
+                    'value_int': 4
+                }, 'equipmentRequired': {
+                    'value_int': 4
+                }
+            }
+        }, {
+            id: '002',
+            title: "child2",
+            children: [],
+            modelAttributes: {
+                'time': {
+                    'value_int': 20
+                }, 'expertise': {
+                    'value_int': 20
+                }, 'knowledge': {
+                    'value_int': 20
+                }, 'windowOfOpportunity': {
+                    'value_int': 20
+                }, 'equipmentRequired': {
+                    'value_int': 20
+                }
+            }
+        }]
+    };
+
+    const riskyRisk = new RiskyRisk(tree);
+ 
+    // Combined potential of left node: 20   --> 2
+    // Combined potential of right node: 100 --> 1
+    expect(riskyRisk.computeRiskForNode("000", evitaRiskModel)['computed']['singleValueDisplay']).toEqual('RF1 RO2 RP0 RS0');
+
+    tree['nodes'][0]['modelAttributes']['node_type']['value_string'] = 'or';
+
+    expect(riskyRisk.computeRiskForNode("000", evitaRiskModel)['computed']['singleValueDisplay']).toEqual('RF2 RO3 RP1 RS0');
+
+});
