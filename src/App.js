@@ -52,10 +52,11 @@ variants: [
     props: { variant: 'riskypane' },
     style: {
       backgroundColor: RiskyColors.uiColors.paneBackground,
-      height: 'calc(100vh - 60px)',
+      height: 'calc(100vh - 90px)',
       padding: '15px',
       width: '316px',
       marginTop: '60px',
+
     },
 }, {
   props: { variant: 'treearea' },
