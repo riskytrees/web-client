@@ -17,12 +17,6 @@ import NodePane from './NodePane';
 import TreeData from './interfaces/TreeData';
 import { RiskyRisk } from './Risk';
 
-declare module '@mui/material/Paper' {
-  interface PaperPropsVariantOverrides {
-    riskypane: true;
-  }
-}
-
 class TreeViewPage extends React.Component<{
 
 }, {

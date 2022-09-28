@@ -11,7 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+/*
 .RiskyPane {
   background-color: rgb(42, 42, 42);
   height: calc(100vh - 50px);
@@ -24,9 +24,10 @@ code {
   height: 50px;
   background-color: rgb(48, 48, 48);
 }
-
+*/
 .RiskyTree {
-  height: calc(100vh - 50px);
+  height: calc(100vh);
   width: 100%;
+  background-color: #191919;
 }
 
