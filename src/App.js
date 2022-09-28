@@ -5,6 +5,7 @@ import { RiskyColors } from './colors.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { createTheme, ThemeProvider }  from "@mui/material";
+import { calculateNewValue } from '@testing-library/user-event/dist/utils';
 
 const baseComponents = {
   MuiListSubheader: {
@@ -30,6 +31,13 @@ const baseComponents = {
       }
     }
   },
+  MuiButton: {
+    styleOverrides: {
+      root: {
+        backgroundColor: RiskyColors.uiColors.buttonSecondary,
+      }
+    }
+  },
   MuiPaper: {
     styleOverrides: {
       root: {
@@ -49,6 +57,13 @@ variants: [
       width: '316px',
       marginTop: '60px',
     },
+}, {
+  props: { variant: 'treearea' },
+  style: {
+    backgroundColor: RiskyColors.uiColors.mainBackground,
+    height: 'calc(100vh)',
+    width: '100%',
+  },
 }
 ]
   },
@@ -96,3 +111,4 @@ function App() {
 }
 
 export default App;
+

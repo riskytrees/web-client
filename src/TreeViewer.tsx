@@ -1,6 +1,8 @@
 import React from 'react';
 import { Network } from "vis-network/peer";
 import { DataSet } from "vis-data/peer";
+import Container, { ContainerProps } from "@mui/material/Container";
+import Paper from '@mui/material/Paper';
 
 
 class TreeViewer extends React.Component<{
@@ -124,8 +126,8 @@ class TreeViewer extends React.Component<{
     return (
       <>
 
-        <div id="mynetwork" className='RiskyTree'></div>
-
+        {/*<div id="mynetwor" className='RiskyTree'></div> */}
+        <Paper variant="treearea" id="mynetwork"></Paper>
       </>
     )
   }
