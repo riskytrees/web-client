@@ -43,6 +43,19 @@ export class RiskyRisk {
 
     getInheritedEVITAValue(children, nodeType: string, attribute: string) {
         let result = null
+
+        // If there are no children then inherit nothing.
+        if (children.length === 0) {
+            return null;
+        }
+
+        // All children must have valid properties otherwise return null
+        for (const child of children) {
+            if (!child.computed[attribute] || !child.computed[attribute]['value_int']) {
+                return null;
+            }
+        }
+
         if (nodeType === 'and') {
             result = children.reduce((l, r) => l.computed[attribute]['value_int'] > r.computed[attribute]['value_int'] ? l.computed[attribute]['value_int'] : r.computed[attribute]['value_int'])
         } else if (nodeType === 'or') {

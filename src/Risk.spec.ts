@@ -175,3 +175,78 @@ it('Lets you compute evita risk at node locations', () => {
     expect(riskyRisk.computeRiskForNode("000", evitaRiskModel)['computed']['singleValueDisplay']).toEqual('RF2 RO3 RP1 RS0');
 
 });
+
+
+it('works without modelAttributes', () => {
+    const evitaRiskModel = 'bf4397f7-93ae-4502-a4a2-397f40f5cc49';
+
+    const tree = {
+        title: "test",
+        nodes: [{
+            id: '000',
+            title: "root",
+            children: ["001"],
+            modelAttributes: {
+                'node_type': {
+                    'value_string': 'and'
+                }, 'safetyImpact': {
+                    'value_int': 1
+                }, 'privacyImpact': {
+                    'value_int': 2
+                }, 'financialImpact': {
+                    'value_int': 3
+                }, 'operationalImpact': {
+                    'value_int': 4
+                }
+            }
+        }, {
+            id: '001',
+            title: "child",
+            children: [],
+            modelAttributes: {
+
+            }
+        }]
+    };
+
+    const riskyRisk = new RiskyRisk(tree);
+ 
+    // Combined potential of left node: 20   --> 2
+    // Combined potential of right node: 100 --> 1
+    expect(riskyRisk.computeRiskForNode("000", evitaRiskModel)['computed']['singleValueDisplay']).toContain('R')
+    expect(riskyRisk.computeRiskForNode("001", evitaRiskModel)['computed']['singleValueDisplay']).toContain('R')
+
+});
+
+it('works without children', () => {
+    const evitaRiskModel = 'bf4397f7-93ae-4502-a4a2-397f40f5cc49';
+
+    const tree = {
+        title: "test",
+        nodes: [{
+            id: '000',
+            title: "root",
+            children: [],
+            modelAttributes: {
+                'node_type': {
+                    'value_string': 'and'
+                }, 'safetyImpact': {
+                    'value_int': 1
+                }, 'privacyImpact': {
+                    'value_int': 2
+                }, 'financialImpact': {
+                    'value_int': 3
+                }, 'operationalImpact': {
+                    'value_int': 4
+                }
+            }
+        }]
+    };
+
+    const riskyRisk = new RiskyRisk(tree);
+ 
+    // Combined potential of left node: 20   --> 2
+    // Combined potential of right node: 100 --> 1
+    expect(riskyRisk.computeRiskForNode("000", evitaRiskModel)['computed']['singleValueDisplay']).toContain('R')
+
+});
