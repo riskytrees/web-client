@@ -7,7 +7,8 @@ import { Button } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from "@mui/material/Stack";
-
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 import { NodeRiskResult } from './Risk';
 
 class NodePane extends React.Component<{
@@ -157,7 +158,7 @@ class NodePane extends React.Component<{
           attributes.push(
             <Grid container spacing={1}>
               <Grid item xs={6}>
-                <TextField id={key} key={key} label={key} onChange={this.handleAttributeChange} variant="filled" value={this.getAttributeValue(value)} /> 
+                <TextField id={key} key={key} label={key} onChange={this.handleAttributeChange} variant="standard" value={this.getAttributeValue(value)} /> 
   
               </Grid>      
               <Grid item xs={6}>
@@ -181,10 +182,10 @@ class NodePane extends React.Component<{
       <>
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <TextField label="Name" variant="filled" id='newAttributeNameField' />
+          <TextField label="Name" variant="outlined" size="small" id='newAttributeNameField' />
         </Grid>
         <Grid item xs={6}>
-          <TextField label="Value" variant="filled" id='newAttributeValueField' />
+          <TextField label="Value" variant="outlined" size="small" id='newAttributeValueField' />
         </Grid>
         <Grid item xs={2}> </Grid>
         <Grid item xs={8}>
@@ -275,7 +276,7 @@ class NodePane extends React.Component<{
 
   renderConditionSettingsIfApplicable() {
     if (this.isConditionNode()) {
-      return <TextField label="Condition" onChange={this.handleConditionFieldChanged} variant="filled" value={this.getConditionValue()} />
+      return <TextField label="Condition" onChange={this.handleConditionFieldChanged}  variant="outlined" size="small" value={this.getConditionValue()} />
     }
 
     return null;
@@ -285,23 +286,29 @@ class NodePane extends React.Component<{
     return (
       <>
       <Stack>
-      <TextField label="Node Name" onChange={this.handleNodeNameChange} variant="filled" value={this.state.nodeTitle} />
+      <TextField label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
+      <Box height={"20px"}></Box>
+      <FormControl size="small">
+        <InputLabel id="node-type-dropdown-label">Node Type</InputLabel>
       <Select
             labelId="node-type-dropdown-label"
             id="node-type-dropdown"
             value={this.getNodeType()}
             label="Node Type"
+            variant="outlined" 
             onChange={this.nodeTypeDropdownChanged}
       >
             <MenuItem value={"and"}>And</MenuItem>
             <MenuItem value={"or"}>Or</MenuItem>
             <MenuItem value={"condition"}>Condition</MenuItem>
       </Select>
+        </FormControl>
+      <Box height={"20px"}></Box>
 
       <div>{this.renderConditionSettingsIfApplicable()}</div>
 
 
-      <TextField label="Description" onChange={this.handleNodeDescriptionChange} variant="filled" value={this.state.nodeDescription} />
+      <TextField label="Description" onChange={this.handleNodeDescriptionChange} variant="outlined" size="small" value={this.state.nodeDescription} />
 
    
       <div>{this.renderAttributes()}</div>
@@ -315,7 +322,7 @@ class NodePane extends React.Component<{
 
       <TextField InputProps={{
             readOnly: true,
-          }} label="Computed Risk" value={this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : ''}></TextField>
+          }} label="Computed Risk"  variant="outlined" size="small" value={this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : ''}></TextField>
 
       <Box height={"20px"}></Box>
 

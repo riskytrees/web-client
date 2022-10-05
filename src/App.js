@@ -38,6 +38,36 @@ const baseComponents = {
       }
     }
   },
+  MuiTextField: {
+    styleOverrides: {
+      root: {
+        backgroundColor: RiskyColors.uiColors.buttonSecondary,
+        fontFamily: ' Open Sans',
+      }
+    },
+    variants: [
+      {
+        props: { variant: 'outlined' },
+        style: {
+
+        },
+    },]
+  },
+  MuiSelect: {
+    styleOverrides: {
+      root: {
+        backgroundColor: RiskyColors.uiColors.buttonSecondary,
+        fontFamily: 'Open Sans, sans-serif',
+      }
+    },
+    variants: [
+      {
+        props: { variant: 'outlined' },
+        style: {
+          
+        },
+    },]
+  },
   MuiPaper: {
     styleOverrides: {
       root: {
