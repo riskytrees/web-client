@@ -5,7 +5,6 @@ import { RiskyColors } from './colors.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { createTheme, ThemeProvider }  from "@mui/material";
-import { calculateNewValue } from '@testing-library/user-event/dist/utils';
 
 const baseComponents = {
   MuiListSubheader: {
@@ -37,6 +36,36 @@ const baseComponents = {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
       }
     }
+  },
+  MuiTextField: {
+    styleOverrides: {
+      root: {
+        backgroundColor: RiskyColors.uiColors.buttonSecondary,
+        fontFamily: 'Open Sans',
+      }
+    },
+    variants: [
+      {
+        props: { variant: 'outlined' },
+        style: {
+
+        },
+    },]
+  },
+  MuiSelect: {
+    styleOverrides: {
+      root: {
+        backgroundColor: RiskyColors.uiColors.buttonSecondary,
+        fontFamily: 'Open Sans, sans-serif',
+      }
+    },
+    variants: [
+      {
+        props: { variant: 'outlined' },
+        style: {
+          
+        },
+    },]
   },
   MuiPaper: {
     styleOverrides: {
