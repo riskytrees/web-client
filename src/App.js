@@ -5,7 +5,6 @@ import { RiskyColors } from './colors.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { createTheme, ThemeProvider }  from "@mui/material";
-import { calculateNewValue } from '@testing-library/user-event/dist/utils';
 
 const baseComponents = {
   MuiListSubheader: {
@@ -42,7 +41,7 @@ const baseComponents = {
     styleOverrides: {
       root: {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
-        fontFamily: ' Open Sans',
+        fontFamily: 'Open Sans',
       }
     },
     variants: [
