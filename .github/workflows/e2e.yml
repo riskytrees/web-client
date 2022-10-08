@@ -31,7 +31,7 @@ jobs:
           ref: master
           path: "api-service"
                 
-      - run: docker-compose up &
+      - run: docker-compose up -d
         working-directory: ./api-service
       
       - run: npx wait-on localhost:8000
