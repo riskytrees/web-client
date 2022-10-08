@@ -29,6 +29,7 @@ jobs:
           repository: riskytrees/api-service
           token: ${{ secrets.REPO_PAT }}
           ref: master
+          path: "api-service"
           
       - run: cd api-service
       
