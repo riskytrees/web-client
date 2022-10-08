@@ -157,8 +157,10 @@ class NodePane extends React.Component<{
         if (!attributesToIgnore.includes(key)) {
           attributes.push(
             <Grid container spacing={1}>
-              <Grid item xs={6}>
-                <TextField id={key} key={key} label={key} onChange={this.handleAttributeChange} variant="standard" value={this.getAttributeValue(value)} /> 
+              <Grid item xs={6} >
+                <TextField id={key} key={key}  sx={{
+          marginBottom: '10px',
+        }} label={key} onChange={this.handleAttributeChange} variant="standard" value={this.getAttributeValue(value)} /> 
   
               </Grid>      
               <Grid item xs={6}>
@@ -296,6 +298,7 @@ class NodePane extends React.Component<{
             value={this.getNodeType()}
             label="Node Type"
             variant="outlined" 
+            size="small" 
             onChange={this.nodeTypeDropdownChanged}
       >
             <MenuItem value={"and"}>And</MenuItem>
