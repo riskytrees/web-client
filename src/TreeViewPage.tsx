@@ -10,7 +10,7 @@ import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import {Stack} from "@mui/material";
-
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import TreeViewPane from './TreeViewPane';
 import NodePane from './NodePane';
@@ -281,8 +281,8 @@ class TreeViewPage extends React.Component<{
       
         
         <AppBar>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <Button onClick={this.handleOpen} variant="text">{this.getTreeName()}</Button>
+          <Box display="flex" justifyContent="center" alignItems="center" marginTop="11.75px">
+            <Button id="treeNameSelect" onClick={this.handleOpen} variant="text" endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
           </Box>
 
           <Modal
@@ -291,13 +291,16 @@ class TreeViewPage extends React.Component<{
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           >
-          <Box>
-          <TextField label="Tree Name" variant="outlined" onChange={this.handleTreeNameChanged} defaultValue={this.getTreeName()} />
+
+          <Box id="treeSelectCenter">
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
+          <TextField label="Tree Name" variant="outlined" size="small" onChange={this.handleTreeNameChanged} defaultValue={this.getTreeName()} />
           <Select
             labelId="config-dropdown-label"
             id="config-dropdown"
             value={null}
             label="Config"
+            size="small"
             onChange={undefined}
           >
             <MenuItem value={10}>Config One</MenuItem>
@@ -310,12 +313,15 @@ class TreeViewPage extends React.Component<{
             id="model-dropdown"
             value={this.state.selectedModel}
             label="Config"
+            size="small"
             onChange={this.modelDropdownChanged}
           >
             {modelDropdownItems}
             
           </Select>
+          </Stack>
           </Box>
+
         </Modal>
 
         </AppBar>

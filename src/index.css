@@ -1,6 +1,6 @@
 body, #root {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -30,6 +30,16 @@ code {
   width: 100%;
   background-color: #191919;
 }
+
+#treeSelectCenter {
+text-align:center;
+margin-top:12px;
+
+}
+
+#treeNameSelect {
+background:none;
+  }
 
 
 @font-face {

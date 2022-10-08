@@ -7,11 +7,21 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider }  from "@mui/material";
 
 const baseComponents = {
+
   MuiListSubheader: {
     styleOverrides: {
       root: {
         background: "transparent",
-        fontSize: "24px"
+        fontSize: "24px",
+        fontFamily: 'Open Sans, Sans-Serif',
+      }
+    } 
+  },
+
+  MuiTypography: {
+    styleOverrides: {
+      root: {
+        fontFamily:'Open Sans',
       }
     } 
   },
@@ -34,6 +44,7 @@ const baseComponents = {
     styleOverrides: {
       root: {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
+        color: RiskyColors.uiColors.mainText,
       }
     }
   },
@@ -64,6 +75,10 @@ const baseComponents = {
         props: { variant: 'outlined' },
         style: {
           
+        },
+        props: { variant: 'treeSelect' },
+        style: {
+          marginTop:'50px',
         },
     },]
   },
@@ -108,6 +123,7 @@ variants: [
 
       },
 },
+
   },
 
 };
@@ -115,6 +131,9 @@ variants: [
 const theme = createTheme({
   palette: {
     mode: 'dark',
+  },
+  typography: {
+    fontFamily: 'Open Sans',
   },
   components: baseComponents
 });
