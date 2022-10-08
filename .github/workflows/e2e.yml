@@ -34,8 +34,14 @@ jobs:
       - run: docker-compose up &
         working-directory: ./api-service
       
+      - run: npx wait-on localhost:8000
+      
       - name: Get yarn dependencies
         run: yarn
+        
+      - run: yarn run start &
+        
+      - run: npx wait-on localhost:8080
         
       - name: Run e2e tests
         run: npx cypress run
