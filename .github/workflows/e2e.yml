@@ -30,10 +30,6 @@ jobs:
           token: ${{ secrets.REPO_PAT }}
           ref: master
           
-      - name: Build and push Docker images
-        # You may pin to the exact commit or the version.
-        uses: docker/build-push-action@v3.1.1
-          
       - run: cd api-service
       
       - run: docker-compose up &
