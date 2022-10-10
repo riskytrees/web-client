@@ -48,7 +48,7 @@ jobs:
           resource: http://localhost:8080
         
       - name: Run e2e tests
-      - uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v2
         with:
           max_attempts: 3
           retry_on: error
