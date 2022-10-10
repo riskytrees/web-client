@@ -6,4 +6,10 @@ declare module '@mui/material/Paper' {
         treearea: true;
     }
 }
-
+declare module '@mui/material/Button' {
+    interface ButtonPropsVariantOverrides {
+        addButton: true;
+        deleteButton: true;
+        primaryButton: true;
+    }
+}

@@ -22,8 +22,17 @@ const baseComponents = {
     styleOverrides: {
       root: {
         fontFamily:'Open Sans',
+      
       }
-    } 
+    },
+    variants: [
+      {
+        props: { variant: 'h3' },
+        style: {
+          fontSize:'14px',
+          fontWeight:'700',
+        },
+    },]
   },
   MuiListItemText: {
     styleOverrides: {
@@ -46,13 +55,50 @@ const baseComponents = {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
         color: RiskyColors.uiColors.mainText,
       }
-    }
+    },
+    variants: [
+      {
+        props: { variant: 'addButton' },
+        style: {
+          backgroundColor: 'transparent',
+          border: 'none',
+          justifyContent:'flex-start',
+          paddingLeft: '10px',
+          '&:hover': {
+            backgroundColor: RiskyColors.uiColors.primaryCTA,
+        },
+        },
+      },{
+        props: { variant: 'deleteButton' },
+        style: {
+          backgroundColor: 'transparent',
+          border: 'none',
+          justifyContent:'flex-start',
+          paddingLeft: '10px',
+          '&:hover': {
+            backgroundColor: RiskyColors.uiColors.negative,
+        },
+        },
+      },{
+        props: { variant: 'primaryButton' },
+        style: {
+          backgroundColor: 'transparent',
+          border: 'none',
+          justifyContent:'flex-start',
+          paddingLeft: '10px',
+          '&:hover': {
+            backgroundColor: RiskyColors.uiColors.primaryButton,
+        },
+        },
+        },
+    ]
   },
   MuiTextField: {
     styleOverrides: {
       root: {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
         fontFamily: 'Open Sans',
+
       }
     },
     variants: [
@@ -100,6 +146,7 @@ variants: [
       padding: '15px',
       width: '316px',
       marginTop: '60px',
+      overflow: 'auto',
 
     },
 }, {
