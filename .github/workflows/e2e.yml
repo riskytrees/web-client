@@ -30,7 +30,11 @@ jobs:
           token: ${{ secrets.REPO_PAT }}
           ref: master
           path: "api-service"
-                
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+
       - run: docker-compose up -d
         working-directory: ./api-service
       
