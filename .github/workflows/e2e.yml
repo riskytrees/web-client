@@ -44,7 +44,8 @@ jobs:
 
       - name: Archive cypress output
         uses: actions/upload-artifact@v3
+        if: failure()
         with:
           name: cypress-output
           path: |
-            ./cypress/videos/**/*
+            ./cypress/videos/
