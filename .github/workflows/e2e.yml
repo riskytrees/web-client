@@ -48,8 +48,12 @@ jobs:
           resource: http://localhost:8080
         
       - name: Run e2e tests
-        run: npx cypress run
-
+      - uses: nick-fields/retry@v2
+        with:
+          max_attempts: 3
+          retry_on: error
+          command: npx cypress run
+        
       - name: Archive cypress output
         uses: actions/upload-artifact@v3
         if: failure()
