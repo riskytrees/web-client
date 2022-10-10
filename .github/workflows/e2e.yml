@@ -41,3 +41,10 @@ jobs:
         
       - name: Run e2e tests
         run: npx cypress run
+
+      - name: Archive cypress output
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-output
+          path: |
+            ./cypress/videos/**/*
