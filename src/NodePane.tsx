@@ -9,6 +9,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Stack from "@mui/material/Stack";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { NodeRiskResult } from './Risk';
 
 class NodePane extends React.Component<{
@@ -157,16 +161,16 @@ class NodePane extends React.Component<{
         if (!attributesToIgnore.includes(key)) {
           attributes.push(
             <Grid container spacing={1}>
-              <Grid item xs={6} >
+              <Grid item xs={9} >
                 <TextField id={key} key={key}  sx={{
           marginBottom: '10px',
-        }} label={key} onChange={this.handleAttributeChange} variant="standard" value={this.getAttributeValue(value)} /> 
+        }} label={key} onChange={this.handleAttributeChange} variant="outlined" size="small" value={this.getAttributeValue(value)} /> 
   
               </Grid>      
-              <Grid item xs={6}>
-                <Button onClick={() => {
+              <Grid item xs={3}>
+                <IconButton onClick={() => {
                   this.deleteAttribute(key);
-                }}>Delete</Button>
+                }}><DeleteIcon /></IconButton>
   
               </Grid>      
   
@@ -189,9 +193,9 @@ class NodePane extends React.Component<{
         <Grid item xs={6}>
           <TextField label="Value" variant="outlined" size="small" id='newAttributeValueField' />
         </Grid>
-        <Grid item xs={2}> </Grid>
-        <Grid item xs={8}>
-          <Button onClick={this.createAttribute}>Create Attribute</Button>
+        
+        <Grid item xs={12}>
+          <Button fullWidth={true} variant="addButton" startIcon={<AddIcon />} onClick={this.createAttribute}>Add Attribute</Button>
         </Grid>
         <Grid item xs={2}> </Grid>
 
@@ -288,6 +292,9 @@ class NodePane extends React.Component<{
     return (
       <>
       <Stack>
+      <Typography variant="h3">Details</Typography>
+      <Box height={"10px"}></Box>
+
       <TextField label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
       <Box height={"20px"}></Box>
       <FormControl size="small">
@@ -308,30 +315,29 @@ class NodePane extends React.Component<{
         </FormControl>
       <Box height={"20px"}></Box>
 
-      <div>{this.renderConditionSettingsIfApplicable()}</div>
-
-
-      <TextField label="Description" onChange={this.handleNodeDescriptionChange} variant="outlined" size="small" value={this.state.nodeDescription} />
-
-   
-      <div>{this.renderAttributes()}</div>
-
-      <Box height={"20px"}></Box>
-
-      {this.renderAddDeleteFields()}
-
-      <Box height={"20px"}></Box>
-
-
       <TextField InputProps={{
             readOnly: true,
           }} label="Computed Risk"  variant="outlined" size="small" value={this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : ''}></TextField>
 
       <Box height={"20px"}></Box>
+      <Typography variant="h3">Node Attributes</Typography>
+      <Box height={"10px"}></Box>
+      <div>{this.renderConditionSettingsIfApplicable()}</div>
 
 
-      <Button onClick={this.handleAddNode}>Add Node</Button>
-      <Button onClick={this.handleDeleteNode}>Delete Node</Button>
+      <div>{this.renderAttributes()}</div>
+
+      {this.renderAddDeleteFields()}
+
+      <Box height={"5px"}></Box>
+      <Typography variant="h3">Other</Typography>
+      <Box height={"10px"}></Box>
+      <TextField label="Description" onChange={this.handleNodeDescriptionChange} multiline variant="outlined" rows="3" size="small" value={this.state.nodeDescription} />
+      <Box height={"20px"}></Box>
+
+      <Button variant="addButton" startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node</Button>
+      <Box height={"5px"}></Box>
+      <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
 
       </Stack>
 

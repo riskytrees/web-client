@@ -89,6 +89,8 @@ export const enum uiColors {
     /*====INTERACTIVE COMPONENTS====*/
     /*Field input is for any component where the user inputs/selects data*/
     fieldInput = 'rgb(72, 72, 72)',
+    /*Button primary is for form field main buttons*/
+    buttonPrimary = 'rgb(46, 55, 73)',
     /*Button secondary is for non-primary buttons, such as open/close buttons and drop down select buttons*/
     buttonSecondary = 'rgb(72, 72, 72)',
     /*Button secondary pressed is for when a secondary button is pressed, color should swap out to indicate selection*/
