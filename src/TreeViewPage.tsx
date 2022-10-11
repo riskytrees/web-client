@@ -169,7 +169,7 @@ class TreeViewPage extends React.Component<{
     const treeData = JSON.parse(JSON.stringify(this.state.treeData));
     let uuid = crypto.randomUUID();
 
-    if (isAddAction) {
+    if (isAddAction && parentNodeId || isAddAction && treeData.nodes.length === 0) {
       treeData['nodes'].push({
         title: "New Node",
         description: "",
