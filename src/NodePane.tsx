@@ -254,16 +254,16 @@ class NodePane extends React.Component<{
         id: 'node_type',
         value: newType
       }
+    }).then(res => {
+      if (newType === 'condition' && !this.getConditionValue()) {
+        this.handleAttributeChange({
+          target: {
+            id: 'condition_value',
+            value: ''
+          }
+        })
+      }
     })
-
-    if (newType === 'condition' && !this.getConditionValue()) {
-      this.handleAttributeChange({
-        target: {
-          id: 'condition_value',
-          value: ''
-        }
-      })
-    }
   }
 
   isConditionNode() {
