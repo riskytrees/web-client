@@ -189,16 +189,20 @@ class TreeViewPage extends React.Component<{
           treeData.nodes[idx]['children'].push(uuid);
         } else if (node.id !== treeData.rootNodeId) {
           // Delete
-          nodeToDelete = idx;
+          if (treeData.nodes[idx]['children'].length === 0) {
+            nodeToDelete = idx;
+          }
         }
-      }
-
-      if (isAddAction === false && node.children.includes(parentNodeId)) {
-        treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
       }
     }
 
     if (nodeToDelete !== null) {
+      for (const [idx, node] of treeData.nodes.entries()) {
+        if (node.children.includes(parentNodeId)) {
+          treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
+        }
+      }
+
       treeData.nodes.splice(nodeToDelete, 1);
     }
 
