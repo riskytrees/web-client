@@ -124,8 +124,6 @@ class NodePane extends React.Component<{
     console.log(this.props)
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       if (this.props.currentNode) {
-        console.log(this.props.currentNode)
-
         this.setState({
           nodeTitle: "" + this.props.currentNode.label,
           nodeDescription: "" + this.props.currentNode.description,
@@ -133,6 +131,15 @@ class NodePane extends React.Component<{
           modelAttributes: this.props.currentNode.modelAttributes,
           conditionAttribute: this.props.currentNode.conditionAttribute
         });
+      } else {
+        this.setState({
+          nodeTitle: "",
+          nodeDescription: "",
+          nodeId: "",
+          modelAttributes: {},
+          conditionAttribute: ""
+        });
+
       }
     }
   }
