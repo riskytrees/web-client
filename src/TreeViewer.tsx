@@ -90,10 +90,16 @@ class TreeViewer extends React.Component<{
       network.on('click', (properties) => {
          var id = properties.nodes[0];
          let selectedNodes = [];
+         let foundNode = false;
          for (const node of nodes) {
            if (node.id === id) {
              this.nodeClicked(node);
+             foundNode = true;
            }
+         }
+
+         if (!foundNode) {
+          this.nodeClicked(null);
          }
       });
     }
