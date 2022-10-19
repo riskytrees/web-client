@@ -3,21 +3,19 @@ import { Network } from "vis-network/peer";
 import { DataSet } from "vis-data/peer";
 import Container, { ContainerProps } from "@mui/material/Container";
 import Paper from '@mui/material/Paper';
+import TreeData from './interfaces/TreeData';
 
 
 class TreeViewer extends React.Component<{
-  treeData: {
-    nodes: any[]
-  };
+  treeMap: Record<string, TreeData>
+
   onNodeClicked: Function;
 }, {
-  data: {
-    nodes: any[]
-  };
+  treeMap: Record<string, TreeData>
 }> {
   constructor(props) {
     super(props);
-    this.state = { data: this.props.treeData };
+    this.state = { treeMap: this.props.treeMap };
 
     this.loadAndRender = this.loadAndRender.bind(this);
 
@@ -39,22 +37,24 @@ class TreeViewer extends React.Component<{
     const nodes: Record<string, any>[] = [];
     const edges: Record<string, any>[] = [];
 
-    for (const node of this.state.data.nodes) {
-      nodes.push({
-        id: node.id,
-        label: node.title,
-        description: node.description,
-        modelAttributes: node.modelAttributes,
-        conditionAttribute: node.conditionAttribute,
-        size: 15,
-        shape: this.getShapeForNodeType(node.modelAttributes)
-      })
-
-      for (const child of node.children) {
-        edges.push({
-          from: node.id,
-          to: child
+    for (const tree of Object.values(this.state.treeMap)) {
+      for (const node of tree.nodes) {
+        nodes.push({
+          id: node.id,
+          label: node.title,
+          description: node.description,
+          modelAttributes: node.modelAttributes,
+          conditionAttribute: node.conditionAttribute,
+          size: 15,
+          shape: this.getShapeForNodeType(node.modelAttributes)
         })
+  
+        for (const child of node.children) {
+          edges.push({
+            from: node.id,
+            to: child
+          })
+        }
       }
     }
 
@@ -122,8 +122,8 @@ class TreeViewer extends React.Component<{
 
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       console.log("test")
-      if (this.props.treeData) {
-        this.setState ({ data: this.props.treeData }, this.loadAndRender);
+      if (this.props.treeMap) {
+        this.setState ({ treeMap: this.props.treeMap }, this.loadAndRender);
       }
     }
   }
