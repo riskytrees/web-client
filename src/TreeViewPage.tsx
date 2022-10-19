@@ -20,7 +20,7 @@ import { RiskyRisk } from './Risk';
 class TreeViewPage extends React.Component<{
 
 }, {
-  treeData: TreeData;
+  treeMap: Record<string, TreeData>;
   selectedNode: {
     id: string;
     label: string;
@@ -33,7 +33,7 @@ class TreeViewPage extends React.Component<{
 
   constructor(props) {
     super(props);
-    this.state = { treeData: { title: '', nodes: [] }, selectedNode: null, modalOpen: false, models: [], selectedModel: "" };
+    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, models: [], selectedModel: "" };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -48,7 +48,7 @@ class TreeViewPage extends React.Component<{
     this.getListOfModels();
     this.getCurrentModel();
 
-    this.riskEngine = new RiskyRisk(this.state.treeData);
+    this.riskEngine = new RiskyRisk(this.state.treeMap, null);
   }
 
   async getCurrentModel() {
@@ -64,8 +64,14 @@ class TreeViewPage extends React.Component<{
     })
   }
 
+  // Only acts on root tree
   async populateModelAttributes(modelId) {
-    const treeData = JSON.parse(JSON.stringify(this.state.treeData));
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const treeId = urlParams.get('id');
+
+    const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeId]));
     let relevantProperties: string[] = [];
 
     // For now, add empty attributes for the appropriate model.
@@ -95,9 +101,12 @@ class TreeViewPage extends React.Component<{
       }
     }
 
+    const treeMap = this.state.treeMap;
+    treeMap[treeId] = treeData;
+
     this.setState({
-      treeData
-    }, this.updateTree);
+      treeMap: treeMap
+    }, () => this.updateTree(treeId) );
   }
 
   async loadTree() {
@@ -109,47 +118,52 @@ class TreeViewPage extends React.Component<{
 
     let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeId);
     let data = await response.json();
+    const treeMap = {};
+    treeMap[treeId] = data.result;
     this.setState({
-      treeData: data.result
+      treeMap
     }, () => {
-      this.riskEngine = new RiskyRisk(this.state.treeData);
+      this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
     })
     
   }
 
   // Called when any portion of the tree is updated and needs to be synced
-  async updateTree() {
-    this.riskEngine = new RiskyRisk(this.state.treeData);
-
+  async updateTree(treeIdToUpdate: string) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
     const projectId = urlParams.get('projectId');
     const treeId = urlParams.get('id');
 
+
+    this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+
+
     let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeId, {
       method: 'PUT',
 
-      body: JSON.stringify(this.state.treeData)
+      body: JSON.stringify(this.state.treeMap[treeIdToUpdate])
     });
 
   }
 
-  localTreeNodeUpdate(newNodeData) {
-    for (const [idx, node] of this.state.treeData.nodes.entries()) {
+  localTreeNodeUpdate(treeIdToUpdate: string, newNodeData) {
+    for (const [idx, node] of this.state.treeMap[treeIdToUpdate].nodes.entries()) {
       if (node.id === newNodeData.id) {
-        const treeData = JSON.parse(JSON.stringify(this.state.treeData));
+        const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
         treeData.nodes[idx]['title'] = newNodeData['title'];
         treeData.nodes[idx]['description'] = newNodeData['description'];
         treeData.nodes[idx]['modelAttributes'] = newNodeData['modelAttributes'];
         treeData.nodes[idx]['conditionAttribute'] = newNodeData['conditionAttribute'];
-
+        const treeMap = this.state.treeMap;
+        treeMap[treeIdToUpdate] = treeData;
         console.log("Tree Update")
         console.log(treeData)
         this.setState({
-          treeData: treeData,
+          treeMap: treeMap,
           selectedNode: this.state.selectedNode
-        }, this.updateTree);
+        }, () => this.updateTree(treeIdToUpdate));
       }
     }
   }
@@ -161,12 +175,12 @@ class TreeViewPage extends React.Component<{
     });
   }
 
-  onNodeChanged(data) {
-    this.localTreeNodeUpdate(data)
+  onNodeChanged(treeIdToUpdate: string, data) {
+    this.localTreeNodeUpdate(treeIdToUpdate, data)
   }
 
-  onAddOrDeleteNode(parentNodeId, isAddAction) {
-    const treeData = JSON.parse(JSON.stringify(this.state.treeData));
+  onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction) {
+    const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
     let uuid = crypto.randomUUID();
 
     if (isAddAction && parentNodeId || isAddAction && treeData.nodes.length === 0) {
@@ -206,10 +220,13 @@ class TreeViewPage extends React.Component<{
       treeData.nodes.splice(nodeToDelete, 1);
     }
 
+    const treeMap = this.state.treeMap;
+    treeMap[treeIdToUpdate] = treeData;
+
     this.setState({
-      treeData: treeData,
+      treeMap: treeMap,
       selectedNode: this.state.selectedNode
-    }, this.updateTree);
+    }, () => this.updateTree(treeIdToUpdate) );
   }
 
   handleOpen() {
@@ -256,19 +273,32 @@ class TreeViewPage extends React.Component<{
   }
 
   handleTreeNameChanged(event) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const treeId = urlParams.get('id');
+
     const proposedName = event.target.value;
-    const treeData = JSON.parse(JSON.stringify(this.state.treeData));
+    const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeId]));
 
     treeData.title = proposedName;
 
+    const treeMap = this.state.treeMap;
+    treeMap[treeId] = treeData;
+
     this.setState({
-      treeData
-    }, this.updateTree);
+      treeMap: treeMap
+    }, () => this.updateTree(treeId) );
 
   }
 
   getTreeName() {
-    return this.state.treeData.title;
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const treeId = urlParams.get('id');
+
+    return this.state.treeMap[treeId].title;
   }
 
   render() {
@@ -332,9 +362,9 @@ class TreeViewPage extends React.Component<{
 
           <Stack direction="row">
             <Paper variant="riskypane">
-              <TreeViewPane nodes={this.state.treeData ? this.state.treeData.nodes : []}/>
+              <TreeViewPane nodes={this.state.treeMap ? Object.values(this.state.treeMap)[0].nodes : []}/>
             </Paper>
-            {this.state.treeData && this.state.treeData.nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeData={this.state.treeData} /> }
+            {this.state.treeMap && Object.values(this.state.treeMap)[0].nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeData={Object.values(this.state.treeMap)[0]} /> }
 
             <Paper variant="riskypane">
               {
