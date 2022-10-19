@@ -210,22 +210,6 @@ const baseComponents = {
     },]
   },
 
-  List: {
-    styleOverrides: {
-      root: {
-        backgroundColor:'red',
-
-      },
-    },
-},
- ListItemButton: {
-    styleOverrides: {
-      root: {
-        backgroundColor:'red',
-
-      },
-    },
-},
 ListItemText: {
   styleOverrides: {
     root: {
