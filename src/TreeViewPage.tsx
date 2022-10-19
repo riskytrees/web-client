@@ -109,6 +109,30 @@ class TreeViewPage extends React.Component<{
     }, () => this.updateTree(treeId) );
   }
 
+  async resolveImports(treeData: TreeData, projectId: string) {
+    const nodesOfConcern = treeData.nodes.map(node => node.id);
+    let children = treeData.nodes.reduce((prev, curr) => prev.concat(curr.children), [])
+    children = [...new Set(children)];
+
+    const childrenToResolve = children.filter(child => nodesOfConcern.indexOf(child) === -1)
+
+    let result = {}
+
+    for (const childId of childrenToResolve) {
+      let response = await fetch("http://localhost:8000/nodes/" + childId);
+      let treeData = await response.json();
+
+      response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeData.result.treeId);
+      let data = await response.json();
+  
+
+      result[treeData.result.treeId] = data.result;
+      result = {...result, ...(await this.resolveImports(data.result, projectId))};
+    }
+
+    return result;
+  }
+
   async loadTree() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -118,8 +142,13 @@ class TreeViewPage extends React.Component<{
 
     let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeId);
     let data = await response.json();
-    const treeMap = {};
+    let treeMap = {};
     treeMap[treeId] = data.result;
+
+    // Recursively resolve tree imports
+    const result = await this.resolveImports(data.result, projectId);
+    treeMap = {...treeMap, ...result};
+
     this.setState({
       treeMap
     }, () => {
@@ -140,7 +169,7 @@ class TreeViewPage extends React.Component<{
     this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
 
 
-    let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeId, {
+    let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeIdToUpdate, {
       method: 'PUT',
 
       body: JSON.stringify(this.state.treeMap[treeIdToUpdate])
@@ -149,6 +178,8 @@ class TreeViewPage extends React.Component<{
   }
 
   localTreeNodeUpdate(treeIdToUpdate: string, newNodeData) {
+    console.log(this.state.treeMap)
+    console.log(treeIdToUpdate)
     for (const [idx, node] of this.state.treeMap[treeIdToUpdate].nodes.entries()) {
       if (node.id === newNodeData.id) {
         const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
@@ -156,7 +187,7 @@ class TreeViewPage extends React.Component<{
         treeData.nodes[idx]['description'] = newNodeData['description'];
         treeData.nodes[idx]['modelAttributes'] = newNodeData['modelAttributes'];
         treeData.nodes[idx]['conditionAttribute'] = newNodeData['conditionAttribute'];
-        const treeMap = this.state.treeMap;
+        const treeMap = {...this.state.treeMap};
         treeMap[treeIdToUpdate] = treeData;
         console.log("Tree Update")
         console.log(treeData)
@@ -366,9 +397,9 @@ class TreeViewPage extends React.Component<{
 
           <Stack direction="row">
             <Paper variant="riskypane">
-              <TreeViewPane nodes={this.state.treeMap && Object.values(this.state.treeMap).length > 0 ? Object.values(this.state.treeMap)[0].nodes : []}/>
+              <TreeViewPane treeMap={this.state.treeMap}/>
             </Paper>
-            {this.state.treeMap && Object.values(this.state.treeMap).length > 0 && Object.values(this.state.treeMap)[0].nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeData={Object.values(this.state.treeMap)[0]} /> }
+            {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} /> }
 
             <Paper variant="riskypane">
               {

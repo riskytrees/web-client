@@ -116,7 +116,7 @@ class NodePane extends React.Component<{
 
   async triggerOnNodeChanged() {
     if (this.props.onNodeChanged && this.state.nodeId) {
-      this.props.onNodeChanged(await this.getTreeIdFromNodeId(this.state.nodeId), {
+      this.props.onNodeChanged((await this.getTreeIdFromNodeId(this.state.nodeId)), {
         title: this.state.nodeTitle,
         description: this.state.nodeDescription,
         id: "" + this.state.nodeId,

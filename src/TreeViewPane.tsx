@@ -7,16 +7,17 @@ import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import TreeData from './interfaces/TreeData';
 
 
 class TreeViewPane extends React.Component<{
-  nodes: any[];
+  treeMap: Record<string, TreeData>;
 }, {
-  nodes: any[];
+  treeMap: Record<string, TreeData>;
 }> {
   constructor(props) {
     super(props);
-    this.state = { nodes: [] };
+    this.state = { treeMap: this.props.treeMap };
 
     this.lineItemClicked = this.lineItemClicked.bind(this);
     this.generateLineItem = this.generateLineItem.bind(this);
@@ -25,20 +26,22 @@ class TreeViewPane extends React.Component<{
 
   componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
-      if (this.props.nodes) {
+      if (this.props.treeMap) {
         this.setState({
-          nodes: this.props.nodes
+          treeMap: this.props.treeMap
         });
       }
     }
   }
 
   findNodeWithId(nodeId) {
-    for (const node of this.state.nodes) {
+    for (const tree of Object.values(this.state.treeMap)) {
+      for (const node of tree.nodes) {
         if (node.id === nodeId) {
             return node;
         }
-    }
+      }
+    } 
 
     return null;
   }
@@ -94,26 +97,31 @@ class TreeViewPane extends React.Component<{
   }
 
   renderTreeList() {
-    if (this.state.nodes) {
+    if (this.state.treeMap) {
         console.log("Render Tree List")
         const toReturn = [];
-        console.log(this.state.nodes)
+        console.log(this.state.treeMap)
     
         // Find the root node
         const children: string[] = [];
         let rootNode = null;
     
-        for (const node of this.state.nodes) {
+        for (const tree of Object.values(this.state.treeMap)) {
+          for (const node of tree.nodes) {
             for (const child of node.children) {
                 children.push(child);
             }
+          }
         }
-    
-        for (const node of this.state.nodes) {
-            if (!children.includes(node.id)) {
-                rootNode = node;
-                break;
-            }
+
+        for (const tree of Object.values(this.state.treeMap)) {
+
+          for (const node of tree.nodes) {
+              if (!children.includes(node.id)) {
+                  rootNode = node;
+                  break;
+              }
+          }
         }
     
     
