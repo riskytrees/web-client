@@ -169,7 +169,7 @@ class TreeViewPage extends React.Component<{
     this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
 
 
-    let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeId, {
+    let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeIdToUpdate, {
       method: 'PUT',
 
       body: JSON.stringify(this.state.treeMap[treeIdToUpdate])
@@ -178,6 +178,8 @@ class TreeViewPage extends React.Component<{
   }
 
   localTreeNodeUpdate(treeIdToUpdate: string, newNodeData) {
+    console.log(this.state.treeMap)
+    console.log(treeIdToUpdate)
     for (const [idx, node] of this.state.treeMap[treeIdToUpdate].nodes.entries()) {
       if (node.id === newNodeData.id) {
         const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
@@ -185,7 +187,7 @@ class TreeViewPage extends React.Component<{
         treeData.nodes[idx]['description'] = newNodeData['description'];
         treeData.nodes[idx]['modelAttributes'] = newNodeData['modelAttributes'];
         treeData.nodes[idx]['conditionAttribute'] = newNodeData['conditionAttribute'];
-        const treeMap = this.state.treeMap;
+        const treeMap = {...this.state.treeMap};
         treeMap[treeIdToUpdate] = treeData;
         console.log("Tree Update")
         console.log(treeData)
@@ -397,7 +399,7 @@ class TreeViewPage extends React.Component<{
             <Paper variant="riskypane">
               <TreeViewPane treeMap={this.state.treeMap}/>
             </Paper>
-            {this.state.treeMap && Object.values(this.state.treeMap).length > 0 && Object.values(this.state.treeMap)[0].nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} /> }
+            {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} /> }
 
             <Paper variant="riskypane">
               {
