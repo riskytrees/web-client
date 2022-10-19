@@ -3,9 +3,11 @@ import {expect} from '@jest/globals';
 
 it('Lets you construct a RiskyRisk object', () => {
     const riskyRisk = new RiskyRisk({
-        title: "test",
-        nodes: []
-    });
+        "root": {
+            title: "test",
+            nodes: []
+        }
+    }, "root");
 
     expect(riskyRisk).not.toBeNull;
 });
@@ -45,7 +47,9 @@ it('Lets you compute attacker likelihood at node locations', () => {
         }]
     };
 
-    const riskyRisk = new RiskyRisk(tree);
+    const riskyRisk = new RiskyRisk({
+        "root": tree
+    }, "root");
 
     expect(riskyRisk.computeRiskForNode("000", attackerLikelihoodModel)['computed']['likelihoodOfSuccess']).toEqual(0.25);
 
@@ -93,7 +97,9 @@ it('Lets you compute attack risk at node locations', () => {
         }]
     };
 
-    const riskyRisk = new RiskyRisk(tree);
+    const riskyRisk = new RiskyRisk({
+        "root": tree
+    }, "root");
 
     expect(riskyRisk.computeRiskForNode("000", attackRiskModel)['computed']['likelihoodOfSuccess']).toEqual(0.25);
     expect(riskyRisk.computeRiskForNode("000", attackRiskModel)['computed']['risk']).toEqual(25);
@@ -164,7 +170,9 @@ it('Lets you compute evita risk at node locations', () => {
         }]
     };
 
-    const riskyRisk = new RiskyRisk(tree);
+    const riskyRisk = new RiskyRisk({
+        "root": tree
+    }, "root")
  
     // Combined potential of left node: 20   --> 2
     // Combined potential of right node: 100 --> 1
@@ -209,7 +217,9 @@ it('works without modelAttributes', () => {
         }]
     };
 
-    const riskyRisk = new RiskyRisk(tree);
+    const riskyRisk = new RiskyRisk({
+        "root": tree
+    }, "root");
  
     // Combined potential of left node: 20   --> 2
     // Combined potential of right node: 100 --> 1
@@ -243,7 +253,9 @@ it('works without children', () => {
         }]
     };
 
-    const riskyRisk = new RiskyRisk(tree);
+    const riskyRisk = new RiskyRisk({
+        "root": tree
+    }, "root");
  
     // Combined potential of left node: 20   --> 2
     // Combined potential of right node: 100 --> 1

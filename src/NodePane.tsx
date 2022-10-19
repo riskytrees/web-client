@@ -44,15 +44,26 @@ class NodePane extends React.Component<{
     this.handleConditionFieldChanged = this.handleConditionFieldChanged.bind(this);
   }
 
+  async getTreeIdFromNodeId(nodeId: string) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+
+    let response = await fetch("http://localhost:8000/nodes/" + nodeId);
+    let data = await response.json();
+    return data['result']['treeId'];
+  }
+
   async handleAddNode(event) {
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(this.state.nodeId, true);
+      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, true);
     }
   }
 
   async handleDeleteNode(event) {
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(this.state.nodeId, false);
+      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, false);
     }
   }
 
@@ -103,9 +114,9 @@ class NodePane extends React.Component<{
 
   }
 
-  triggerOnNodeChanged() {
-    if (this.props.onNodeChanged) {
-      this.props.onNodeChanged({
+  async triggerOnNodeChanged() {
+    if (this.props.onNodeChanged && this.state.nodeId) {
+      this.props.onNodeChanged(await this.getTreeIdFromNodeId(this.state.nodeId), {
         title: this.state.nodeTitle,
         description: this.state.nodeDescription,
         id: "" + this.state.nodeId,
