@@ -38,6 +38,43 @@ const baseComponents = {
     styleOverrides: {
       root: {
         color: RiskyColors.uiColors.mainText,
+        
+      }
+    }
+  },
+  MuiModal: {
+    styleOverrides: {
+      root: {
+
+        
+      }
+    }
+  },
+  MuiFormControl:{
+    styleOverrides: {
+      root: {
+        borderRadius:'4px',
+        '& label': {
+          color: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& label.Mui-focused': {
+          color: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& .MuiInput-underline:after': {
+          borderBottomColor: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor:'transparent',
+          },
+          '&:hover fieldset': {
+            borderColor: RiskyColors.uiColors.mainHighlightBorder,
+ 
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: RiskyColors.uiColors.mainHighlightBorder,
+          },
+        },
       }
     }
   },
@@ -46,7 +83,30 @@ const baseComponents = {
       root: {
         padding: 0,
         backgroundColor: RiskyColors.uiColors.mainNodeBackground,
-      }
+        borderRadius:'4px',
+        '& label': {
+          color: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& label.Mui-focused': {
+          color: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& .MuiInput-underline:after': {
+          borderBottomColor: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor:'transparent',
+          },
+          '&:hover fieldset': {
+            borderColor: RiskyColors.uiColors.mainHighlightBorder,
+ 
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: RiskyColors.uiColors.mainHighlightBorder,
+          },
+        },
+      },
+
     }
   },
   MuiButton: {
@@ -98,8 +158,31 @@ const baseComponents = {
       root: {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
         fontFamily: 'Open Sans',
+        borderRadius:'4px',
+        '& label': {
+          color: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& label.Mui-focused': {
+          color: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& .MuiInput-underline:after': {
+          borderBottomColor: RiskyColors.uiColors.mainHighlightBorder,
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor:'transparent',
+          },
+          '&:hover fieldset': {
+            borderColor: RiskyColors.uiColors.mainHighlightBorder,
+ 
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: RiskyColors.uiColors.mainHighlightBorder,
+          },
+        },
 
-      }
+      },
+
     },
     variants: [
       {
@@ -114,6 +197,7 @@ const baseComponents = {
       root: {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
         fontFamily: 'Open Sans, sans-serif',
+        
       }
     },
     variants: [
@@ -125,6 +209,7 @@ const baseComponents = {
         props: { variant: 'treeSelect' },
         style: {
           marginTop:'50px',
+          
         },
     },]
   },
@@ -176,13 +261,17 @@ variants: [
 };
 
 const theme = createTheme({
+
   palette: {
     mode: 'dark',
+
+
   },
   typography: {
     fontFamily: 'Open Sans',
   },
   components: baseComponents
+  
 });
 
 function App() {

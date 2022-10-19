@@ -32,15 +32,23 @@ code {
 }
 
 #treeSelectCenter {
-text-align:center;
+
+margin:auto;
 margin-top:12px;
+background-color:rgb(42, 42, 42); /*same as paneBackground*/
+width:30vw;
+min-width:240px;
+max-width:440px;
+border:2px solid rgb(238, 238, 238, .4);
+padding:16px;
+border-radius:4px;
+
 
 }
 
 #treeNameSelect {
 background:none;
   }
-
 
 @font-face {
   font-family: 'Open Sans';

@@ -16,7 +16,8 @@ import TreeViewPane from './TreeViewPane';
 import NodePane from './NodePane';
 import TreeData from './interfaces/TreeData';
 import { RiskyRisk } from './Risk';
-
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 class TreeViewPage extends React.Component<{
 
 }, {
@@ -362,8 +363,10 @@ class TreeViewPage extends React.Component<{
           >
 
           <Box id="treeSelectCenter">
-          <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
+          <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
           <TextField label="Tree Name" variant="outlined" size="small" onChange={this.handleTreeNameChanged} defaultValue={this.getTreeName()} />
+          <FormControl size="small">
+        <InputLabel id="node-type-dropdown-label">Config</InputLabel>
           <Select
             labelId="config-dropdown-label"
             id="config-dropdown"
@@ -376,7 +379,9 @@ class TreeViewPage extends React.Component<{
             <MenuItem value={20}>Config Two</MenuItem>
             <MenuItem value={30}>Config Three</MenuItem>
           </Select>
-
+</FormControl>
+<FormControl size="small">
+        <InputLabel id="node-type-dropdown-label">Model</InputLabel>
           <Select
             labelId="model-dropdown-label"
             id="model-dropdown"
@@ -388,6 +393,7 @@ class TreeViewPage extends React.Component<{
             {modelDropdownItems}
             
           </Select>
+          </FormControl>
           </Stack>
           </Box>
 
