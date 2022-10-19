@@ -298,7 +298,11 @@ class TreeViewPage extends React.Component<{
 
     const treeId = urlParams.get('id');
 
-    return this.state.treeMap[treeId].title;
+    if (this.state.treeMap[treeId]) {
+      return this.state.treeMap[treeId].title;
+    }
+  
+    return "";
   }
 
   render() {
@@ -362,9 +366,9 @@ class TreeViewPage extends React.Component<{
 
           <Stack direction="row">
             <Paper variant="riskypane">
-              <TreeViewPane nodes={this.state.treeMap ? Object.values(this.state.treeMap)[0].nodes : []}/>
+              <TreeViewPane nodes={this.state.treeMap && Object.values(this.state.treeMap).length > 0 ? Object.values(this.state.treeMap)[0].nodes : []}/>
             </Paper>
-            {this.state.treeMap && Object.values(this.state.treeMap)[0].nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeData={Object.values(this.state.treeMap)[0]} /> }
+            {this.state.treeMap && Object.values(this.state.treeMap).length > 0 && Object.values(this.state.treeMap)[0].nodes && <TreeViewer onNodeClicked={this.onNodeClicked} treeData={Object.values(this.state.treeMap)[0]} /> }
 
             <Paper variant="riskypane">
               {
