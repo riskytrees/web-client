@@ -5,6 +5,7 @@ import { RiskyColors } from './colors.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { createTheme, ThemeProvider }  from "@mui/material";
+import { NoEncryption } from '@mui/icons-material';
 
 const baseComponents = {
 
@@ -34,14 +35,7 @@ const baseComponents = {
         },
     },]
   },
-  MuiListItemText: {
-    styleOverrides: {
-      root: {
-        color: RiskyColors.uiColors.mainText,
-        
-      }
-    }
-  },
+
   MuiModal: {
     styleOverrides: {
       root: {
@@ -82,7 +76,7 @@ const baseComponents = {
     styleOverrides: {
       root: {
         padding: 0,
-        backgroundColor: RiskyColors.uiColors.mainNodeBackground,
+        backgroundColor:'none',
         borderRadius:'4px',
         '& label': {
           color: RiskyColors.uiColors.mainHighlightBorder,
@@ -213,6 +207,31 @@ const baseComponents = {
         },
     },]
   },
+
+  List: {
+    styleOverrides: {
+      root: {
+        backgroundColor:'red',
+
+      },
+    },
+},
+ ListItemButton: {
+    styleOverrides: {
+      root: {
+        backgroundColor:'red',
+
+      },
+    },
+},
+ListItemText: {
+  styleOverrides: {
+    root: {
+      backgroundColor:'none',
+
+    },
+  },
+},
   MuiPaper: {
     styleOverrides: {
       root: {
@@ -223,6 +242,7 @@ const baseComponents = {
 
 },
 variants: [
+ 
   {
     props: { variant: 'riskypane' },
     style: {
@@ -241,7 +261,7 @@ variants: [
     height: 'calc(100vh)',
     width: '100%',
   },
-}
+}, 
 ]
   },
   MuiAppBar: {

@@ -4,6 +4,7 @@ declare module '@mui/material/Paper' {
     interface PaperPropsVariantOverrides {
         riskypane: true;
         treearea: true;
+        homepane:true;
     }
 }
 declare module '@mui/material/Button' {
@@ -13,3 +14,4 @@ declare module '@mui/material/Button' {
         primaryButton: true;
     }
 }
+
