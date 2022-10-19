@@ -6,7 +6,7 @@ export interface NodeRiskResult {
 }
 
 export class RiskyRisk {
-    constructor(private treeData: TreeData ) {
+    constructor(private treeMap: Record<string, TreeData>, private rootTreeId: string ) {
     }
 
     // Returns an object of computed values:
@@ -32,11 +32,14 @@ export class RiskyRisk {
     }
 
     getNode(nodeId: string) {
-        for (const node of this.treeData.nodes) {
-            if (node.id === nodeId) {
-                return node;
+        for (const tree of Object.values(this.treeMap)) {
+            for (const node of tree.nodes) {
+                if (node.id === nodeId) {
+                    return node;
+                }
             }
         }
+
 
         return null;
     }

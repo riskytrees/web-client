@@ -4,6 +4,8 @@ export default interface TreeData {
         id: string;
         title: string;
         children: string[];
-        modelAttributes: Record<string, any>
+        modelAttributes: Record<string, any>;
+        description?: string;
+        conditionAttribute?: string;
     }[];
 };

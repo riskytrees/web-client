@@ -76,7 +76,9 @@ const baseComponents = {
     styleOverrides: {
       root: {
         padding: 0,
+
         backgroundColor:'none',
+
         borderRadius:'4px',
         '& label': {
           color: RiskyColors.uiColors.mainHighlightBorder,
