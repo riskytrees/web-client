@@ -252,7 +252,7 @@ class TreeViewPage extends React.Component<{
       treeData.nodes.splice(nodeToDelete, 1);
     }
 
-    const treeMap = this.state.treeMap;
+    const treeMap = structuredClone(this.state.treeMap);
     treeMap[treeIdToUpdate] = treeData;
 
     this.setState({

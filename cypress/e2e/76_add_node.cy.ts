@@ -1,4 +1,4 @@
-describe('Deselect Node', () => {
+describe('Add Node', () => {
     const newProjectUUID = self.crypto.randomUUID();
 
     it('loads tree page', () => {
@@ -29,14 +29,22 @@ describe('Deselect Node', () => {
             .click(canvasCenterX - 45, canvasCenterY)
 
             cy.contains('This is the root node')
-
-            // Click somewhere else on the canvas
-            cy.wrap(canvas)
-            .click(canvasCenterX + 45, canvasCenterY)
+            cy.contains('Add Node').click()
             cy.wait(1000)
 
-            cy.get('body').should('not.contain', 'This is the root node')
+            cy.get('canvas').then(canvas => {
+                const width = canvas.width();
+                const height = canvas.height();
+                const canvasCenterX = width / 2;
+                const canvasCenterY = height / 2;
+    
+                cy.wrap(canvas)
+                .click(canvasCenterX - 40, canvasCenterY + 55)
+                cy.wait(1000)
 
+    
+                cy.get('body').should('not.contain', 'This is the root node')
+            })
         })
       })
   })
