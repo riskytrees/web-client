@@ -75,7 +75,10 @@ export const enum uiColors {
     /*====PRIMARY COLORS====*/
     /*Primary color used for important buttons on a page, selected states, or special action indicators. Should be used sparingly*/
     primaryCTA = 'rgb(17, 91, 251)',
-   
+    /*14% darker than primary CTA*/
+    primaryCTAhover = 'rgb(3, 70, 216)',
+       /*14% darker than primary CTA*/
+    primaryCTAdisabled = 'rgb(35, 35, 35)',
     /*====BACKGROUNDS====*/
     /*Pane background is for most containers*/
     paneBackground = 'rgb(42, 42, 42)',

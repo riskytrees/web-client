@@ -42,9 +42,23 @@ max-width:440px;
 border:2px solid rgb(238, 238, 238, .4);
 padding:16px;
 border-radius:4px;
-
-
 }
+
+#projectName {
+
+  background-color:rgb(42, 42, 42); /*same as paneBackground*/
+  width:15vw;
+  min-width:180px;
+  max-width:240px;
+  border:2px solid rgb(238, 238, 238, .4);
+  padding:16px;
+  border-radius:4px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  
+  }
 
 #treeNameSelect {
 background:none;
