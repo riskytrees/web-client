@@ -30,6 +30,7 @@ describe('Add Node', () => {
 
             cy.contains('This is the root node')
             cy.contains('Add Node').click()
+            cy.wait(1000)
 
             cy.get('canvas').then(canvas => {
                 const width = canvas.width();
@@ -39,9 +40,10 @@ describe('Add Node', () => {
     
                 cy.wrap(canvas)
                 .click(canvasCenterX - 40, canvasCenterY + 55)
+                cy.wait(1000)
 
     
-                cy.should('not.contain', 'This is the root node')
+                cy.get('body').should('not.contain', 'This is the root node')
             })
         })
       })

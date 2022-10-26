@@ -33,6 +33,7 @@ describe('Deselect Node', () => {
             // Click somewhere else on the canvas
             cy.wrap(canvas)
             .click(canvasCenterX + 45, canvasCenterY)
+            cy.wait(1000)
 
             cy.get('body').should('not.contain', 'This is the root node')
 
