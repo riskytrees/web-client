@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import {Stack} from "@mui/material";
+import { Stack } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import TreeViewPane from './TreeViewPane';
@@ -82,7 +82,7 @@ class TreeViewPage extends React.Component<{
     } else if (modelId === 'f1644cb9-b2a5-4abb-813f-98d0277e42f2') {
       // Risk of Attack
       for (const [idx, node] of treeData.nodes.entries()) {
-        relevantProperties =  ['likelihoodOfSuccess', 'impactToDefender']
+        relevantProperties = ['likelihoodOfSuccess', 'impactToDefender']
       }
     } else if (modelId === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
       // EVITA
@@ -107,7 +107,7 @@ class TreeViewPage extends React.Component<{
 
     this.setState({
       treeMap: treeMap
-    }, () => this.updateTree(treeId) );
+    }, () => this.updateTree(treeId));
   }
 
   async resolveImports(treeData: TreeData, projectId: string) {
@@ -125,10 +125,10 @@ class TreeViewPage extends React.Component<{
 
       response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeData.result.treeId);
       let data = await response.json();
-  
+
 
       result[treeData.result.treeId] = data.result;
-      result = {...result, ...(await this.resolveImports(data.result, projectId))};
+      result = { ...result, ...(await this.resolveImports(data.result, projectId)) };
     }
 
     return result;
@@ -148,14 +148,14 @@ class TreeViewPage extends React.Component<{
 
     // Recursively resolve tree imports
     const result = await this.resolveImports(data.result, projectId);
-    treeMap = {...treeMap, ...result};
+    treeMap = { ...treeMap, ...result };
 
     this.setState({
       treeMap
     }, () => {
       this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
     })
-    
+
   }
 
   // Called when any portion of the tree is updated and needs to be synced
@@ -188,7 +188,7 @@ class TreeViewPage extends React.Component<{
         treeData.nodes[idx]['description'] = newNodeData['description'];
         treeData.nodes[idx]['modelAttributes'] = newNodeData['modelAttributes'];
         treeData.nodes[idx]['conditionAttribute'] = newNodeData['conditionAttribute'];
-        const treeMap = {...this.state.treeMap};
+        const treeMap = { ...this.state.treeMap };
         treeMap[treeIdToUpdate] = treeData;
         console.log("Tree Update")
         console.log(treeData)
@@ -224,7 +224,7 @@ class TreeViewPage extends React.Component<{
         id: uuid,
         children: []
       });
-  
+
     }
 
     let nodeToDelete = null;
@@ -258,15 +258,15 @@ class TreeViewPage extends React.Component<{
     this.setState({
       treeMap: treeMap,
       selectedNode: this.state.selectedNode
-    }, () => this.updateTree(treeIdToUpdate) );
+    }, () => this.updateTree(treeIdToUpdate));
   }
 
   handleOpen() {
-   this.setState({modalOpen: true})
+    this.setState({ modalOpen: true })
   }
 
   handleClose() {
-    this.setState({modalOpen: false})
+    this.setState({ modalOpen: false })
   }
 
   async getListOfModels() {
@@ -301,7 +301,7 @@ class TreeViewPage extends React.Component<{
       this.populateModelAttributes(modelId);
     })
 
-    
+
   }
 
   handleTreeNameChanged(event) {
@@ -320,7 +320,7 @@ class TreeViewPage extends React.Component<{
 
     this.setState({
       treeMap: treeMap
-    }, () => this.updateTree(treeId) );
+    }, () => this.updateTree(treeId));
 
   }
 
@@ -333,7 +333,7 @@ class TreeViewPage extends React.Component<{
     if (this.state.treeMap[treeId]) {
       return this.state.treeMap[treeId].title;
     }
-  
+
     return "";
   }
 
@@ -348,69 +348,69 @@ class TreeViewPage extends React.Component<{
 
     return (
       <>
-      
-        
+
+
         <AppBar>
           <Box display="flex" justifyContent="center" alignItems="center" marginTop="11.75px">
             <Button id="treeNameSelect" onClick={this.handleOpen} variant="text" endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
           </Box>
 
           <Modal
-          open={this.state.modalOpen}
-          onClose={this.handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+            open={this.state.modalOpen}
+            onClose={this.handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
           >
 
-          <Box id="treeSelectCenter">
-          <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
-          <TextField label="Tree Name" variant="outlined" size="small" onChange={this.handleTreeNameChanged} defaultValue={this.getTreeName()} />
-          <FormControl size="small">
-        <InputLabel id="node-type-dropdown-label">Config</InputLabel>
-          <Select
-            labelId="config-dropdown-label"
-            id="config-dropdown"
-            value={null}
-            label="Config"
-            size="small"
-            onChange={undefined}
-          >
-            <MenuItem value={10}>Config One</MenuItem>
-            <MenuItem value={20}>Config Two</MenuItem>
-            <MenuItem value={30}>Config Three</MenuItem>
-          </Select>
-</FormControl>
-<FormControl size="small">
-        <InputLabel id="node-type-dropdown-label">Model</InputLabel>
-          <Select
-            labelId="model-dropdown-label"
-            id="model-dropdown"
-            value={this.state.selectedModel}
-            label="Config"
-            size="small"
-            onChange={this.modelDropdownChanged}
-          >
-            {modelDropdownItems}
-            
-          </Select>
-          </FormControl>
-          </Stack>
-          </Box>
+            <Box id="treeSelectCenter">
+              <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
+                <TextField label="Tree Name" variant="outlined" size="small" onChange={this.handleTreeNameChanged} defaultValue={this.getTreeName()} />
+                <FormControl size="small">
+                  <InputLabel id="node-type-dropdown-label">Config</InputLabel>
+                  <Select
+                    labelId="config-dropdown-label"
+                    id="config-dropdown"
+                    value={null}
+                    label="Config"
+                    size="small"
+                    onChange={undefined}
+                  >
+                    <MenuItem value={10}>Config One</MenuItem>
+                    <MenuItem value={20}>Config Two</MenuItem>
+                    <MenuItem value={30}>Config Three</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl size="small">
+                  <InputLabel id="node-type-dropdown-label">Model</InputLabel>
+                  <Select
+                    labelId="model-dropdown-label"
+                    id="model-dropdown"
+                    value={this.state.selectedModel}
+                    label="Config"
+                    size="small"
+                    onChange={this.modelDropdownChanged}
+                  >
+                    {modelDropdownItems}
 
-        </Modal>
+                  </Select>
+                </FormControl>
+              </Stack>
+            </Box>
+
+          </Modal>
 
         </AppBar>
 
-          <Stack direction="row">
-            <Paper variant="riskypane">
-              <TreeViewPane treeMap={this.state.treeMap}/>
-            </Paper>
-            {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} /> }
+        <Stack direction="row">
+          <Paper variant="riskypane">
+            <TreeViewPane treeMap={this.state.treeMap} />
+          </Paper>
+          {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} />}
 
 
-            <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null , this.state.selectedModel)}/>
+          <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />
 
-          </Stack>
+        </Stack>
       </>
     )
   }
