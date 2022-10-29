@@ -44,10 +44,13 @@ describe('Page should not crash when selecting nodes', () => {
                 .click(canvasCenterX - 45, canvasCenterY + 50)
                 cy.get('#node-type-dropdown').click()
                 cy.contains("And").click()
+                cy.wait(1000)
 
                 cy.get('canvas').then(canvas => {
                     cy.wrap(canvas)
                     .click(canvasCenterX - 45, canvasCenterY)
+                    cy.wait(1000)
+
                     cy.get('#node-type-dropdown').click()
                     cy.contains("Or").click()
                 })
