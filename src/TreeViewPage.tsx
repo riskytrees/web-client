@@ -407,11 +407,9 @@ class TreeViewPage extends React.Component<{
             </Paper>
             {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} /> }
 
-            <Paper variant="riskypane">
-              {
-              <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null , this.state.selectedModel)}/>
-              }
-            </Paper>
+
+            <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null , this.state.selectedModel)}/>
+
           </Stack>
       </>
     )

@@ -14,6 +14,8 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { NodeRiskResult } from './Risk';
+import { LibraryAdd } from '@mui/icons-material';
+import Paper from "@mui/material/Paper";
 
 class NodePane extends React.Component<{
   currentNode: Record<string, any>;
@@ -65,6 +67,10 @@ class NodePane extends React.Component<{
     if (this.props.triggerAddDeleteNode) {
       this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, false);
     }
+  }
+
+  async handleAddSubtree(event) {
+
   }
 
   async handleNodeNameChange(event) {
@@ -307,8 +313,13 @@ class NodePane extends React.Component<{
   }
 
   render() {
+    if (!this.state.nodeId) {
+      return null;
+    }
+
     return (
       <>
+      <Paper variant="riskypane">
       <Stack>
       <Typography variant="h3">Details</Typography>
       <Box height={"10px"}></Box>
@@ -355,9 +366,12 @@ class NodePane extends React.Component<{
 
       <Button variant="addButton" startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node</Button>
       <Box height={"5px"}></Box>
+      <Button variant="addButton" startIcon={<LibraryAdd />} onClick={this.handleAddSubtree}>Add Subtree</Button>
+      <Box height={"5px"}></Box>
       <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
 
       </Stack>
+      </Paper>
 
       </>
     );
