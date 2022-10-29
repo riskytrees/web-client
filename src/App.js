@@ -33,7 +33,15 @@ const baseComponents = {
           fontSize:'14px',
           fontWeight:'700',
         },
-    },]
+    },
+    {
+      props: { variant: 'h2' },
+      style: {
+        fontSize:'16px',
+        fontWeight:'500',
+        color: RiskyColors.uiColors.mainText,
+      },
+  },]
   },
 
   MuiModal: {
@@ -138,15 +146,31 @@ const baseComponents = {
       },{
         props: { variant: 'primaryButton' },
         style: {
-          backgroundColor: 'transparent',
+          backgroundColor: RiskyColors.uiColors.primaryCTA,
           border: 'none',
+          borderRadius:'16px',
           justifyContent:'flex-start',
-          paddingLeft: '10px',
+          paddingLeft: '15px',
+          paddingRight: '15px',
           '&:hover': {
-            backgroundColor: RiskyColors.uiColors.primaryButton,
+            backgroundColor: RiskyColors.uiColors.primaryCTAhover,
         },
         },
         },
+        {
+          props: { variant: 'createButton' },
+          style: {
+            backgroundColor: RiskyColors.uiColors.primaryCTA,
+            border: 'none',
+            justifyContent:'flex-center',
+            '&:hover': {
+              backgroundColor: RiskyColors.uiColors.primaryCTAhover,
+          },
+            '&:disabled':{
+              backgroundColor: RiskyColors.uiColors.primaryCTAdisabled,
+            }
+          },
+          },
     ]
   },
   MuiTextField: {

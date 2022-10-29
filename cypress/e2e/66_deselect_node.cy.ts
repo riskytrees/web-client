@@ -4,8 +4,9 @@ describe('Deselect Node', () => {
     it('loads tree page', () => {
       cy.visit('/')
       cy.get('body').should('contain', 'Home')
+      cy.get('body').contains('New Project').click()
       cy.get('#createProjectButtonField').type(newProjectUUID)
-      cy.contains('New Project').click()
+      cy.contains('Create New Project').click()
       cy.contains(newProjectUUID, { timeout: 80000 }).click()
 
       cy.get('body').should('contain', 'Create New Tree')

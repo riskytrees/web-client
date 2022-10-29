@@ -12,6 +12,13 @@ declare module '@mui/material/Button' {
         addButton: true;
         deleteButton: true;
         primaryButton: true;
+        createButton: true;
     }
 }
 
+declare module '@mui/material/Typography' {
+    interface TypographyPropsVariantOverrides {
+        h3: true;
+        h2: true;
+    }
+}
