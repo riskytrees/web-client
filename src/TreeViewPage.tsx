@@ -234,6 +234,7 @@ class TreeViewPage extends React.Component<{
         
         if (subtreeNodeId) {
           treeData.nodes[idx]['children'].push(subtreeNodeId);
+          treeData.nodes[idx]['modelAttributes']['node_type'] = 'subtree';
         }
         else if (isAddAction) {
           treeData.nodes[idx]['children'].push(uuid);

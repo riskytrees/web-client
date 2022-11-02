@@ -360,6 +360,8 @@ class NodePane extends React.Component<{
             <MenuItem value={"and"}>And</MenuItem>
             <MenuItem value={"or"}>Or</MenuItem>
             <MenuItem value={"condition"}>Condition</MenuItem>
+            <MenuItem value={"subtree"}>Subtree</MenuItem>
+
       </Select>
         </FormControl>
       <Box height={"20px"}></Box>
