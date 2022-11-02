@@ -211,11 +211,12 @@ class TreeViewPage extends React.Component<{
     this.localTreeNodeUpdate(treeIdToUpdate, data)
   }
 
-  onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction) {
+  onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
     const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
     let uuid = crypto.randomUUID();
-
-    if (isAddAction && parentNodeId || isAddAction && treeData.nodes.length === 0) {
+    
+   
+    if (isAddAction && !subtreeNodeId && parentNodeId || isAddAction && treeData.nodes.length === 0) {
       treeData['nodes'].push({
         title: "New Node",
         description: "",
@@ -224,14 +225,17 @@ class TreeViewPage extends React.Component<{
         id: uuid,
         children: []
       });
-
     }
 
     let nodeToDelete = null;
 
     for (const [idx, node] of treeData.nodes.entries()) {
       if (node.id === parentNodeId) {
-        if (isAddAction) {
+        
+        if (subtreeNodeId) {
+          treeData.nodes[idx]['children'].push(subtreeNodeId);
+        }
+        else if (isAddAction) {
           treeData.nodes[idx]['children'].push(uuid);
         } else if (node.id !== treeData.rootNodeId) {
           // Delete

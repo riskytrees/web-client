@@ -81,7 +81,9 @@ class NodePane extends React.Component<{
   }
 
   async pickedSubtreeCallback(nodeId: string) {
-    // TODO
+    if (this.props.triggerAddDeleteNode) {
+      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, true, nodeId);
+    }
 
   }
 
@@ -388,8 +390,13 @@ class NodePane extends React.Component<{
       <TreePicker enabled={this.state.showSubtreeDialog} onSubmit={this.pickedSubtreeCallback} onCancel={this.canceledSubtreeCallback}></TreePicker>
       <Box height={"5px"}></Box>
       <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
+      <Box height={"5px"}></Box>
+      <Typography variant="caption">Node ID: {this.state.nodeId}</Typography>
+
       </Stack>
       </Paper>
+
+
 
       </>
     );
