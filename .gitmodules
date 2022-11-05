@@ -1,0 +1,3 @@
+[submodule "canvas-locator"]
+	path = canvas-locator
+	url = git@github.com:riskytrees/canvas-locator.git
