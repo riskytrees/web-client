@@ -4543,10 +4543,10 @@ __metadata:
 
 "canvas-locator@file:./canvas-locator::locator=web-client%40workspace%3A.":
   version: 1.0.0
-  resolution: "canvas-locator@file:./canvas-locator#./canvas-locator::hash=0b6c9f&locator=web-client%40workspace%3A."
+  resolution: "canvas-locator@file:./canvas-locator#./canvas-locator::hash=ec1334&locator=web-client%40workspace%3A."
   dependencies:
     tesseract.js: ^2.1.5
-  checksum: 52296c5e62659d5d38beacd4075136cc8e86c90fb24898912f7ad6f8debfdeade8dee0f01b13f03b8067f877ebf534a9794943f2c25426911ca26302511020a8
+  checksum: 5d0b8d57749b08f2c25beead0731911d305a3573d7c0d8f58f71a72172ae01049e23a2d6079d5f75b2998a1389027254f3f6fdc439b9f06ab42f8a0e5d1d0520
   languageName: node
   linkType: hard
 

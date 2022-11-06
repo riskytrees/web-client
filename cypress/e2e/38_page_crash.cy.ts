@@ -1,3 +1,5 @@
+import { CanvasLocator } from "canvas-locator";
+
 describe('Page should not crash when selecting nodes', () => {
     const newProjectUUID = self.crypto.randomUUID();
 
@@ -27,6 +29,14 @@ describe('Page should not crash when selecting nodes', () => {
         cy.get('body').should('not.contain', "EVITA")
       })
 
+      it('should contain a New Root node in canvas', () => {
+        let locator = new CanvasLocator();
+
+        
+        
+
+      })
+
       it('lets you add nodes', () => {
         cy.get('canvas').then(canvas => {
             const width = canvas.width();
@@ -36,20 +46,22 @@ describe('Page should not crash when selecting nodes', () => {
 
             cy.wrap(canvas)
             .click(canvasCenterX - 45, canvasCenterY)
+            cy.wait(1000)
 
             cy.contains('Add Node').click()
+            cy.wait(10000)
 
-            cy.get('canvas').then(canvas => {
+            cy.get('body').then(canvas => {
                 cy.wrap(canvas)
-                .click(canvasCenterX - 45, canvasCenterY + 50)
+                .click(475, 330)
                 cy.get('#node-type-dropdown').click()
                 cy.contains("And").click()
-                cy.wait(1000)
+                cy.wait(10000)
 
-                cy.get('canvas').then(canvas => {
+                cy.get('body').then(canvas => {
                     cy.wrap(canvas)
                     .click(canvasCenterX - 45, canvasCenterY)
-                    cy.wait(1000)
+                    cy.wait(10000)
 
                     cy.get('#node-type-dropdown').click()
                     cy.contains("Or").click()
