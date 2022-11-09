@@ -29,14 +29,6 @@ describe('Page should not crash when selecting nodes', () => {
         cy.get('body').should('not.contain', "EVITA")
       })
 
-      it('should contain a New Root node in canvas', () => {
-        let locator = new CanvasLocator();
-
-        
-        
-
-      })
-
       it('lets you add nodes', () => {
         cy.get('canvas').then(canvas => {
             const width = canvas.width();
@@ -52,15 +44,23 @@ describe('Page should not crash when selecting nodes', () => {
             cy.wait(10000)
 
             cy.get('body').then(canvas => {
+              const width = canvas.width();
+              const height = canvas.height();
+              const canvasCenterX = width / 2;
+              const canvasCenterY = height / 2;
                 cy.wrap(canvas)
-                .click(475, 330)
+                .click(canvasCenterX - 45, canvasCenterY + 45)
                 cy.get('#node-type-dropdown').click()
                 cy.contains("And").click()
                 cy.wait(10000)
 
                 cy.get('body').then(canvas => {
+                  const width = canvas.width();
+                  const height = canvas.height();
+                  const canvasCenterX = width / 2;
+                  const canvasCenterY = height / 2;
                     cy.wrap(canvas)
-                    .click(canvasCenterX - 45, canvasCenterY)
+                    .click(canvasCenterX - 45, canvasCenterY - 45)
                     cy.wait(10000)
 
                     cy.get('#node-type-dropdown').click()
