@@ -14,6 +14,9 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { NodeRiskResult } from './Risk';
+import { LibraryAdd } from '@mui/icons-material';
+import Paper from "@mui/material/Paper";
+import TreePicker from './TreePicker';
 
 class NodePane extends React.Component<{
   currentNode: Record<string, any>;
@@ -26,10 +29,11 @@ class NodePane extends React.Component<{
   nodeDescription: string;
   modelAttributes: any | null;
   conditionAttribute: string;
+  showSubtreeDialog: boolean;
 }> {
   constructor(props) {
     super(props);
-    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '' };
+    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false };
 
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
@@ -42,6 +46,9 @@ class NodePane extends React.Component<{
     this.isConditionNode = this.isConditionNode.bind(this);
     this.getConditionValue = this.getConditionValue.bind(this);
     this.handleConditionFieldChanged = this.handleConditionFieldChanged.bind(this);
+    this.handleAddSubtree = this.handleAddSubtree.bind(this);
+    this.canceledSubtreeCallback = this.canceledSubtreeCallback.bind(this);
+    this.pickedSubtreeCallback = this.pickedSubtreeCallback.bind(this);
   }
 
   async getTreeIdFromNodeId(nodeId: string) {
@@ -65,6 +72,25 @@ class NodePane extends React.Component<{
     if (this.props.triggerAddDeleteNode) {
       this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, false);
     }
+  }
+
+  async handleAddSubtree(event) {
+    this.setState({
+      showSubtreeDialog: true
+    })
+  }
+
+  async pickedSubtreeCallback(nodeId: string) {
+    if (this.props.triggerAddDeleteNode) {
+      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, true, nodeId);
+    }
+
+  }
+
+  async canceledSubtreeCallback() {
+    this.setState({
+      showSubtreeDialog: false
+    })
   }
 
   async handleNodeNameChange(event) {
@@ -307,8 +333,13 @@ class NodePane extends React.Component<{
   }
 
   render() {
+    if (!this.state.nodeId) {
+      return null;
+    }
+
     return (
       <>
+      <Paper variant="riskypane">
       <Stack>
       <Typography variant="h3">Details</Typography>
       <Box height={"10px"}></Box>
@@ -329,6 +360,8 @@ class NodePane extends React.Component<{
             <MenuItem value={"and"}>And</MenuItem>
             <MenuItem value={"or"}>Or</MenuItem>
             <MenuItem value={"condition"}>Condition</MenuItem>
+            <MenuItem value={"subtree"}>Subtree</MenuItem>
+
       </Select>
         </FormControl>
       <Box height={"20px"}></Box>
@@ -355,9 +388,17 @@ class NodePane extends React.Component<{
 
       <Button variant="addButton" startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node</Button>
       <Box height={"5px"}></Box>
+      <Button variant="addButton" startIcon={<LibraryAdd />} onClick={this.handleAddSubtree}>Add Subtree</Button>
+      <TreePicker enabled={this.state.showSubtreeDialog} onSubmit={this.pickedSubtreeCallback} onCancel={this.canceledSubtreeCallback}></TreePicker>
+      <Box height={"5px"}></Box>
       <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
+      <Box height={"5px"}></Box>
+      <Typography variant="caption">Node ID: {this.state.nodeId}</Typography>
 
       </Stack>
+      </Paper>
+
+
 
       </>
     );

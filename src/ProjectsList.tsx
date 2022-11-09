@@ -35,7 +35,7 @@ class ProjectsList extends React.Component {
     return (
       <table>
         <tbody>
-        {rows}
+          {rows}
 
         </tbody>
       </table>
