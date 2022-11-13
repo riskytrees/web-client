@@ -1,14 +1,40 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
+import TextField from "@mui/material/TextField";
+import { Button } from '@mui/material';
+import { RiskyRisk } from './Risk';
+import { title } from 'process';
+import { createThis } from 'typescript';
 
 class CreateTreeWidget extends React.Component<{
   projectId: string;
 }> {
   constructor(props) {
     super(props);
-    this.state = {  };
+    this.state = {'readyCheck':false};
+    this.validate = this.validate.bind(this);
   }
+
+
+  validate(){
+    console.log("Yep")
+    const treeNameFieldValidate = document.getElementById("treeNameField") as HTMLInputElement;
+    
+    if (treeNameFieldValidate) {
+      const title = treeNameFieldValidate.value;
+    
+    if (title.length > 0){
+    this.setState( {
+      'readyCheck':true
+    })}
+    else {
+    this.setState( {
+      'readyCheck':false
+    })}
+  
+  }
+  return true
+  };
 
   async createTree() {
     const treeNameField = document.getElementById("treeNameField");
@@ -54,11 +80,13 @@ class CreateTreeWidget extends React.Component<{
   render() {
     return (
       <>
-        <input placeholder="Tree Name" id="treeNameField">
-        </input>
-        <button onClick={this.createTree.bind(this)}>
+        
+        <TextField label="Tree Name" variant="outlined" size="small" id="treeNameField" onChange={this.validate}>
+        </TextField>
+ 
+        <Button variant="createButton" onClick={this.createTree.bind(this)} disabled ={!this.state['readyCheck']}>
           Create New Tree
-        </button>
+        </Button>
       </>
     )
   }

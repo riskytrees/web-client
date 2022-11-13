@@ -88,7 +88,7 @@ class Projects extends React.Component <{
           <Paper variant="riskypane" sx={{backgroundColor:'rgb(25, 25, 25)',}}>
             
           <Box sx={{ }}>
-          <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton" >New Project</Button>
+          <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton" >New Tree</Button>
           <Modal
           open={this.state.modalOpen}
           onClose={this.handleClose}
@@ -100,7 +100,7 @@ class Projects extends React.Component <{
           <Typography variant="h2">Enter Project Name</Typography>
           <Box height={"20px"}></Box>
           <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
-          <CreateProjectButton />
+          <CreateTreeWidget projectId={this.state['projectId']}/>
           </Stack>
           </Box>
           </Modal>
@@ -126,10 +126,15 @@ class Projects extends React.Component <{
       </nav>
     </Box>
 
-      <CreateTreeWidget projectId={this.state['projectId']}/>
+
+      </Paper>
+      <Paper variant="treearea">
+<Box px='60px'></Box>
+      
 
       <TreesList projectId={this.state['projectId']} />
-      </Paper>
+
+          </Paper>
       </Stack>
       <script>
 
