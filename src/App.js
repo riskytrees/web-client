@@ -260,7 +260,6 @@ variants: [
       height: 'calc(100vh - 90px)',
       padding: '15px',
       width: '316px',
-      marginTop: '60px',
       overflow: 'auto',
 
     },
