@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
+import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -123,12 +124,14 @@ class TreeViewPage extends React.Component<{
       let response = await fetch("http://localhost:8000/nodes/" + childId);
       let treeData = await response.json();
 
-      response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeData.result.treeId);
-      let data = await response.json();
-
-
-      result[treeData.result.treeId] = data.result;
-      result = { ...result, ...(await this.resolveImports(data.result, projectId)) };
+      if (treeData.ok === true) {
+        response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeData.result.treeId);
+        let data = await response.json();
+  
+  
+        result[treeData.result.treeId] = data.result;
+        result = { ...result, ...(await this.resolveImports(data.result, projectId)) };
+      }
     }
 
     return result;
@@ -159,7 +162,7 @@ class TreeViewPage extends React.Component<{
   }
 
   // Called when any portion of the tree is updated and needs to be synced
-  async updateTree(treeIdToUpdate: string) {
+  async updateTree(treeIdToUpdate: string, reloadAll: boolean = false) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -175,6 +178,10 @@ class TreeViewPage extends React.Component<{
 
       body: JSON.stringify(this.state.treeMap[treeIdToUpdate])
     });
+
+    if (reloadAll) {
+      await this.loadTree();
+    }
 
   }
 
@@ -234,7 +241,6 @@ class TreeViewPage extends React.Component<{
         
         if (subtreeNodeId) {
           treeData.nodes[idx]['children'].push(subtreeNodeId);
-          treeData.nodes[idx]['modelAttributes']['node_type'] = 'subtree';
         }
         else if (isAddAction) {
           treeData.nodes[idx]['children'].push(uuid);
@@ -263,7 +269,7 @@ class TreeViewPage extends React.Component<{
     this.setState({
       treeMap: treeMap,
       selectedNode: this.state.selectedNode
-    }, () => this.updateTree(treeIdToUpdate));
+    }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
   }
 
   handleOpen() {
@@ -405,7 +411,6 @@ class TreeViewPage extends React.Component<{
           </Modal>
 
         </AppBar>
-
         <Stack direction="row">
           <Paper variant="riskypane">
             <TreeViewPane treeMap={this.state.treeMap} />

@@ -37,7 +37,7 @@ describe('Page should not crash when selecting nodes', () => {
             const canvasCenterY = height / 2;
 
             cy.wrap(canvas)
-            .click(canvasCenterX - 45, canvasCenterY)
+            .click(canvasCenterX - 45, canvasCenterY )
             cy.wait(1000)
 
             cy.contains('Add Node').click()
@@ -49,7 +49,7 @@ describe('Page should not crash when selecting nodes', () => {
               const canvasCenterX = width / 2;
               const canvasCenterY = height / 2;
                 cy.wrap(canvas)
-                .click(canvasCenterX - 45, canvasCenterY + 45)
+                .click(canvasCenterX - 45, canvasCenterY + 60 )
                 cy.get('#node-type-dropdown').click()
                 cy.contains("And").click()
                 cy.wait(10000)
@@ -60,7 +60,7 @@ describe('Page should not crash when selecting nodes', () => {
                   const canvasCenterX = width / 2;
                   const canvasCenterY = height / 2;
                     cy.wrap(canvas)
-                    .click(canvasCenterX - 45, canvasCenterY - 45)
+                    .click(canvasCenterX - 45, canvasCenterY - 30 )
                     cy.wait(10000)
 
                     cy.get('#node-type-dropdown').click()

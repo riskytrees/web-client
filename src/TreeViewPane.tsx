@@ -84,7 +84,9 @@ class TreeViewPane extends React.Component<{
                     {
                         node.children.map(child => {
                             const node = this.findNodeWithId(child);
-                            return this.generateLineItem(node, level + 1)
+                            if (node) {
+                              return this.generateLineItem(node, level + 1)
+                            }
                         })
                     }
                 </List>
@@ -117,10 +119,13 @@ class TreeViewPane extends React.Component<{
         for (const tree of Object.values(this.state.treeMap)) {
 
           for (const node of tree.nodes) {
+            if (node) { // Node can be null if it no longer exists
               if (!children.includes(node.id)) {
-                  rootNode = node;
-                  break;
-              }
+                rootNode = node;
+                break;
+            }
+            }
+
           }
         }
     
