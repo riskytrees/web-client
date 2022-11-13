@@ -257,7 +257,7 @@ variants: [
     props: { variant: 'riskypane' },
     style: {
       backgroundColor: RiskyColors.uiColors.paneBackground,
-      height: 'calc(100vh - 90px)',
+      height: 'calc(100vh - 30px)',
       padding: '15px',
       width: '316px',
       overflow: 'auto',
@@ -281,7 +281,7 @@ variants: [
         backgroundColor: RiskyColors.uiColors.headerBackground,
         backgroundImage: 'none',
         boxShadow: '2px 2px 4px 0px rgb(5 5 5 / 10%)',
-
+        position: 'relative'
       },
 },
 

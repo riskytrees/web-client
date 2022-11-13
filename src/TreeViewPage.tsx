@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
+import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -410,7 +411,6 @@ class TreeViewPage extends React.Component<{
           </Modal>
 
         </AppBar>
-
         <Stack direction="row">
           <Paper variant="riskypane">
             <TreeViewPane treeMap={this.state.treeMap} />

@@ -42,7 +42,7 @@ class HomePage extends React.Component <{
   render() {
     return (
       <>
-      <AppBar position="sticky">
+      <AppBar>
           <Box display="flex" justifyContent="center" alignItems="center" marginTop="11.75px">
             <Button id="treeNameSelect"  variant="text" endIcon={<Home />}>Home</Button>
           </Box>
