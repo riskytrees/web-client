@@ -91,7 +91,7 @@ class HomePage extends React.Component <{
 
             </Paper> 
           <Paper variant="treearea">
-
+          <Box px='60px'></Box>
             <ProjectsList />
           </Paper>
         </Stack>
