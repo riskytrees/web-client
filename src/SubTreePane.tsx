@@ -21,7 +21,6 @@ class SubTreePane extends React.Component<{
     this.state = { dag: null };
 
     this.lineItemClicked = this.lineItemClicked.bind(this);
-    this.generateLineItem = this.generateLineItem.bind(this);
     this.renderTreeList = this.renderTreeList.bind(this);
 
   }
@@ -66,39 +65,7 @@ class SubTreePane extends React.Component<{
     })
   }
 
-  generateLineItem(node, level) {
-    const toReturn: JSX.Element[] = [];
-    const key = "line-" + node.id;
 
-    const indentClass = 'RiskyIndentLevel' + level.toString()
-
-    toReturn.push(<ListItemButton sx={{ ml: (level * 10).toString() + 'px' }} alignItems="flex-start" id={key} key={key} onClick={() => {
-        this.lineItemClicked(key)
-    }}>
-        <ListItemIcon></ListItemIcon>
-        <ListItemText primary={node.title}/>
-        {this.state[key] ? <ExpandLess /> : <ExpandMore />}
-    </ListItemButton>)
-
-   if (node.children.length > 0) {
-        toReturn.push(<Collapse in={this.state[key]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    {
-                        node.children.map(child => {
-                            //const node = this.findNodeWithId(child);
-                            //if (node) {
-                            //  return this.generateLineItem(node, level + 1)
-                            //}
-                        })
-                    }
-                </List>
-            </Collapse>
-        )
-
-    }
-
-    return toReturn;
-  }
 
   renderTreeList(data: Record<string, any>, level: number = 0) {
     if (!data) {
@@ -121,7 +88,7 @@ class SubTreePane extends React.Component<{
             <List component="div" disablePadding>
                 {
                     data.children.map(child => {
-                      return this.generateLineItem(child, level + 1)
+                      return this.renderTreeList(child, level + 1)
 
                     })
                 }
