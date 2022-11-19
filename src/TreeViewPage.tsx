@@ -13,12 +13,13 @@ import MenuItem from '@mui/material/MenuItem';
 import { Stack } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
-import TreeViewPane from './TreeViewPane';
 import NodePane from './NodePane';
 import TreeData from './interfaces/TreeData';
 import { RiskyRisk } from './Risk';
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import SubTreePane from './SubTreePane';
+
 class TreeViewPage extends React.Component<{
 
 }, {
@@ -349,6 +350,11 @@ class TreeViewPage extends React.Component<{
   }
 
   render() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const treeId = urlParams.get('id');
+    const projectId = urlParams.get('projectId');
+
     const modelDropdownItems: JSX.Element[] = [];
 
     if (this.state.models) {
@@ -413,7 +419,7 @@ class TreeViewPage extends React.Component<{
         </AppBar>
         <Stack direction="row">
           <Paper variant="riskypane">
-            <TreeViewPane treeMap={this.state.treeMap} />
+            <SubTreePane rootTreeId={treeId} projectId={projectId} />
           </Paper>
           {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} />}
 

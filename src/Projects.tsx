@@ -6,7 +6,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Home from '@mui/icons-material/Home';
-import TreeViewPane from './TreeViewPane';
+import TreeViewPane from './SubTreePane';
 import Paper from "@mui/material/Paper"
 import Stack from "@mui/material/Stack"
 import List from '@mui/material/List';

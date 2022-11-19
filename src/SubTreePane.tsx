@@ -10,40 +10,42 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import TreeData from './interfaces/TreeData';
 
 
-class TreeViewPane extends React.Component<{
-  treeMap: Record<string, TreeData>;
+class SubTreePane extends React.Component<{
+  projectId: string;
+  rootTreeId: string;
 }, {
-  treeMap: Record<string, TreeData>;
+  dag: Record<string, any>
 }> {
   constructor(props) {
     super(props);
-    this.state = { treeMap: this.props.treeMap };
+    this.state = { dag: null };
 
     this.lineItemClicked = this.lineItemClicked.bind(this);
     this.generateLineItem = this.generateLineItem.bind(this);
     this.renderTreeList = this.renderTreeList.bind(this);
+
+  }
+
+  componentDidMount() {
+    this.getDag();
+
+  }
+
+  async getDag() {
+    let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + '/trees/' + this.props.rootTreeId + '/dag/down');
+    let data = await response.json();
+    console.log(data)
+    this.setState({
+      dag: data['result']['root']
+    })
   }
 
   componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
-      if (this.props.treeMap) {
-        this.setState({
-          treeMap: this.props.treeMap
-        });
+      if (this.props.rootTreeId && this.props.projectId) {
+        this.getDag();
       }
     }
-  }
-
-  findNodeWithId(nodeId) {
-    for (const tree of Object.values(this.state.treeMap)) {
-      for (const node of tree.nodes) {
-        if (node.id === nodeId) {
-            return node;
-        }
-      }
-    } 
-
-    return null;
   }
 
   lineItemClicked(lineItemId) {
@@ -83,10 +85,10 @@ class TreeViewPane extends React.Component<{
                 <List component="div" disablePadding>
                     {
                         node.children.map(child => {
-                            const node = this.findNodeWithId(child);
-                            if (node) {
-                              return this.generateLineItem(node, level + 1)
-                            }
+                            //const node = this.findNodeWithId(child);
+                            //if (node) {
+                            //  return this.generateLineItem(node, level + 1)
+                            //}
                         })
                     }
                 </List>
@@ -98,44 +100,38 @@ class TreeViewPane extends React.Component<{
     return toReturn;
   }
 
-  renderTreeList() {
-    if (this.state.treeMap) {
-        console.log("Render Tree List")
-        const toReturn = [];
-        console.log(this.state.treeMap)
-    
-        // Find the root node
-        const children: string[] = [];
-        let rootNode = null;
-    
-        for (const tree of Object.values(this.state.treeMap)) {
-          for (const node of tree.nodes) {
-            for (const child of node.children) {
-                children.push(child);
-            }
-          }
-        }
-
-        for (const tree of Object.values(this.state.treeMap)) {
-
-          for (const node of tree.nodes) {
-            if (node) { // Node can be null if it no longer exists
-              if (!children.includes(node.id)) {
-                rootNode = node;
-                break;
-            }
-            }
-
-          }
-        }
-    
-    
-        if (rootNode) {
-            return this.generateLineItem(rootNode, 0)
-        }
+  renderTreeList(data: Record<string, any>, level: number = 0) {
+    if (!data) {
+      return null;
     }
 
-    return null;
+    const toReturn: JSX.Element[] = [];
+    const key = "line-" + data['id'];
+
+    toReturn.push(<ListItemButton sx={{ ml: (level * 10).toString() + 'px' }} alignItems="flex-start" id={key} key={key} onClick={() => {
+      this.lineItemClicked(key)
+  }}>
+      <ListItemIcon></ListItemIcon>
+      <ListItemText primary={data['id']}/>
+      {this.state[key] ? <ExpandLess /> : <ExpandMore />}
+  </ListItemButton>)
+
+  if (data.children.length > 0) {
+    toReturn.push(<Collapse in={this.state[key]} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+                {
+                    data.children.map(child => {
+                      return this.generateLineItem(child, level + 1)
+
+                    })
+                }
+            </List>
+        </Collapse>
+    )
+
+  }
+
+    return toReturn;
   }
 
   render() {
@@ -148,12 +144,12 @@ class TreeViewPane extends React.Component<{
             disablePadding
             subheader={
                 <ListSubheader id="nested-list-subheader">
-                    Tree Viewer
+                    SubTree Viewer
                 </ListSubheader>
             }
         >
 
-        <div>{this.renderTreeList()}</div>
+        <div>{this.renderTreeList(this.state.dag)}</div>
 
         </List>
       </>
@@ -161,4 +157,4 @@ class TreeViewPane extends React.Component<{
   }
 }
 
-export default TreeViewPane;
+export default SubTreePane;
