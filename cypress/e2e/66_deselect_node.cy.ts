@@ -7,11 +7,18 @@ describe('Deselect Node', () => {
       cy.get('body').contains('New Project').click()
       cy.get('#createProjectButtonField').type(newProjectUUID)
       cy.contains('Create New Project').click()
+      cy.intercept('http://localhost:8000/projects/*/trees/*').as('getProject')
+  
       cy.contains("Tree Viewer", { timeout: 80000 }).click()
+      cy.wait('@getProject', { timeout: 20000 })
     })
 
     it('lets you select a node', () => {
-        cy.contains('New Root node', { timeout: 20000 })
+      cy.location().then((loc) => {
+        let treeId = loc.search.split('id=')[1].split('&')[0];
+
+
+        cy.contains(treeId, { timeout: 20000 })
 
         cy.get('canvas').then(canvas => {
             const width = canvas.width();
@@ -33,4 +40,6 @@ describe('Deselect Node', () => {
 
         })
       })
+
+    })
   })
