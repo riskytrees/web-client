@@ -19,6 +19,7 @@ import { RiskyRisk } from './Risk';
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import SubTreePane from './SubTreePane';
+import ConfigPicker from './ConfigPicker';
 
 class TreeViewPage extends React.Component<{
 
@@ -400,21 +401,7 @@ class TreeViewPage extends React.Component<{
             <Box id="treeSelectCenter">
               <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
                 <TextField label="Tree Name" variant="outlined" size="small" onChange={this.handleTreeNameChanged} defaultValue={this.getTreeName()} />
-                <FormControl size="small">
-                  <InputLabel id="node-type-dropdown-label">Config</InputLabel>
-                  <Select
-                    labelId="config-dropdown-label"
-                    id="config-dropdown"
-                    value={null}
-                    label="Config"
-                    size="small"
-                    onChange={undefined}
-                  >
-                    <MenuItem value={10}>Config One</MenuItem>
-                    <MenuItem value={20}>Config Two</MenuItem>
-                    <MenuItem value={30}>Config Three</MenuItem>
-                  </Select>
-                </FormControl>
+                <ConfigPicker projectId={projectId}></ConfigPicker>
                 {modelDropdown}
 
               </Stack>
