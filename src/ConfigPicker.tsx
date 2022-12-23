@@ -12,50 +12,100 @@ import EditIcon from '@mui/icons-material/Edit';
 class ConfigPicker extends React.Component<{
     projectId: string
 }, {
-    availableConfigs: Record<string, any>[]
+    availableConfigs: string[],
+    selectedConfig: string
 }>{
     constructor(props) {
         super(props);
-        this.state = { availableConfigs: [] };
+        this.state = { availableConfigs: [], selectedConfig: null };
 
         this.loadAvailableConfigs = this.loadAvailableConfigs.bind(this);
+        this.loadSelectedConfig = this.loadSelectedConfig.bind(this);
         this.addClicked = this.addClicked.bind(this);
         this.editClicked = this.editClicked.bind(this);
+        this.configItemClicked = this.configItemClicked.bind(this);
 
+        this.loadAvailableConfigs().then(res => {
+            this.loadSelectedConfig();
+        })
     }
 
     async loadAvailableConfigs() {
         let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/configs");
         let data = await response.json();
+        
+        if (data['ok'] === false) {
+            this.setState({
+                availableConfigs: []
+            });
+        } else {
+            this.setState({
+                availableConfigs: data['result']['ids']
+            });
+        }
+    }
 
-        this.setState({
-            availableConfigs: data['result']
-        });
+    async loadSelectedConfig() {
+        let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/config");
+        let data = await response.json();
+        
+        if (data['ok'] === false) {
+            this.setState({
+                selectedConfig: null
+            });
+        } else {
+            this.setState({
+                selectedConfig: data['result']['id']
+            });
+        }
     }
 
     editClicked() {
         console.log("Edit clicked")
     }
 
+    async switchConfig(desiredConfigId: string) {
+        let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/config", {
+            method: 'PUT',
+            body: JSON.stringify({ 
+                desiredConfig: desiredConfigId
+             }),
+        });
+        let data = await response.json();
+        this.setState({
+            selectedConfig: desiredConfigId
+        });
+
+        return data['ok'];
+
+    }
+
     async addClicked() {
         let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/configs", {
             method: 'POST',
-            body: JSON.stringify({  }),
+            body: JSON.stringify({ 
+                attributes: {}
+             }),
         });
         let data = await response.json();
         
         if (data['ok'] === true) {
-            this.loadAvailableConfigs();
+            await this.loadAvailableConfigs();
+
+            // Now switch to it
+            await this.switchConfig(data['result']['id']);
         }
+    }
+
+    async configItemClicked(event) {
+        return await this.switchConfig(event.target.value)
     }
 
     render() {
         let menuItemList: JSX.Element[] = [];
 
-        for (const option of this.state['availableConfigs']) {
-            for (const id of option['ids']) {
-                menuItemList.push(<MenuItem value={id}> Config {id} </MenuItem>)
-            }
+        for (const optionId of this.state['availableConfigs']) {
+            menuItemList.push(<MenuItem value={optionId}> Config {optionId} </MenuItem>)
         }
 
         return (
@@ -68,10 +118,10 @@ class ConfigPicker extends React.Component<{
                             <Select
                                 labelId="config-dropdown-label"
                                 id="config-dropdown"
-                                value={null}
+                                value={this.state.selectedConfig}
                                 label="Config"
                                 size="small"
-                                onChange={undefined}
+                                onChange={this.configItemClicked}
                             >
                                 {menuItemList}
                             </Select>
