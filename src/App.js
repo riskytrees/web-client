@@ -1,6 +1,7 @@
 import HomePage from './HomePage';
 import Projects from './Projects.tsx';
 import TreeViewPage from './TreeViewPage';
+import LoginPage from './LoginPage';
 import { RiskyColors } from './colors.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -242,7 +243,7 @@ ListItemText: {
     },
   },
 },
-  MuiPaper: {
+MuiPaper: {
     styleOverrides: {
       root: {
         borderRadius:'0px',
@@ -250,28 +251,28 @@ ListItemText: {
 
       },
 
-},
-variants: [
- 
-  {
-    props: { variant: 'riskypane' },
-    style: {
-      backgroundColor: RiskyColors.uiColors.paneBackground,
-      height: 'calc(100vh - 30px)',
-      padding: '15px',
-      width: '316px',
-      overflow: 'auto',
-
     },
-}, {
-  props: { variant: 'treearea' },
-  style: {
-    backgroundColor: RiskyColors.uiColors.mainBackground,
-    height: 'calc(100vh)',
-    width: '100%',
-  },
-}, 
-]
+    variants: [
+    
+      {
+        props: { variant: 'riskypane' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.paneBackground,
+          height: 'calc(100vh - 30px)',
+          padding: '15px',
+          width: '316px',
+          overflow: 'auto',
+
+        },
+    }, {
+      props: { variant: 'treearea' },
+      style: {
+        backgroundColor: RiskyColors.uiColors.mainBackground,
+        height: 'calc(100vh)',
+        width: '100%',
+      },
+    }, 
+    ]
   },
   MuiAppBar: {
     styleOverrides: {
@@ -315,6 +316,8 @@ function App() {
           <Route path="/projects" element={<Projects />}>
           </Route>
           <Route path="/tree" element={<TreeViewPage />}>
+          </Route>
+          <Route path="/login" element={<LoginPage />}>
           </Route>
         </Routes>
       </BrowserRouter>

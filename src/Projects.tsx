@@ -21,9 +21,10 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { RiskyRisk } from './Risk';
+import { RiskyApi } from './api';
 
 
-class Projects extends React.Component <{
+class Projects extends React.Component<{
 
 }, {
   modalOpen: boolean;
@@ -35,7 +36,7 @@ class Projects extends React.Component <{
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
-    this.state = { projectId: urlParams.get('id'), projectName: null, modalOpen:false };
+    this.state = { projectId: urlParams.get('id'), projectName: null, modalOpen: false };
 
     this.loadCurrentProjectName(this.state['projectId']);
     this.handleOpen = this.handleOpen.bind(this);
@@ -43,9 +44,7 @@ class Projects extends React.Component <{
   }
 
   async loadCurrentProjectName(projectId: string) {
-
-    let response = await fetch("http://localhost:8000/projects");
-    let data = await response.json();
+    let data = await RiskyApi.call("http://localhost:8000/projects", {});
 
     if (data['result']['projects']) {
       for (const project of data['result']['projects']) {
@@ -58,87 +57,75 @@ class Projects extends React.Component <{
     }
   }
 
-    handleOpen() {
-      this.setState({modalOpen: true})
-     }
-   
-     handleClose() {
-       this.setState({modalOpen: false})
-     }
+  handleOpen() {
+    this.setState({ modalOpen: true })
+  }
 
-  
-
-
-     
-    
- 
-// this.state = { projectId: urlParams.get('id') }
-
+  handleClose() {
+    this.setState({ modalOpen: false })
+  }
 
 
   render() {
     return (
       <>
-<AppBar>
+        <AppBar>
           <Box display="flex" justifyContent="center" alignItems="center" marginTop="11.75px">
-            <Button id="treeNameSelect"  variant="text" endIcon={<Home />}>{this.state['projectName']}</Button>
+            <Button id="treeNameSelect" variant="text" endIcon={<Home />}>{this.state['projectName']}</Button>
           </Box>
-          </AppBar>
+        </AppBar>
         <Stack direction="row">
-          <Paper variant="riskypane" sx={{backgroundColor:'rgb(25, 25, 25)',}}>
-            
-          <Box sx={{ }}>
-          <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton" >New Tree</Button>
-          <Modal
-          open={this.state.modalOpen}
-          onClose={this.handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          >
+          <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
 
-          <Box id="projectName">
-          <Typography variant="h2">Enter Project Name</Typography>
-          <Box height={"20px"}></Box>
-          <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
-          <CreateTreeWidget projectId={this.state['projectId']}/>
-          </Stack>
-          </Box>
-          </Modal>
+            <Box sx={{}}>
+              <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton" >New Tree</Button>
+              <Modal
+                open={this.state.modalOpen}
+                onClose={this.handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
 
-          <Box height={"10px"}></Box>
-      <nav aria-label="main mailbox folders">
+                <Box id="projectName">
+                  <Typography variant="h2">Enter Project Name</Typography>
+                  <Box height={"20px"}></Box>
+                  <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
+                    <CreateTreeWidget projectId={this.state['projectId']} />
+                  </Stack>
+                </Box>
+              </Modal>
 
-      </nav>
-      <Divider />
-      <nav aria-label="secondary mailbox folders">
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Trash" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemText primary="Spam" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </nav>
-    </Box>
+              <Box height={"10px"}></Box>
+              <nav aria-label="main mailbox folders">
 
+              </nav>
+              <Divider />
+              <nav aria-label="secondary mailbox folders">
+                <List>
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <ListItemText primary="Trash" />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton component="a" href="#simple-list">
+                      <ListItemText primary="Spam" />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </nav>
+            </Box>
 
-      </Paper>
-      <Paper variant="treearea">
-<Box px='60px'></Box>
-      
-
-      <TreesList projectId={this.state['projectId']} />
 
           </Paper>
-      </Stack>
-      <script>
+          <Paper variant="treearea">
+            <Box px='60px'></Box>
 
-      </script>
+
+            <TreesList projectId={this.state['projectId']} />
+
+          </Paper>
+        </Stack>
       </>
     );
   }

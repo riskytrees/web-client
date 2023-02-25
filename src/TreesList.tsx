@@ -1,4 +1,5 @@
 import React from 'react';
+import { RiskyApi } from './api';
 
 class TreesList extends React.Component<{
   projectId: string;
@@ -14,8 +15,7 @@ class TreesList extends React.Component<{
   async loadTrees() {
     this.state = { trees: [] };
 
-    let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/trees");
-    let data = await response.json();
+    let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/trees", {});
 
     if (data['result']['trees']) {
       for (const tree of data['result']['trees']) {

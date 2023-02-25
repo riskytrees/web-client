@@ -2,6 +2,8 @@ describe('Condition field', () => {
     const newProjectUUID = self.crypto.randomUUID();
 
     it('loads tree page', () => {
+      localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
+
       cy.visit('/')
       cy.get('body').should('contain', 'Home')
       cy.get('body').contains('New Project').click()
@@ -14,6 +16,8 @@ describe('Condition field', () => {
     })
 
     it('lets you select a node', () => {
+      localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
+
       cy.location().then((loc) => {
         let treeId = loc.search.split('id=')[1].split('&')[0];
   
@@ -38,6 +42,8 @@ describe('Condition field', () => {
     })
 
     it('should let you select the condition field', () => {
+      localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
+
         cy.get('#node-type-dropdown').click()
         cy.get('[data-value="condition"]').click()
         cy.get('#node-type-dropdown').should('contain', 'Condition')

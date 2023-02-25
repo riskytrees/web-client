@@ -20,6 +20,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import SubTreePane from './SubTreePane';
 import ConfigPicker from './ConfigPicker';
+import { RiskyApi } from './api';
 
 class TreeViewPage extends React.Component<{
 
@@ -61,8 +62,7 @@ class TreeViewPage extends React.Component<{
 
     const projectId = urlParams.get('projectId');
 
-    let response = await fetch("http://localhost:8000/projects/" + projectId + "/model");
-    let data = await response.json();
+    let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/model", {});
     this.setState({
       selectedModel: data.result.modelId
     })
@@ -123,13 +123,10 @@ class TreeViewPage extends React.Component<{
     let result = {}
 
     for (const childId of childrenToResolve) {
-      let response = await fetch("http://localhost:8000/nodes/" + childId);
-      let treeData = await response.json();
+      let treeData = await RiskyApi.call("http://localhost:8000/nodes/" + childId, {});
 
       if (treeData.ok === true) {
-        response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeData.result.treeId);
-        let data = await response.json();
-  
+        let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/trees/" + treeData.result.treeId, {});
   
         result[treeData.result.treeId] = data.result;
         result = { ...result, ...(await this.resolveImports(data.result, projectId)) };
@@ -146,8 +143,7 @@ class TreeViewPage extends React.Component<{
     const projectId = urlParams.get('projectId');
     const treeId = urlParams.get('id');
 
-    let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeId);
-    let data = await response.json();
+    let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/trees/" + treeId, {});
     let treeMap = {};
     treeMap[treeId] = data.result;
 
@@ -171,15 +167,12 @@ class TreeViewPage extends React.Component<{
     const projectId = urlParams.get('projectId');
     const treeId = urlParams.get('id');
 
-
     this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
 
-
-    let response = await fetch("http://localhost:8000/projects/" + projectId + "/trees/" + treeIdToUpdate, {
+    let response = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/trees/" + treeIdToUpdate, {
       method: 'PUT',
-
       body: JSON.stringify(this.state.treeMap[treeIdToUpdate])
-    });
+    })
 
     if (reloadAll) {
       await this.loadTree();
@@ -283,9 +276,7 @@ class TreeViewPage extends React.Component<{
   }
 
   async getListOfModels() {
-
-    let response = await fetch("http://localhost:8000/models/");
-    let data = await response.json();
+    let data = await RiskyApi.call("http://localhost:8000/models/", {});
     this.setState({
       models: data.result.models
     })
@@ -302,12 +293,13 @@ class TreeViewPage extends React.Component<{
     const projectId = urlParams.get('projectId');
     const treeId = urlParams.get('id');
 
-    let response = await fetch("http://localhost:8000/projects/" + projectId + "/model", {
+    let response = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/model", {
       method: 'PUT',
       body: JSON.stringify({
         modelId: modelId
       })
-    });
+    })
+
     this.setState({
       selectedModel: modelId
     }, () => {

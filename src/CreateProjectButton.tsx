@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import { RiskyRisk } from './Risk';
 import { title } from 'process';
 import { v4 as uuidv4 } from 'uuid';
-
+import { RiskyApi } from './api';
 
 class CreateProjectButton extends React.Component<{
 
@@ -41,32 +41,21 @@ class CreateProjectButton extends React.Component<{
   async createProject() {
     const createProjectButtonField = document.getElementById("createProjectButtonField") as HTMLInputElement;
 
-    console.log("check1")
     if (createProjectButtonField) {
       const title = createProjectButtonField.value;
-      console.log("check2")
-      let response = await fetch("http://localhost:8000/projects", {
+      let data = await RiskyApi.call("http://localhost:8000/projects", {
         method: 'POST',
         body: JSON.stringify({
           title
         })
-      });
-      console.log("check3")
-      let data = await response.json();
-      console.log("check4")
+      })
 
-      //Everything below is news
       this.setState({ projectId: data['result']['id'] })
-      console.log(this.state)
 
-
-      console.log('check5')
-
-      let createTreeResponse = await fetch("http://localhost:8000/projects/" + this.state.projectId + '/trees', {
+      data = await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + '/trees', {
         method: 'POST',
         body: JSON.stringify({ title: 'Untitled' }),
-      });
-      data = await createTreeResponse.json();
+      })
 
       const newRootNodeId = uuidv4();
       let newData = {
@@ -84,10 +73,11 @@ class CreateProjectButton extends React.Component<{
         ]
       }
 
-      let addNodeResponse = await fetch("http://localhost:8000/projects/" + this.state.projectId + '/trees/' + data['result']["id"], {
+      await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + '/trees/' + data['result']["id"], {
         method: 'PUT',
         body: JSON.stringify(newData)
-      });
+      })
+
 
       window.location.href = "http://localhost:8080/tree?id=" + data['result']["id"] + "&projectId=" + this.state.projectId;
     }

@@ -3,6 +3,8 @@ describe('Page should not crash when selecting nodes', () => {
   const newProjectUUID = self.crypto.randomUUID();
 
   it('loads tree page', () => {
+    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
+
     cy.visit('/')
     cy.get('body').should('contain', 'Home')
     cy.get('body').contains('New Project').click()
@@ -15,6 +17,8 @@ describe('Page should not crash when selecting nodes', () => {
   })
 
   it('lets you select a risk model', () => {
+    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
+
     cy.location().then((loc) => {
       let treeId = loc.search.split('id=')[1].split('&')[0];
 
@@ -29,6 +33,8 @@ describe('Page should not crash when selecting nodes', () => {
   })
 
   it('lets you add nodes', () => {
+    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
+
     cy.get('canvas').then(canvas => {
       const width = canvas.width();
       const height = canvas.height();
