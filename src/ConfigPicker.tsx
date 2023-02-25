@@ -9,6 +9,8 @@ import Item from '@mui/material/Grid';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 
+import { RiskyApi } from './api';
+
 class ConfigPicker extends React.Component<{
     projectId: string
 }, {
@@ -31,8 +33,7 @@ class ConfigPicker extends React.Component<{
     }
 
     async loadAvailableConfigs() {
-        let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/configs");
-        let data = await response.json();
+        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/configs", {});
         
         if (data['ok'] === false) {
             this.setState({
@@ -46,9 +47,8 @@ class ConfigPicker extends React.Component<{
     }
 
     async loadSelectedConfig() {
-        let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/config");
-        let data = await response.json();
-        
+        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/config", {});
+
         if (data['ok'] === false) {
             this.setState({
                 selectedConfig: null
@@ -65,13 +65,13 @@ class ConfigPicker extends React.Component<{
     }
 
     async switchConfig(desiredConfigId: string) {
-        let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/config", {
+        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/config", {
             method: 'PUT',
             body: JSON.stringify({ 
                 desiredConfig: desiredConfigId
              }),
-        });
-        let data = await response.json();
+        })
+
         this.setState({
             selectedConfig: desiredConfigId
         });
@@ -81,13 +81,12 @@ class ConfigPicker extends React.Component<{
     }
 
     async addClicked() {
-        let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + "/configs", {
+        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/configs", {
             method: 'POST',
             body: JSON.stringify({ 
                 attributes: {}
              }),
-        });
-        let data = await response.json();
+        })
         
         if (data['ok'] === true) {
             await this.loadAvailableConfigs();

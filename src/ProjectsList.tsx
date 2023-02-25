@@ -1,4 +1,5 @@
 import React from 'react';
+import { RiskyApi } from './api';
 
 class ProjectsList extends React.Component {
   constructor(props) {
@@ -10,8 +11,7 @@ class ProjectsList extends React.Component {
   async loadProjects() {
     this.state = { projects: [] };
 
-    let response = await fetch("http://localhost:8000/projects");
-    let data = await response.json();
+    let data = await RiskyApi.call("http://localhost:8000/projects", {});
 
     if (data['result']['projects']) {
       for (const project of data['result']['projects']) {

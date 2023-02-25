@@ -17,6 +17,7 @@ import { NodeRiskResult } from './Risk';
 import { LibraryAdd } from '@mui/icons-material';
 import Paper from "@mui/material/Paper";
 import TreePicker from './TreePicker';
+import { RiskyApi } from './api';
 
 class NodePane extends React.Component<{
   currentNode: Record<string, any>;
@@ -57,8 +58,7 @@ class NodePane extends React.Component<{
 
     const projectId = urlParams.get('projectId');
 
-    let response = await fetch("http://localhost:8000/nodes/" + nodeId);
-    let data = await response.json();
+    let data = await RiskyApi.call("http://localhost:8000/nodes/" + nodeId, {});
     return data['result']['treeId'];
   }
 
@@ -157,8 +157,6 @@ class NodePane extends React.Component<{
   }
 
   componentDidUpdate(prevProps) {
-    console.log("Did Update")
-    console.log(this.props)
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       if (this.props.currentNode) {
         this.setState({

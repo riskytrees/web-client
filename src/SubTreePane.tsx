@@ -8,6 +8,7 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import TreeData from './interfaces/TreeData';
+import { RiskyApi } from './api';
 
 
 class SubTreePane extends React.Component<{
@@ -31,9 +32,7 @@ class SubTreePane extends React.Component<{
   }
 
   async getDag() {
-    let response = await fetch("http://localhost:8000/projects/" + this.props.projectId + '/trees/' + this.props.rootTreeId + '/dag/down');
-    let data = await response.json();
-    console.log(data)
+    let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + '/trees/' + this.props.rootTreeId + '/dag/down', {});
     this.setState({
       dag: data['result']['root']
     })
