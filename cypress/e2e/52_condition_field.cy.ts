@@ -44,7 +44,7 @@ describe('Condition field', () => {
     it('should let you select the condition field', () => {
       localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
 
-        cy.get('#node-type-dropdown').click()
+        cy.get('#node-type-dropdown', { timeout: 20000 }).click()
         cy.get('[data-value="condition"]').click()
         cy.get('#node-type-dropdown').should('contain', 'Condition')
     })

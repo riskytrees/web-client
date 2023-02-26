@@ -33,9 +33,12 @@ class SubTreePane extends React.Component<{
 
   async getDag() {
     let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + '/trees/' + this.props.rootTreeId + '/dag/down', {});
-    this.setState({
-      dag: data['result']['root']
-    })
+
+    if (data.ok) {
+      this.setState({
+        dag: data['result']['root']
+      })
+    }
   }
 
   componentDidUpdate(prevProps) {
