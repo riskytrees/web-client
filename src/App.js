@@ -272,6 +272,17 @@ MuiPaper: {
         width: '100%',
       },
     }, 
+    {
+      props: { variant: 'loginback' },
+      style: {
+
+        height: 'calc(100vh)',
+        width: '100%',
+        
+
+        
+      },
+    }, 
     ]
   },
   MuiAppBar: {

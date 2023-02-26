@@ -1,11 +1,14 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import Box from "@mui/material/Box";
 import React from 'react';
+import { Stack } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { RiskyApi } from './api';
+import Image from '@jy95/material-ui-image';
+import LoginBackground from './img/login_background.png';
 
 class LoginPage extends React.Component <{
 }, {
@@ -68,19 +71,22 @@ class LoginPage extends React.Component <{
   render() {
     return (
       <>
-        <Grid container spacing={0}>
-            <Grid item xs={7}>
-                <Paper>
-                    RISKYTREES
-                </Paper>
-            </Grid>
-            <Grid item xs={5}>
-                <Paper>
-                    <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" onChange={this.handleEmailChanged} />
+
+
+        <Stack direction="row">
+        <Paper variant="loginback">
+          <Image src={LoginBackground} cover/>
+</Paper>
+          <Paper variant="riskypane" sx={{backgroundColor:'rgb(25, 25, 25)',}}>
+          <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" onChange={this.handleEmailChanged} />
                     <Button onClick={this.loginClicked}>Login or Create an Account</Button>
-                </Paper>
-            </Grid>
-        </Grid>
+      
+
+          <Box height={"10px"}></Box>
+</Paper>
+
+        </Stack>
+
 
 
 
