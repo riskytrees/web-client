@@ -22,7 +22,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "cypress": "^10.9.0",
+    "cypress": "^11.0.0",
     "react-scripts": "^5.0.1"
   },
   "scripts": {

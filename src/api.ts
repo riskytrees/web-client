@@ -14,9 +14,16 @@ export class RiskyApi {
             'Authorization': sessionToken
         }
 
-        let response = await fetch(location, params);
+        try {
+            let response = await fetch(location, params);
+            return response.json();
+        } catch (e) {
+            console.log(e);
+            return {
+                'ok': false
+            }
+        }
 
-        return response.json();
     }
 
 }
