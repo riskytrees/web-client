@@ -4,7 +4,7 @@ import TreeViewPage from './TreeViewPage';
 import LoginPage from './LoginPage';
 import { RiskyColors } from './colors.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
+import LoginBackground from './img/login_background.png';
 import { createTheme, ThemeProvider }  from "@mui/material";
 import { NoEncryption } from '@mui/icons-material';
 

@@ -75,7 +75,7 @@ class LoginPage extends React.Component <{
 
         <Stack direction="row">
         <Paper variant="loginback">
-          <Image src={LoginBackground} cover/>
+<img src={LoginBackground} width="100%" height="100%"></img>
 </Paper>
           <Paper variant="riskypane" sx={{backgroundColor:'rgb(25, 25, 25)',}}>
           <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" onChange={this.handleEmailChanged} />
