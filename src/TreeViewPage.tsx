@@ -281,7 +281,7 @@ class TreeViewPage extends React.Component<{
   }
 
   async getListOfModels() {
-    let data = await RiskyApi.call("http://localhost:8000/models/", {});
+    let data = await RiskyApi.call("http://localhost:8000/models", {});
 
     if (data.ok) {
       this.setState({
