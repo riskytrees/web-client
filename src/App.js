@@ -4,7 +4,7 @@ import TreeViewPage from './TreeViewPage';
 import LoginPage from './LoginPage';
 import { RiskyColors } from './colors.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
+import LoginBackground from './img/login_background.png';
 import { createTheme, ThemeProvider }  from "@mui/material";
 import { NoEncryption } from '@mui/icons-material';
 
@@ -270,6 +270,17 @@ MuiPaper: {
         backgroundColor: RiskyColors.uiColors.mainBackground,
         height: 'calc(100vh)',
         width: '100%',
+      },
+    }, 
+    {
+      props: { variant: 'loginback' },
+      style: {
+
+        height: 'calc(100vh)',
+        width: '100%',
+        
+
+        
       },
     }, 
     ]
