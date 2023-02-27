@@ -63,9 +63,12 @@ class TreeViewPage extends React.Component<{
     const projectId = urlParams.get('projectId');
 
     let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/model", {});
-    this.setState({
-      selectedModel: data.result.modelId
-    })
+
+    if (data.ok) {
+      this.setState({
+        selectedModel: data.result.modelId
+      })
+    }
   }
 
   // Only acts on root tree
@@ -144,19 +147,21 @@ class TreeViewPage extends React.Component<{
     const treeId = urlParams.get('id');
 
     let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/trees/" + treeId, {});
-    let treeMap = {};
-    treeMap[treeId] = data.result;
 
-    // Recursively resolve tree imports
-    const result = await this.resolveImports(data.result, projectId);
-    treeMap = { ...treeMap, ...result };
-
-    this.setState({
-      treeMap
-    }, () => {
-      this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
-    })
-
+    if (data.ok) {
+      let treeMap = {};
+      treeMap[treeId] = data.result;
+  
+      // Recursively resolve tree imports
+      const result = await this.resolveImports(data.result, projectId);
+      treeMap = { ...treeMap, ...result };
+  
+      this.setState({
+        treeMap
+      }, () => {
+        this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+      })
+    }
   }
 
   // Called when any portion of the tree is updated and needs to be synced
@@ -276,10 +281,13 @@ class TreeViewPage extends React.Component<{
   }
 
   async getListOfModels() {
-    let data = await RiskyApi.call("http://localhost:8000/models/", {});
-    this.setState({
-      models: data.result.models
-    })
+    let data = await RiskyApi.call("http://localhost:8000/models", {});
+
+    if (data.ok) {
+      this.setState({
+        models: data.result.models
+      })
+    }
   }
 
   modelDropdownChanged(event) {
