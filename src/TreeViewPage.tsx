@@ -310,8 +310,6 @@ class TreeViewPage extends React.Component<{
 
     this.setState({
       selectedModel: modelId
-    }, () => {
-      this.populateModelAttributes(modelId);
     })
 
 
@@ -417,7 +415,7 @@ class TreeViewPage extends React.Component<{
           {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} />}
 
 
-          <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />
+          <NodePane selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />
 
         </Stack>
       </>
