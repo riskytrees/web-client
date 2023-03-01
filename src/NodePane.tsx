@@ -32,10 +32,11 @@ class NodePane extends React.Component<{
   modelAttributes: any | null;
   conditionAttribute: string;
   showSubtreeDialog: boolean;
+  selectedTreeId: string | null;
 }> {
   constructor(props) {
     super(props);
-    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false };
+    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false, selectedTreeId: null };
 
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
@@ -52,6 +53,7 @@ class NodePane extends React.Component<{
     this.canceledSubtreeCallback = this.canceledSubtreeCallback.bind(this);
     this.pickedSubtreeCallback = this.pickedSubtreeCallback.bind(this);
     this.addAttributesBasedOnSelectedModel = this.addAttributesBasedOnSelectedModel.bind(this);
+    this.loadTreeIdForThisNode = this.loadTreeIdForThisNode.bind(this);
   }
 
   async getTreeIdFromNodeId(nodeId: string) {
@@ -66,13 +68,13 @@ class NodePane extends React.Component<{
 
   async handleAddNode(event) {
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, true);
+      this.props.triggerAddDeleteNode(this.state['selectedTreeId'], this.state.nodeId, true);
     }
   }
 
   async handleDeleteNode(event) {
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, false);
+      this.props.triggerAddDeleteNode(this.state['selectedTreeId'], this.state.nodeId, false);
     }
   }
 
@@ -84,7 +86,7 @@ class NodePane extends React.Component<{
 
   async pickedSubtreeCallback(nodeId: string) {
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, true, nodeId);
+      this.props.triggerAddDeleteNode(this.state['selectedTreeId'], this.state.nodeId, true, nodeId);
     }
 
   }
@@ -118,7 +120,6 @@ class NodePane extends React.Component<{
   }
 
   async handleAttributeChange(event) {
-    console.log(event)
     const newModelAttributes = { ...this.state.modelAttributes };
 
     
@@ -143,9 +144,9 @@ class NodePane extends React.Component<{
   }
 
   async triggerOnNodeChanged() {
-    if (this.props.onNodeChanged && this.state.nodeId) {
+    if (this.props.onNodeChanged && this.state.nodeId && this.state.selectedTreeId) {
       try {
-        const treeId = await this.getTreeIdFromNodeId(this.state.nodeId);
+        const treeId = this.state['selectedTreeId'];
 
         this.props.onNodeChanged(treeId, {
           title: this.state.nodeTitle,
@@ -173,7 +174,9 @@ class NodePane extends React.Component<{
           nodeDescription: "" + this.props.currentNode.description,
           nodeId: "" + this.props.currentNode.id,
           modelAttributes: this.props.currentNode.modelAttributes,
-          conditionAttribute: this.props.currentNode.conditionAttribute
+          conditionAttribute: this.props.currentNode.conditionAttribute,
+        }, () => {
+          this.loadTreeIdForThisNode();
         });
       } else {
         this.setState({
@@ -228,10 +231,8 @@ class NodePane extends React.Component<{
       let relevantAttributes: string[] = this.getAttributesRelevantToModel();
 
       for (const attribute of relevantAttributes) {
-        console.log(this.state.modelAttributes[attribute])
         if (!this.state.modelAttributes[attribute] || this.state.modelAttributes[attribute] == '') {
           // Add attribute
-          console.log("add attribute")
           this.handleAttributeChange({ target: { id: attribute, value: '' } });
         }
       }
@@ -300,9 +301,6 @@ class NodePane extends React.Component<{
     const newAttributeValueField = document.getElementById('newAttributeValueField') as HTMLInputElement;
 
     if (newAttributeNameField && newAttributeValueField) {
-      console.log(newAttributeNameField.value);
-      console.log(newAttributeValueField.value);
-  
       this.handleAttributeChange({ target: { id: newAttributeNameField.value, value: newAttributeValueField.value } });
     }
   }
@@ -376,6 +374,14 @@ class NodePane extends React.Component<{
     }
 
     return null;
+  }
+
+  async loadTreeIdForThisNode() {
+    if (this.state.nodeId) {
+      this.setState({
+        selectedTreeId: await this.getTreeIdFromNodeId(this.state.nodeId)
+      })  
+    }
   }
 
   render() {
