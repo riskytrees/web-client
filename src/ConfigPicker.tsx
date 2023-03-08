@@ -15,7 +15,7 @@ class ConfigPicker extends React.Component<{
     projectId: string
 }, {
     availableConfigs: string[],
-    selectedConfig: string
+    selectedConfig: string | null
 }>{
     constructor(props) {
         super(props);
@@ -61,7 +61,7 @@ class ConfigPicker extends React.Component<{
     }
 
     editClicked() {
-        console.log("Edit clicked")
+        window.location.href = "/projects/" + this.props.projectId + "/config/" + this.state.selectedConfig;
     }
 
     async switchConfig(desiredConfigId: string) {
