@@ -15,27 +15,45 @@ class ConfigEditorPage extends React.Component<{
         this.state = { configJsonValue: "", projectId: null, configId: null };
     }
 
-    componentDidMount(): void {
-        this.getProjectIdFromURL();
-        this.getConfigIdFromURL();
+    async componentDidMount(): Promise<void> {
+        let projectId = await this.getProjectIdFromURL();
+        this.setState({
+            projectId: projectId
+        });
+
+        let configId = await this.getConfigIdFromURL();
+        this.setState({
+            configId: configId
+        });
+
+        this.loadInitialConfig();
+
+    }
+
+    loadInitialConfig = async () => {
+        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + "/configs/" + this.state.configId, {});
+        
+        if (data.ok) {
+            let attributes = data.result.attributes;
+
+            this.setState({
+                "configJsonValue": JSON.stringify(data.result.attributes)
+            })
+        }
+
     }
 
     getProjectIdFromURL = async () => {
         const path = window.location.href;
 
         const projectId = path.split("/")[4];
-        this.setState({
-            projectId: projectId
-        })
+        return projectId;
     }
 
     getConfigIdFromURL = async () => {
         const path = window.location.href;
-
         const configId = path.split("/")[6];
-        this.setState({
-            configId: configId
-        })
+        return configId;
     }
 
     updateConfig = async () => {
