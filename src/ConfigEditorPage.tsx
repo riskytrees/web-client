@@ -2,7 +2,7 @@ import { Button, Grid, IconButton, Stack, TextField } from '@mui/material';
 import React from 'react';
 import Item from '@mui/material/Grid';
 import { RiskyApi } from './api';
-
+import { JsonViewer } from '@textea/json-viewer';
 
 class ConfigEditorPage extends React.Component<{
 }, {
@@ -93,7 +93,9 @@ class ConfigEditorPage extends React.Component<{
                     </Grid>
                     <Grid item xs={6}>
                         <Item>
-                            A beautiful JSON viewer
+                        <JsonViewer
+                            value={this.state.configJsonValue}
+                        />
                         </Item>
                     </Grid>
 
