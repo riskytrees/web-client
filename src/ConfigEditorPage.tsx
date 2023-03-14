@@ -78,6 +78,12 @@ class ConfigEditorPage extends React.Component<{
     }
 
     render() {
+        let parsedJSONData = {};
+        try {
+            parsedJSONData = JSON.parse(this.state.configJsonValue);
+        } catch (e) {
+
+        }
 
 
         return (
@@ -94,7 +100,7 @@ class ConfigEditorPage extends React.Component<{
                     <Grid item xs={6}>
                         <Item>
                         <JsonViewer
-                            value={this.state.configJsonValue}
+                            value={parsedJSONData}
                         />
                         </Item>
                     </Grid>
