@@ -6,6 +6,7 @@ declare module '@mui/material/Paper' {
         treearea: true;
         homepane:true;
         loginback:true;
+        loginBox:true;
     }
 }
 declare module '@mui/material/Button' {

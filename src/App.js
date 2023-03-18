@@ -299,6 +299,76 @@ MuiPaper: {
     }, 
     ]
   },
+
+  MuiPaper: {
+    styleOverrides: {
+      root: {
+        borderRadius:'0px',
+
+
+      },
+
+    },
+    variants: [
+    
+      {
+        props: { variant: 'riskypane' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.paneBackground,
+          height: 'calc(100vh - 30px)',
+          padding: '15px',
+          width: Variables.widthsList.paneWidth,
+          overflow: 'auto',
+          display:'inline-block',
+          overflowY:'hidden',
+        },
+    }, {
+      props: { variant: 'treearea' },
+      style: {
+        backgroundColor: RiskyColors.uiColors.mainBackground,
+        height: 'calc(100vh)',
+        width: '100%',
+      },
+    }, 
+    {
+      props: { variant: 'loginback' },
+      style: {
+
+        height: 'calc(100vh)',
+        width: '100%',
+        margin:'0',
+
+      },
+    },
+    {
+      props: { variant: 'loginlogo' },
+      style: {
+
+        height: '200px',
+        width: 'calc(100% - ' + Variables.widthsList.paneWidth + ')',
+        position:'absolute',
+        display:'inline',
+        backgroundColor:'transparent',
+        margin: '0 auto',
+        textAlign:'center',
+        top:'50%',
+
+      },
+    }, 
+    {
+      props: { variant: 'loginBox' },
+      style: {
+        height: 'calc(100vh)',
+        width: 'calc(97vw - ' + Variables.widthsList.paneWidth +')',
+        overflow: 'auto',
+
+        display:'inline-block',
+        overflowY:'hidden',
+      },
+  },
+    ]
+  },
+  
   MuiAppBar: {
     styleOverrides: {
       root: {

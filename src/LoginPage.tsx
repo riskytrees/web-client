@@ -11,12 +11,12 @@ import Image from '@jy95/material-ui-image';
 import LoginBackground from './img/login_background.png';
 import LoginLogo from './img/login_logo.png';
 
-class LoginPage extends React.Component <{
+class LoginPage extends React.Component<{
 }, {
-}> {
+  }> {
   constructor(props) {
     super(props);
-    this.state = {modalOpen: false, email: ""};
+    this.state = { modalOpen: false, email: "" };
 
     this.handleEmailChanged = this.handleEmailChanged.bind(this);
     this.loginClicked = this.loginClicked.bind(this);
@@ -68,29 +68,29 @@ class LoginPage extends React.Component <{
       email: proposedName
     })
   }
-  
+
   render() {
     return (
       <>
 
 
-        <Stack direction="row">
-        <Box width="100vw" height="100vh">
 
-        <Paper variant="loginlogo">
-        <img src={LoginLogo} width="30%"></img>
-        </Paper>
-        <img src={LoginBackground} width="100%" height="100%"></img>
-</Box>
-          <Paper variant="riskypane" sx={{backgroundColor:'rgb(25, 25, 25)',}}>
-          <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" onChange={this.handleEmailChanged} />
-                    <Button onClick={this.loginClicked}>Login or Create an Account</Button>
-      
+          <Paper variant="loginBox">
 
-          <Box height={"10px"}></Box>
-</Paper>
+            <Paper variant="loginlogo">
+              <img src={LoginLogo} width="30%"></img>
+            </Paper>
+            <img src={LoginBackground} width="100%" height="100%"></img>
+          </Paper>
+          <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
+            <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" onChange={this.handleEmailChanged} />
+            <Button onClick={this.loginClicked}>Login or Create an Account</Button>
 
-        </Stack>
+
+  
+          </Paper>
+
+
 
 
 
