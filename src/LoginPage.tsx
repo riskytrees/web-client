@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { RiskyApi } from './api';
 import Image from '@jy95/material-ui-image';
 import LoginBackground from './img/login_background.png';
+import LoginLogo from './img/login_logo.png';
 
 class LoginPage extends React.Component <{
 }, {
@@ -74,9 +75,13 @@ class LoginPage extends React.Component <{
 
 
         <Stack direction="row">
-        <Paper variant="loginback">
-<img src={LoginBackground} width="100%" height="100%"></img>
-</Paper>
+        <Box width="100vw" height="100vh">
+
+        <Paper variant="loginlogo">
+        <img src={LoginLogo} width="30%"></img>
+        </Paper>
+        <img src={LoginBackground} width="100%" height="100%"></img>
+</Box>
           <Paper variant="riskypane" sx={{backgroundColor:'rgb(25, 25, 25)',}}>
           <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" onChange={this.handleEmailChanged} />
                     <Button onClick={this.loginClicked}>Login or Create an Account</Button>

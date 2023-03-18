@@ -3,10 +3,11 @@ import Projects from './Projects.tsx';
 import TreeViewPage from './TreeViewPage';
 import LoginPage from './LoginPage';
 import { RiskyColors } from './colors.ts';
+import { Variables } from './variables.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import LoginBackground from './img/login_background.png';
 import { createTheme, ThemeProvider }  from "@mui/material";
 import { NoEncryption } from '@mui/icons-material';
+
 
 const baseComponents = {
 
@@ -260,7 +261,7 @@ MuiPaper: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
           height: 'calc(100vh - 30px)',
           padding: '15px',
-          width: '316px',
+          width: Variables.widthsList.paneWidth,
           overflow: 'auto',
 
         },
@@ -278,9 +279,22 @@ MuiPaper: {
 
         height: 'calc(100vh)',
         width: '100%',
-        
 
-        
+      },
+    },
+    {
+      props: { variant: 'loginlogo' },
+      style: {
+
+        height: '200px',
+        width: 'calc(100% - ' + Variables.widthsList.paneWidth + ')',
+        position:'absolute',
+        display:'inline',
+        backgroundColor:'transparent',
+        margin: '0 auto',
+        textAlign:'center',
+        top:'50%',
+
       },
     }, 
     ]

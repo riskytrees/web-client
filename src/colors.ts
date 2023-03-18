@@ -81,11 +81,11 @@ export const enum uiColors {
     primaryCTAdisabled = 'rgb(35, 35, 35)',
     /*====BACKGROUNDS====*/
     /*Pane background is for most containers*/
-    paneBackground = 'rgb(42, 42, 42)',
+    paneBackground = 'rgb(27, 27, 27)',
     /*Header background is for secondary level containers. Primarly intended for the top header bar*/
-    headerBackground = 'rgb(48, 48, 48)',
+    headerBackground = 'rgb(27, 27, 27)',
     /*Main background is for the furthestmost background on the application for the body of the app*/
-    mainBackground = 'rgb(25, 25, 25)',
+    mainBackground = 'rgb(07, 07, 07)',
     /*Main node background is the default node background color*/
     mainNodeBackground = 'rgb(72, 72, 72)',
 
