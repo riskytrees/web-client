@@ -26,12 +26,12 @@ class ConfigEditorPage extends React.Component<{
             configId: configId
         });
 
-        this.loadInitialConfig();
+        this.loadInitialConfig(projectId, configId);
 
     }
 
-    loadInitialConfig = async () => {
-        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + "/configs/" + this.state.configId, {});
+    loadInitialConfig = async (projectId: string, configId: string) => {
+        let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/configs/" + configId, {});
         
         if (data.ok) {
             let attributes = data.result.attributes;
@@ -57,10 +57,17 @@ class ConfigEditorPage extends React.Component<{
     }
 
     updateConfig = async () => {
+        let parsedJSONData = {};
+        try {
+            parsedJSONData = JSON.parse(this.state.configJsonValue);
+        } catch (e) {
+            return;
+        }
+
         let data = await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + "/configs/" + this.state.configId, {
             method: 'PUT',
             body: JSON.stringify({ 
-                attributes: JSON.parse(this.state.configJsonValue)
+                attributes: parsedJSONData
             }),
         })
 
