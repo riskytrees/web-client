@@ -15,22 +15,16 @@ describe('Config Editor', () => {
     cy.wait('@getProject', { timeout: 20000 })
 
     cy.contains(newProjectUUID, { timeout: 80000 })
-  })
 
-  it('lets you create a config', () => {
-    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
-
+    // Lets you create a config
     cy.get('#treeNameSelect').click();
     cy.get(':nth-child(3) > .MuiGrid-root > .MuiButtonBase-root').click()
     cy.get(':nth-child(2) > .MuiGrid-root > .MuiButtonBase-root').click()
 
     cy.url().should('include', '/config/')
     cy.get('body').should('contain', 'Configuration')
-  })
 
-  it('lets you provide json and will visualize types', () => {
-    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
-
+    // lets you provide json and will visualize types
     cy.get('#config-json-field').type("{backspace}{backspace}{{}\"Hello\": \"World\"\}")
     cy.get('body').contains("1 Items")
     cy.get('body').contains("string")
@@ -39,7 +33,8 @@ describe('Config Editor', () => {
     cy.reload(true)
     cy.get('body').contains("1 Items")
     cy.get('body').contains("string")
-
   })
+
+
 
 })

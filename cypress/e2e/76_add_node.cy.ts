@@ -13,11 +13,8 @@ describe('Add Node', () => {
 
     cy.contains("Tree Viewer", { timeout: 80000 }).click()
     cy.wait('@getProject', { timeout: 20000 })
-  })
 
-  it('lets you select a node', () => {
-    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
-
+    // lets you select a node
     cy.location().then((loc) => {
       let treeId = loc.search.split('id=')[1].split('&')[0];
 
@@ -52,6 +49,6 @@ describe('Add Node', () => {
         })
       })
     })
-
   })
+
 })

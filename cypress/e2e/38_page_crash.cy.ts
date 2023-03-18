@@ -14,10 +14,6 @@ describe('Page should not crash when selecting nodes', () => {
 
     cy.contains("Tree Viewer", { timeout: 80000 }).click()
     cy.wait('@getProject', { timeout: 20000 })
-  })
-
-  it('lets you select a risk model', () => {
-    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
 
     cy.location().then((loc) => {
       let treeId = loc.search.split('id=')[1].split('&')[0];
@@ -30,11 +26,8 @@ describe('Page should not crash when selecting nodes', () => {
       cy.get('.MuiBackdrop-root').first().click()
       cy.get('body').should('not.contain', "EVITA")
     })
-  })
 
-  it('lets you add nodes', () => {
-    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
-
+    // Lets you add nodes
     cy.get('canvas').then(canvas => {
       const width = canvas.width();
       const height = canvas.height();
@@ -75,4 +68,5 @@ describe('Page should not crash when selecting nodes', () => {
       })
     })
   })
+
 })
