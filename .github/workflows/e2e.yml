@@ -52,7 +52,7 @@ jobs:
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 30
-          max_attempts: 8
+          max_attempts: 3
           retry_on: error
           command: npx cypress run -s "**/(38|52)*.cy.ts"
         
@@ -93,6 +93,6 @@ jobs:
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 30
-          max_attempts: 8
+          max_attempts: 3
           retry_on: error
           command: npx cypress run -s "**/!(38|52)*.cy.ts"
