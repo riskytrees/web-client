@@ -16,26 +16,32 @@ export class RiskyApi {
             'Authorization': sessionToken
         }
 
-        const result = await retryAsync(
-            async () => {
-                let attempt;
-                try {
-                    let response = await fetch(location, params);
-                    attempt = await response.json();
-
-                } catch (e) {
-                    attempt = {
+        try {
+            const result = await retryAsync(
+                async () => {
+                    let attempt;
+                    try {
+                        let response = await fetch(location, params);
+                        attempt = await response.json();
+    
+                    } catch (e) {
+                        attempt = {
+                        }
                     }
-                }
+    
+                    return attempt;
+                },
+                { delay: 100, maxTry: 3, until: (lastResult) => {
+                    return 'ok' in lastResult
+                } }
+              );
 
-                return attempt;
-            },
-            { delay: 100, maxTry: 3, until: (lastResult) => {
-                return 'ok' in lastResult
-            } }
-          );
-
-          return result;
+              return result;
+        } catch (err) {
+            return {
+                'ok': false
+            }
+        }          
 
     }
 
