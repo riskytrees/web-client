@@ -33,7 +33,7 @@ export class RiskyApi {
                 return attempt;
             },
             { delay: 100, maxTry: 3, until: (lastResult) => {
-                return lastResult['ok'] === true
+                return 'ok' in lastResult
             } }
           );
 
