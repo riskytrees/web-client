@@ -34,13 +34,13 @@ describe('Add Node', () => {
         cy.contains('Add Node').click()
         cy.wait(1000)
 
-        cy.get('canvas').then(canvas => {
+        cy.get('canvas').as('canvas').then(canvas => {
           const width = canvas.width();
           const height = canvas.height();
           const canvasCenterX = width / 2;
           const canvasCenterY = height / 2;
 
-          cy.wrap(canvas)
+          cy.get('@canvas')
             .click(canvasCenterX - 40, canvasCenterY + 55)
           cy.wait(1000)
 

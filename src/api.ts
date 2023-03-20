@@ -19,8 +19,14 @@ export class RiskyApi {
         const result = await retryAsync(
             async () => {
                 let attempt;
-                let response = await fetch(location, params);
-                attempt = await response.json();
+                try {
+                    let response = await fetch(location, params);
+                    attempt = await response.json();
+
+                } catch (e) {
+                    attempt = {
+                    }
+                }
 
                 return attempt;
             },

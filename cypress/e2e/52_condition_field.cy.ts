@@ -20,13 +20,13 @@ describe('Condition field', () => {
   
         cy.contains(treeId, { timeout: 20000 })
 
-        cy.get('canvas').then(canvas => {
+        cy.get('canvas').as('canvas').then(canvas => {
             const width = canvas.width();
             const height = canvas.height();
             const canvasCenterX = width / 2;
             const canvasCenterY = height / 2;
   
-            cy.wrap(canvas)
+            cy.get('@canvas')
             .click(canvasCenterX - 45, canvasCenterY)
   
             cy.contains('This is the root node')
