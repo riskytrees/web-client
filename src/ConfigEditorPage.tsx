@@ -64,15 +64,13 @@ class ConfigEditorPage extends React.Component<{
             return;
         }
 
-        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + "/configs/" + this.state.configId, {
-            method: 'PUT',
-            body: JSON.stringify({ 
-                attributes: parsedJSONData
-            }),
-        })
-
-        if (!data.ok) {
-            console.error("Request failed")
+        if (this.state.projectId && this.state.configId) {
+            let data = await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + "/configs/" + this.state.configId, {
+                method: 'PUT',
+                body: JSON.stringify({ 
+                    attributes: parsedJSONData
+                }),
+            })
         }
     }
 
