@@ -32,7 +32,11 @@ describe('Config Editor', () => {
     cy.wait('@putConfig', { timeout: 20000 })
 
     // If refresh we should see the same data
+    cy.intercept('GET', 'http://localhost:8000/projects/*/configs/*').as('getConfig')
+
     cy.reload(true)
+    cy.wait('@getConfig', { timeout: 20000 })
+
     cy.get('body').contains("1 Items")
     cy.get('body').contains("string")
   })
