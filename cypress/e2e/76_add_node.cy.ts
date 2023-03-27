@@ -5,6 +5,7 @@ describe('Add Node', () => {
     localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
     cy.intercept('http://localhost:8000/projects/*/trees/*/dag/down').as('dagDown')
     cy.intercept('http://localhost:8000/projects/*/trees/*').as('getProject')
+    cy.intercept('http://localhost:8000/models').as('getModels')
 
 
     cy.visit('/')
@@ -24,6 +25,9 @@ describe('Add Node', () => {
       cy.contains(treeId, { timeout: 20000 })
 
       cy.wait('@dagDown', { timeout: 20000 })
+      cy.wait('@getModels', { timeout: 20000 })
+      cy.wait(1000) // Wait for render
+
       cy.get('canvas').then(canvas => {
         const width = canvas.width();
         const height = canvas.height();

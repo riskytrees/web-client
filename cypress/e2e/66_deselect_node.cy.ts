@@ -10,9 +10,15 @@ describe('Deselect Node', () => {
       cy.get('#createProjectButtonField').type(newProjectUUID)
       cy.contains('Create New Project').click()
       cy.intercept('http://localhost:8000/projects/*/trees/*').as('getProject')
-  
+      cy.intercept('http://localhost:8000/models').as('getModels')
+      cy.intercept('http://localhost:8000/projects/*/trees/*/dag/down').as('dagDown')
+
       cy.contains("Tree Viewer", { timeout: 80000 }).click()
       cy.wait('@getProject', { timeout: 20000 })
+      cy.wait('@getModels', { timeout: 20000 })
+      cy.wait('@dagDown', { timeout: 20000 })
+
+      cy.wait(1000) // Wait for render
 
       // lets you select a node
       cy.location().then((loc) => {
