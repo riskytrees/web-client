@@ -54,7 +54,7 @@ jobs:
           timeout_minutes: 30
           max_attempts: 3
           retry_on: error
-          command: npx cypress run -s "**/(38|52)*.cy.ts"
+          command: npx cypress run --record -s "**/(38|52)*.cy.ts"
         
   testSecondHalf:
     # The type of runner that the job will run on
@@ -95,4 +95,4 @@ jobs:
           timeout_minutes: 30
           max_attempts: 3
           retry_on: error
-          command: npx cypress run -s "**/!(38|52)*.cy.ts"
+          command: npx cypress run --record -s "**/!(38|52)*.cy.ts"

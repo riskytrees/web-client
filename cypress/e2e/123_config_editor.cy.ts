@@ -29,8 +29,7 @@ describe('Config Editor', () => {
     cy.get('#config-json-field').type("{backspace}{backspace}{{}\"Hello\": \"World\"\}")
     cy.get('body').contains("1 Items")
     cy.get('body').contains("string")
-    cy.wait(10000) // BAD - Fix one day
-    //cy.wait('@putConfig', { timeout: 20000 }).its('response.body.result.attributes.attributes.Hello').should('equal', 'World')
+    cy.wait('@putConfig', { timeout: 20000 }).its('response.body.result.attributes.attributes.Hello').should('equal', 'World')
 
     // If refresh we should see the same data
     cy.intercept('GET', 'http://localhost:8000/projects/*/configs/*').as('getConfig')
