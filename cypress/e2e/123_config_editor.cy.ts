@@ -10,6 +10,7 @@ describe('Config Editor', () => {
     cy.get('#createProjectButtonField').type(newProjectUUID)
     cy.contains('Create New Project').click()
     cy.intercept('http://localhost:8000/projects/*/trees/*').as('getProject')
+    cy.intercept('PUT', 'http://localhost:8000/projects/*/configs/*').as('putConfig')
 
     cy.contains("Tree Viewer", { timeout: 80000 }).click()
     cy.wait('@getProject', { timeout: 20000 })
@@ -28,6 +29,7 @@ describe('Config Editor', () => {
     cy.get('#config-json-field').type("{backspace}{backspace}{{}\"Hello\": \"World\"\}")
     cy.get('body').contains("1 Items")
     cy.get('body').contains("string")
+    cy.wait('@putConfig', { timeout: 20000 })
 
     // If refresh we should see the same data
     cy.reload(true)
