@@ -13,6 +13,7 @@ describe('Config Editor', () => {
     cy.intercept('PUT', 'http://localhost:8000/projects/*/configs/*').as('putConfig')
     cy.intercept('POST', 'http://localhost:8000/projects/*/configs').as('postConfig')
     cy.intercept('GET', 'http://localhost:8000/projects/*/configs').as('getConfig')
+    cy.intercept('PUT', 'http://localhost:8000/projects/*/config').as('putConfig')
 
     cy.contains("Tree Viewer", { timeout: 80000 }).click()
     cy.wait('@getProject', { timeout: 20000 })
@@ -24,6 +25,7 @@ describe('Config Editor', () => {
     cy.get(':nth-child(3) > .MuiGrid-root > .MuiButtonBase-root').click()
     cy.wait('@postConfig', { timeout: 20000 })
     cy.wait('@getConfig', { timeout: 20000 })
+    cy.wait('@putConfig', { timeout: 20000 })
 
     cy.get(':nth-child(2) > .MuiGrid-root > .MuiButtonBase-root').click()
 
