@@ -3138,13 +3138,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:^29.0.3":
+"@types/jest@npm:*":
   version: 29.4.1
   resolution: "@types/jest@npm:29.4.1"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
   checksum: 75cdd1804615b663b88844eef61cb7c8104d65baf718190a1cd88ce199412dbe2ee136df3698604cc258a9a62ba7cbd7bd7712a17d8cb748909263ef56d6aac3
+  languageName: node
+  linkType: hard
+
+"@types/jest@npm:^29.5.0":
+  version: 29.5.0
+  resolution: "@types/jest@npm:29.5.0"
+  dependencies:
+    expect: ^29.0.0
+    pretty-format: ^29.0.0
+  checksum: cd877e5c56d299cceb8bfdcbb1a77723c706750dd3c3bc47403bc3599b8faff590a3b009c68bb5b11bf7a8c77d1fb01de5e124329b4a08e65f1cdda28b0ecdb8
   languageName: node
   linkType: hard
 
@@ -13749,7 +13759,7 @@ __metadata:
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.4.3
     "@textea/json-viewer": ^2.14.1
-    "@types/jest": ^29.0.3
+    "@types/jest": ^29.5.0
     "@types/node": ^18.14.6
     "@types/react": ^18.0.20
     "@types/react-dom": ^18.0.6
