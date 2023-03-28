@@ -50,6 +50,8 @@ jobs:
         
       - name: Run e2e tests
         uses: nick-fields/retry@v2
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
         with:
           timeout_minutes: 30
           max_attempts: 3
@@ -91,6 +93,8 @@ jobs:
         
       - name: Run e2e tests
         uses: nick-fields/retry@v2
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
         with:
           timeout_minutes: 30
           max_attempts: 3
