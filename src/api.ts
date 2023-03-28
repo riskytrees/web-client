@@ -1,3 +1,5 @@
+import {retryAsync} from 'ts-retry';
+
 export class RiskyApi {
 
     // Primary wrapper for making authenticated API calls.
@@ -15,14 +17,31 @@ export class RiskyApi {
         }
 
         try {
-            let response = await fetch(location, params);
-            return response.json();
-        } catch (e) {
-            console.log(e);
+            const result = await retryAsync(
+                async () => {
+                    let attempt;
+                    try {
+                        let response = await fetch(location, params);
+                        attempt = await response.json();
+    
+                    } catch (e) {
+                        attempt = {
+                        }
+                    }
+    
+                    return attempt;
+                },
+                { delay: 100, maxTry: 3, until: (lastResult) => {
+                    return 'ok' in lastResult
+                } }
+              );
+
+              return result;
+        } catch (err) {
             return {
                 'ok': false
             }
-        }
+        }          
 
     }
 

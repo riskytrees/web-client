@@ -27,9 +27,13 @@ class ConfigPicker extends React.Component<{
         this.editClicked = this.editClicked.bind(this);
         this.configItemClicked = this.configItemClicked.bind(this);
 
-        this.loadAvailableConfigs().then(res => {
-            this.loadSelectedConfig();
-        })
+
+    }
+
+    async componentDidMount(): Promise<void> {
+        await this.loadAvailableConfigs();
+        await this.loadSelectedConfig();
+
     }
 
     async loadAvailableConfigs() {

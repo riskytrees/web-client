@@ -219,57 +219,62 @@ class TreeViewPage extends React.Component<{
   }
 
   onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
-    const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
-    let uuid = crypto.randomUUID();
-    
-   
-    if (isAddAction && !subtreeNodeId && parentNodeId || isAddAction && treeData.nodes.length === 0) {
-      treeData['nodes'].push({
-        title: "New Node",
-        description: "",
-        modelAttributes: {},
-        conditionAttribute: "",
-        id: uuid,
-        children: []
-      });
-    }
-
-    let nodeToDelete = null;
-
-    for (const [idx, node] of treeData.nodes.entries()) {
-      if (node.id === parentNodeId) {
-        
-        if (subtreeNodeId) {
-          treeData.nodes[idx]['children'].push(subtreeNodeId);
-        }
-        else if (isAddAction) {
-          treeData.nodes[idx]['children'].push(uuid);
-        } else if (node.id !== treeData.rootNodeId) {
-          // Delete
-          if (treeData.nodes[idx]['children'].length === 0) {
-            nodeToDelete = idx;
+    if (this.state.treeMap[treeIdToUpdate]) {
+      const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
+      let uuid = crypto.randomUUID();
+      
+     
+      if (isAddAction && !subtreeNodeId && parentNodeId || isAddAction && treeData.nodes.length === 0) {
+        treeData['nodes'].push({
+          title: "New Node",
+          description: "",
+          modelAttributes: {},
+          conditionAttribute: "",
+          id: uuid,
+          children: []
+        });
+      }
+  
+      let nodeToDelete = null;
+  
+      for (const [idx, node] of treeData.nodes.entries()) {
+        if (node.id === parentNodeId) {
+          
+          if (subtreeNodeId) {
+            treeData.nodes[idx]['children'].push(subtreeNodeId);
+          }
+          else if (isAddAction) {
+            treeData.nodes[idx]['children'].push(uuid);
+          } else if (node.id !== treeData.rootNodeId) {
+            // Delete
+            if (treeData.nodes[idx]['children'].length === 0) {
+              nodeToDelete = idx;
+            }
           }
         }
       }
-    }
-
-    if (nodeToDelete !== null) {
-      for (const [idx, node] of treeData.nodes.entries()) {
-        if (node.children.includes(parentNodeId)) {
-          treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
+  
+      if (nodeToDelete !== null) {
+        for (const [idx, node] of treeData.nodes.entries()) {
+          if (node.children.includes(parentNodeId)) {
+            treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
+          }
         }
+  
+        treeData.nodes.splice(nodeToDelete, 1);
       }
-
-      treeData.nodes.splice(nodeToDelete, 1);
+  
+      const treeMap = structuredClone(this.state.treeMap);
+      treeMap[treeIdToUpdate] = treeData;
+  
+      this.setState({
+        treeMap: treeMap,
+        selectedNode: this.state.selectedNode
+      }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
+  
+    } else {
+      console.log("No tree map!")
     }
-
-    const treeMap = structuredClone(this.state.treeMap);
-    treeMap[treeIdToUpdate] = treeData;
-
-    this.setState({
-      treeMap: treeMap,
-      selectedNode: this.state.selectedNode
-    }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
   }
 
   handleOpen() {
