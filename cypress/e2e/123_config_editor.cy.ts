@@ -11,6 +11,8 @@ describe('Config Editor', () => {
     cy.contains('Create New Project').click()
     cy.intercept('http://localhost:8000/projects/*/trees/*').as('getProject')
     cy.intercept('PUT', 'http://localhost:8000/projects/*/configs/*').as('putConfig')
+    cy.intercept('POST', 'http://localhost:8000/projects/*/configs').as('postConfig')
+    cy.intercept('GET', 'http://localhost:8000/projects/*/configs').as('getConfig')
 
     cy.contains("Tree Viewer", { timeout: 80000 }).click()
     cy.wait('@getProject', { timeout: 20000 })
@@ -20,6 +22,9 @@ describe('Config Editor', () => {
     // Lets you create a config
     cy.get('#treeNameSelect').click();
     cy.get(':nth-child(3) > .MuiGrid-root > .MuiButtonBase-root').click()
+    cy.wait('@postConfig', { timeout: 20000 })
+    cy.wait('@getConfig', { timeout: 20000 })
+
     cy.get(':nth-child(2) > .MuiGrid-root > .MuiButtonBase-root').click()
 
     cy.url().should('include', '/config/')
