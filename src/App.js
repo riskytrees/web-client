@@ -5,10 +5,11 @@ import LoginPage from './LoginPage';
 import ConfigEditorPage from './ConfigEditorPage';
 
 import { RiskyColors } from './colors.ts';
+import { Variables } from './variables.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import LoginBackground from './img/login_background.png';
 import { createTheme, ThemeProvider }  from "@mui/material";
 import { NoEncryption } from '@mui/icons-material';
+
 
 const baseComponents = {
 
@@ -37,6 +38,14 @@ const baseComponents = {
           fontWeight:'700',
         },
     },
+    {
+      props: { variant: 'h1' },
+      style: {
+        fontSize:'24px',
+        fontWeight:'700',
+        color: RiskyColors.uiColors.mainText,
+      },
+  },
     {
       props: { variant: 'h2' },
       style: {
@@ -152,7 +161,7 @@ const baseComponents = {
           backgroundColor: RiskyColors.uiColors.primaryCTA,
           border: 'none',
           borderRadius:'16px',
-          justifyContent:'flex-start',
+          justifyContent:'center',
           paddingLeft: '15px',
           paddingRight: '15px',
           '&:hover': {
@@ -245,7 +254,9 @@ ListItemText: {
     },
   },
 },
-MuiPaper: {
+
+
+  MuiPaper: {
     styleOverrides: {
       root: {
         borderRadius:'0px',
@@ -262,11 +273,25 @@ MuiPaper: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
           height: 'calc(100vh - 30px)',
           padding: '15px',
-          width: '316px',
+          width: Variables.widthsList.paneWidth,
           overflow: 'auto',
-
+          display:'inline-block',
+          overflowY:'hidden',
         },
-    }, {
+    },
+    {
+      props: { variant: 'loginpane' },
+      style: {
+        backgroundColor: RiskyColors.uiColors.paneBackground,
+        height: 'calc(100vh - 30px)',
+        padding: '15px',
+        width: Variables.widthsList.paneWidth,
+        overflow: 'auto',
+        display:'inline-block',
+        position:'absolute',
+        overflowY:'hidden',
+      },
+  },  {
       props: { variant: 'treearea' },
       style: {
         backgroundColor: RiskyColors.uiColors.mainBackground,
@@ -280,13 +305,39 @@ MuiPaper: {
 
         height: 'calc(100vh)',
         width: '100%',
-        
+        margin:'0',
+        background: 'linear-gradient(118.16deg, #020302 63.92%, #0A0B20 106.58%)',
+      },
+    },
+    {
+      props: { variant: 'loginlogo' },
+      style: {
 
-        
+        height: '200px',
+        width: 'calc(100% - ' + Variables.widthsList.paneWidth + ' - 200px)',
+        position:'absolute',
+        display:'inline',
+        backgroundColor:'transparent',
+        margin: '0 auto',
+        textAlign:'center',
+        top:'50%',
+
       },
     }, 
+    {
+      props: { variant: 'loginBox' },
+      style: {
+        height: 'calc(100vh)',
+        width: 'calc(97vw - ' + Variables.widthsList.paneWidth +' - 200px)',
+        overflow: 'auto',
+
+        display:'inline-block',
+        overflowY:'hidden',
+      },
+  },
     ]
   },
+  
   MuiAppBar: {
     styleOverrides: {
       root: {
