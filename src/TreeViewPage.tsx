@@ -63,9 +63,12 @@ class TreeViewPage extends React.Component<{
     const projectId = urlParams.get('projectId');
 
     let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/model", {});
-    this.setState({
-      selectedModel: data.result.modelId
-    })
+
+    if (data.ok) {
+      this.setState({
+        selectedModel: data.result.modelId
+      })
+    }
   }
 
   // Only acts on root tree
@@ -144,19 +147,21 @@ class TreeViewPage extends React.Component<{
     const treeId = urlParams.get('id');
 
     let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/trees/" + treeId, {});
-    let treeMap = {};
-    treeMap[treeId] = data.result;
 
-    // Recursively resolve tree imports
-    const result = await this.resolveImports(data.result, projectId);
-    treeMap = { ...treeMap, ...result };
-
-    this.setState({
-      treeMap
-    }, () => {
-      this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
-    })
-
+    if (data.ok) {
+      let treeMap = {};
+      treeMap[treeId] = data.result;
+  
+      // Recursively resolve tree imports
+      const result = await this.resolveImports(data.result, projectId);
+      treeMap = { ...treeMap, ...result };
+  
+      this.setState({
+        treeMap
+      }, () => {
+        this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+      })
+    }
   }
 
   // Called when any portion of the tree is updated and needs to be synced
@@ -214,57 +219,62 @@ class TreeViewPage extends React.Component<{
   }
 
   onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
-    const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
-    let uuid = crypto.randomUUID();
-    
-   
-    if (isAddAction && !subtreeNodeId && parentNodeId || isAddAction && treeData.nodes.length === 0) {
-      treeData['nodes'].push({
-        title: "New Node",
-        description: "",
-        modelAttributes: {},
-        conditionAttribute: "",
-        id: uuid,
-        children: []
-      });
-    }
-
-    let nodeToDelete = null;
-
-    for (const [idx, node] of treeData.nodes.entries()) {
-      if (node.id === parentNodeId) {
-        
-        if (subtreeNodeId) {
-          treeData.nodes[idx]['children'].push(subtreeNodeId);
-        }
-        else if (isAddAction) {
-          treeData.nodes[idx]['children'].push(uuid);
-        } else if (node.id !== treeData.rootNodeId) {
-          // Delete
-          if (treeData.nodes[idx]['children'].length === 0) {
-            nodeToDelete = idx;
+    if (this.state.treeMap[treeIdToUpdate]) {
+      const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
+      let uuid = crypto.randomUUID();
+      
+     
+      if (isAddAction && !subtreeNodeId && parentNodeId || isAddAction && treeData.nodes.length === 0) {
+        treeData['nodes'].push({
+          title: "New Node",
+          description: "",
+          modelAttributes: {},
+          conditionAttribute: "",
+          id: uuid,
+          children: []
+        });
+      }
+  
+      let nodeToDelete = null;
+  
+      for (const [idx, node] of treeData.nodes.entries()) {
+        if (node.id === parentNodeId) {
+          
+          if (subtreeNodeId) {
+            treeData.nodes[idx]['children'].push(subtreeNodeId);
+          }
+          else if (isAddAction) {
+            treeData.nodes[idx]['children'].push(uuid);
+          } else if (node.id !== treeData.rootNodeId) {
+            // Delete
+            if (treeData.nodes[idx]['children'].length === 0) {
+              nodeToDelete = idx;
+            }
           }
         }
       }
-    }
-
-    if (nodeToDelete !== null) {
-      for (const [idx, node] of treeData.nodes.entries()) {
-        if (node.children.includes(parentNodeId)) {
-          treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
+  
+      if (nodeToDelete !== null) {
+        for (const [idx, node] of treeData.nodes.entries()) {
+          if (node.children.includes(parentNodeId)) {
+            treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
+          }
         }
+  
+        treeData.nodes.splice(nodeToDelete, 1);
       }
-
-      treeData.nodes.splice(nodeToDelete, 1);
+  
+      const treeMap = structuredClone(this.state.treeMap);
+      treeMap[treeIdToUpdate] = treeData;
+  
+      this.setState({
+        treeMap: treeMap,
+        selectedNode: this.state.selectedNode
+      }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
+  
+    } else {
+      console.log("No tree map!")
     }
-
-    const treeMap = structuredClone(this.state.treeMap);
-    treeMap[treeIdToUpdate] = treeData;
-
-    this.setState({
-      treeMap: treeMap,
-      selectedNode: this.state.selectedNode
-    }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
   }
 
   handleOpen() {
@@ -276,10 +286,13 @@ class TreeViewPage extends React.Component<{
   }
 
   async getListOfModels() {
-    let data = await RiskyApi.call("http://localhost:8000/models/", {});
-    this.setState({
-      models: data.result.models
-    })
+    let data = await RiskyApi.call("http://localhost:8000/models", {});
+
+    if (data.ok) {
+      this.setState({
+        models: data.result.models
+      })
+    }
   }
 
   modelDropdownChanged(event) {
@@ -302,8 +315,6 @@ class TreeViewPage extends React.Component<{
 
     this.setState({
       selectedModel: modelId
-    }, () => {
-      this.populateModelAttributes(modelId);
     })
 
 
@@ -409,7 +420,7 @@ class TreeViewPage extends React.Component<{
           {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} />}
 
 
-          <NodePane triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />
+          <NodePane selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />
 
         </Stack>
       </>

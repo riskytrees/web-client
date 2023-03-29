@@ -24,6 +24,7 @@ class NodePane extends React.Component<{
   triggerAddDeleteNode: Function;
   onNodeChanged: Function;
   currentNodeRisk: NodeRiskResult;
+  selectedModel: string;
 }, {
   nodeId: string | null;
   nodeTitle: string;
@@ -31,10 +32,11 @@ class NodePane extends React.Component<{
   modelAttributes: any | null;
   conditionAttribute: string;
   showSubtreeDialog: boolean;
+  selectedTreeId: string | null;
 }> {
   constructor(props) {
     super(props);
-    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false };
+    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false, selectedTreeId: null };
 
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
@@ -50,6 +52,8 @@ class NodePane extends React.Component<{
     this.handleAddSubtree = this.handleAddSubtree.bind(this);
     this.canceledSubtreeCallback = this.canceledSubtreeCallback.bind(this);
     this.pickedSubtreeCallback = this.pickedSubtreeCallback.bind(this);
+    this.addAttributesBasedOnSelectedModel = this.addAttributesBasedOnSelectedModel.bind(this);
+    this.loadTreeIdForThisNode = this.loadTreeIdForThisNode.bind(this);
   }
 
   async getTreeIdFromNodeId(nodeId: string) {
@@ -64,13 +68,13 @@ class NodePane extends React.Component<{
 
   async handleAddNode(event) {
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, true);
+      this.props.triggerAddDeleteNode(this.state['selectedTreeId'], this.state.nodeId, true);
     }
   }
 
   async handleDeleteNode(event) {
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, false);
+      this.props.triggerAddDeleteNode(this.state['selectedTreeId'], this.state.nodeId, false);
     }
   }
 
@@ -82,7 +86,7 @@ class NodePane extends React.Component<{
 
   async pickedSubtreeCallback(nodeId: string) {
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(await this.getTreeIdFromNodeId(this.state.nodeId), this.state.nodeId, true, nodeId);
+      this.props.triggerAddDeleteNode(this.state['selectedTreeId'], this.state.nodeId, true, nodeId);
     }
 
   }
@@ -116,7 +120,6 @@ class NodePane extends React.Component<{
   }
 
   async handleAttributeChange(event) {
-    console.log(event)
     const newModelAttributes = { ...this.state.modelAttributes };
 
     
@@ -141,14 +144,21 @@ class NodePane extends React.Component<{
   }
 
   async triggerOnNodeChanged() {
-    if (this.props.onNodeChanged && this.state.nodeId) {
-      this.props.onNodeChanged((await this.getTreeIdFromNodeId(this.state.nodeId)), {
-        title: this.state.nodeTitle,
-        description: this.state.nodeDescription,
-        id: "" + this.state.nodeId,
-        modelAttributes: this.state.modelAttributes,
-        conditionAttribute: this.state.conditionAttribute
-      });
+    if (this.props.onNodeChanged && this.state.nodeId && this.state.selectedTreeId) {
+      try {
+        const treeId = this.state['selectedTreeId'];
+
+        this.props.onNodeChanged(treeId, {
+          title: this.state.nodeTitle,
+          description: this.state.nodeDescription,
+          id: "" + this.state.nodeId,
+          modelAttributes: this.state.modelAttributes,
+          conditionAttribute: this.state.conditionAttribute
+        });
+      } catch (err) {
+        console.log(err);
+      }
+
     }
   }
 
@@ -164,7 +174,9 @@ class NodePane extends React.Component<{
           nodeDescription: "" + this.props.currentNode.description,
           nodeId: "" + this.props.currentNode.id,
           modelAttributes: this.props.currentNode.modelAttributes,
-          conditionAttribute: this.props.currentNode.conditionAttribute
+          conditionAttribute: this.props.currentNode.conditionAttribute,
+        }, () => {
+          this.loadTreeIdForThisNode();
         });
       } else {
         this.setState({
@@ -193,14 +205,51 @@ class NodePane extends React.Component<{
 
     return '';
   }
+
+  getAttributesRelevantToModel() {
+    let relevantAttributes: string[] = [];
+
+    // For now, add empty attributes for the appropriate model.
+    if (this.props.selectedModel === 'b9ff54e0-37cf-41d4-80ea-f3a9b1e3af74') {
+      // Attacker likelihood
+      relevantAttributes = ['likelihoodOfSuccess'];
+    } else if (this.props.selectedModel === 'f1644cb9-b2a5-4abb-813f-98d0277e42f2') {
+      // Risk of Attack
+      relevantAttributes = ['likelihoodOfSuccess', 'impactToDefender']
+    } else if (this.props.selectedModel === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
+      // EVITA
+      relevantAttributes = ['safetyImpact', 'financialImpact', 'privacyImpact', 'operationalImpact'];
+      relevantAttributes.concat(['time', 'expertise', 'knowledge', 'windowOfOpportunity', 'equipmentRequired']);
+    }
+
+    return relevantAttributes;
+  }
+
+  addAttributesBasedOnSelectedModel() {
+    
+    if (this.props.selectedModel && this.props.selectedModel !== "") {
+      let relevantAttributes: string[] = this.getAttributesRelevantToModel();
+
+      for (const attribute of relevantAttributes) {
+        if (!this.state.modelAttributes[attribute] || this.state.modelAttributes[attribute] == '') {
+          // Add attribute
+          this.handleAttributeChange({ target: { id: attribute, value: '' } });
+        }
+      }
+
+    }
+  }
  
   renderAttributes() {
+    this.addAttributesBasedOnSelectedModel();
+
     const attributes: JSX.Element[] = [];
     const attributesToIgnore = ['node_type'];
+    const relevantAttributes: string[] = this.getAttributesRelevantToModel();
 
     if (this.state.modelAttributes) {
       for (const [key, value] of Object.entries(this.state.modelAttributes)) {
-        if (!attributesToIgnore.includes(key)) {
+        if (relevantAttributes.includes(key)) {
           attributes.push(
             <Grid container spacing={1}>
               <Grid item xs={9} >
@@ -252,9 +301,6 @@ class NodePane extends React.Component<{
     const newAttributeValueField = document.getElementById('newAttributeValueField') as HTMLInputElement;
 
     if (newAttributeNameField && newAttributeValueField) {
-      console.log(newAttributeNameField.value);
-      console.log(newAttributeValueField.value);
-  
       this.handleAttributeChange({ target: { id: newAttributeNameField.value, value: newAttributeValueField.value } });
     }
   }
@@ -328,6 +374,14 @@ class NodePane extends React.Component<{
     }
 
     return null;
+  }
+
+  async loadTreeIdForThisNode() {
+    if (this.state.nodeId) {
+      this.setState({
+        selectedTreeId: await this.getTreeIdFromNodeId(this.state.nodeId)
+      })  
+    }
   }
 
   render() {

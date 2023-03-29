@@ -2,6 +2,8 @@ import HomePage from './HomePage';
 import Projects from './Projects.tsx';
 import TreeViewPage from './TreeViewPage';
 import LoginPage from './LoginPage';
+import ConfigEditorPage from './ConfigEditorPage';
+
 import { RiskyColors } from './colors.ts';
 import { Variables } from './variables.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -376,6 +378,8 @@ function App() {
           <Route path="/" element={<HomePage />}>
           </Route>
           <Route path="/projects" element={<Projects />}>
+          </Route>
+          <Route path="/projects/:projectId/config/:configId" element={<ConfigEditorPage />}>
           </Route>
           <Route path="/tree" element={<TreeViewPage />}>
           </Route>

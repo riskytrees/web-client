@@ -15,7 +15,7 @@ class ConfigPicker extends React.Component<{
     projectId: string
 }, {
     availableConfigs: string[],
-    selectedConfig: string
+    selectedConfig: string | null
 }>{
     constructor(props) {
         super(props);
@@ -27,9 +27,13 @@ class ConfigPicker extends React.Component<{
         this.editClicked = this.editClicked.bind(this);
         this.configItemClicked = this.configItemClicked.bind(this);
 
-        this.loadAvailableConfigs().then(res => {
-            this.loadSelectedConfig();
-        })
+
+    }
+
+    async componentDidMount(): Promise<void> {
+        await this.loadAvailableConfigs();
+        await this.loadSelectedConfig();
+
     }
 
     async loadAvailableConfigs() {
@@ -61,7 +65,7 @@ class ConfigPicker extends React.Component<{
     }
 
     editClicked() {
-        console.log("Edit clicked")
+        window.location.href = "/projects/" + this.props.projectId + "/config/" + this.state.selectedConfig;
     }
 
     async switchConfig(desiredConfigId: string) {

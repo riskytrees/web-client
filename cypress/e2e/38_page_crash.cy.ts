@@ -4,20 +4,17 @@ describe('Page should not crash when selecting nodes', () => {
 
   it('loads tree page', () => {
     localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
+    cy.intercept('http://localhost:8000/projects/*/trees/*').as('getProject')
+
 
     cy.visit('/')
     cy.get('body').should('contain', 'Home')
     cy.get('body').contains('New Project').click()
     cy.get('#createProjectButtonField').type(newProjectUUID)
     cy.contains('Create New Project').click()
-    cy.intercept('http://localhost:8000/projects/*/trees/*').as('getProject')
 
     cy.contains("Tree Viewer", { timeout: 80000 }).click()
     cy.wait('@getProject', { timeout: 20000 })
-  })
-
-  it('lets you select a risk model', () => {
-    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
 
     cy.location().then((loc) => {
       let treeId = loc.search.split('id=')[1].split('&')[0];
@@ -30,11 +27,8 @@ describe('Page should not crash when selecting nodes', () => {
       cy.get('.MuiBackdrop-root').first().click()
       cy.get('body').should('not.contain', "EVITA")
     })
-  })
 
-  it('lets you add nodes', () => {
-    localStorage.setItem("sessionToken", "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Impvc2lhaEByaXNreXRyZWVzLmNvbSJ9.2DM3dQPime134NxfVLsx-RT6Y0qpNVAdgZoxWGyhNXg");
-
+    // Lets you add nodes
     cy.get('canvas').then(canvas => {
       const width = canvas.width();
       const height = canvas.height();
@@ -43,10 +37,9 @@ describe('Page should not crash when selecting nodes', () => {
 
       cy.wrap(canvas)
         .click(canvasCenterX - 45, canvasCenterY)
-      cy.wait(1000)
+      cy.wait(100)
 
       cy.contains('Add Node').click()
-      cy.wait(10000)
 
       cy.get('body').then(canvas => {
         const width = canvas.width();
@@ -57,7 +50,6 @@ describe('Page should not crash when selecting nodes', () => {
           .click(canvasCenterX - 45, canvasCenterY + 60)
         cy.get('#node-type-dropdown').click()
         cy.contains("And").click()
-        cy.wait(10000)
 
         cy.get('body').then(canvas => {
           const width = canvas.width();
@@ -66,7 +58,6 @@ describe('Page should not crash when selecting nodes', () => {
           const canvasCenterY = height / 2;
           cy.wrap(canvas)
             .click(canvasCenterX - 45, canvasCenterY - 30)
-          cy.wait(10000)
 
           cy.get('#node-type-dropdown').click()
           cy.contains("Or").click()
@@ -75,4 +66,5 @@ describe('Page should not crash when selecting nodes', () => {
       })
     })
   })
+
 })

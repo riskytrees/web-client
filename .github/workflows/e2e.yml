@@ -50,11 +50,13 @@ jobs:
         
       - name: Run e2e tests
         uses: nick-fields/retry@v2
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
         with:
           timeout_minutes: 30
-          max_attempts: 8
+          max_attempts: 3
           retry_on: error
-          command: npx cypress run -s "**/(38|52)*.cy.ts"
+          command: npx cypress run --record -s "**/(38|52)*.cy.ts"
         
   testSecondHalf:
     # The type of runner that the job will run on
@@ -91,8 +93,10 @@ jobs:
         
       - name: Run e2e tests
         uses: nick-fields/retry@v2
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
         with:
           timeout_minutes: 30
-          max_attempts: 8
+          max_attempts: 3
           retry_on: error
-          command: npx cypress run -s "**/!(38|52)*.cy.ts"
+          command: npx cypress run --record -s "**/!(38|52)*.cy.ts"
