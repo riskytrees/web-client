@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 declare module '@mui/material/Paper' {
     interface PaperPropsVariantOverrides {
         riskypane: true;
+        loginpane: true;
         treearea: true;
         homepane:true;
         loginback:true;

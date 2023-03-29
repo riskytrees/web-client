@@ -4,6 +4,7 @@ export module Variables {
 
         /*Riskypane*/   
         paneWidth = '316px',
+        loginPadding = '60px',
 
     }
     

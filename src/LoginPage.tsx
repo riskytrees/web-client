@@ -10,6 +10,7 @@ import { RiskyApi } from './api';
 import Image from '@jy95/material-ui-image';
 import LoginBackground from './img/login_background.png';
 import LoginLogo from './img/login_logo.png';
+import Typography from "@mui/material/Typography";
 
 class LoginPage extends React.Component<{
 }, {
@@ -74,23 +75,26 @@ class LoginPage extends React.Component<{
       <>
 
 
-
+<Paper variant="loginback">
           <Paper variant="loginBox">
 
             <Paper variant="loginlogo">
-              <img src={LoginLogo} width="30%"></img>
+              <img src={LoginLogo}  width="50%"></img>
             </Paper>
             <img src={LoginBackground} width="100%" height="100%"></img>
           </Paper>
-          <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
-            <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" onChange={this.handleEmailChanged} />
-            <Button onClick={this.loginClicked}>Login or Create an Account</Button>
-
+          <Paper variant="loginpane" sx={{ backgroundColor: 'rgb(25, 25, 25)', paddingLeft:'60px', paddingRight:'60px'}}>
+          <Stack justifyContent="center" direction="column" alignItems="left" spacing={0} height="100%">
+          <Typography variant="h1">Login</Typography>
+          <Box height={"70px"}></Box>
+            <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" size="small" onChange={this.handleEmailChanged} />
+            <Box height={"30px"}></Box>
+            <Button variant="primaryButton" onClick={this.loginClicked}>Enter</Button>
+          </Stack>
 
   
           </Paper>
-
-
+          </Paper>
 
 
 

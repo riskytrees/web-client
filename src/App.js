@@ -37,6 +37,14 @@ const baseComponents = {
         },
     },
     {
+      props: { variant: 'h1' },
+      style: {
+        fontSize:'24px',
+        fontWeight:'700',
+        color: RiskyColors.uiColors.mainText,
+      },
+  },
+    {
       props: { variant: 'h2' },
       style: {
         fontSize:'16px',
@@ -151,7 +159,7 @@ const baseComponents = {
           backgroundColor: RiskyColors.uiColors.primaryCTA,
           border: 'none',
           borderRadius:'16px',
-          justifyContent:'flex-start',
+          justifyContent:'center',
           paddingLeft: '15px',
           paddingRight: '15px',
           '&:hover': {
@@ -244,61 +252,7 @@ ListItemText: {
     },
   },
 },
-MuiPaper: {
-    styleOverrides: {
-      root: {
-        borderRadius:'0px',
 
-
-      },
-
-    },
-    variants: [
-    
-      {
-        props: { variant: 'riskypane' },
-        style: {
-          backgroundColor: RiskyColors.uiColors.paneBackground,
-          height: 'calc(100vh - 30px)',
-          padding: '15px',
-          width: Variables.widthsList.paneWidth,
-          overflow: 'auto',
-
-        },
-    }, {
-      props: { variant: 'treearea' },
-      style: {
-        backgroundColor: RiskyColors.uiColors.mainBackground,
-        height: 'calc(100vh)',
-        width: '100%',
-      },
-    }, 
-    {
-      props: { variant: 'loginback' },
-      style: {
-
-        height: 'calc(100vh)',
-        width: '100%',
-
-      },
-    },
-    {
-      props: { variant: 'loginlogo' },
-      style: {
-
-        height: '200px',
-        width: 'calc(100% - ' + Variables.widthsList.paneWidth + ')',
-        position:'absolute',
-        display:'inline',
-        backgroundColor:'transparent',
-        margin: '0 auto',
-        textAlign:'center',
-        top:'50%',
-
-      },
-    }, 
-    ]
-  },
 
   MuiPaper: {
     styleOverrides: {
@@ -322,7 +276,20 @@ MuiPaper: {
           display:'inline-block',
           overflowY:'hidden',
         },
-    }, {
+    },
+    {
+      props: { variant: 'loginpane' },
+      style: {
+        backgroundColor: RiskyColors.uiColors.paneBackground,
+        height: 'calc(100vh - 30px)',
+        padding: '15px',
+        width: Variables.widthsList.paneWidth,
+        overflow: 'auto',
+        display:'inline-block',
+        position:'absolute',
+        overflowY:'hidden',
+      },
+  },  {
       props: { variant: 'treearea' },
       style: {
         backgroundColor: RiskyColors.uiColors.mainBackground,
@@ -337,7 +304,7 @@ MuiPaper: {
         height: 'calc(100vh)',
         width: '100%',
         margin:'0',
-
+        background: 'linear-gradient(118.16deg, #020302 63.92%, #0A0B20 106.58%)',
       },
     },
     {
@@ -345,7 +312,7 @@ MuiPaper: {
       style: {
 
         height: '200px',
-        width: 'calc(100% - ' + Variables.widthsList.paneWidth + ')',
+        width: 'calc(100% - ' + Variables.widthsList.paneWidth + ' - 200px)',
         position:'absolute',
         display:'inline',
         backgroundColor:'transparent',
@@ -359,7 +326,7 @@ MuiPaper: {
       props: { variant: 'loginBox' },
       style: {
         height: 'calc(100vh)',
-        width: 'calc(97vw - ' + Variables.widthsList.paneWidth +')',
+        width: 'calc(97vw - ' + Variables.widthsList.paneWidth +' - 200px)',
         overflow: 'auto',
 
         display:'inline-block',
