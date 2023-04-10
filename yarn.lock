@@ -2914,9 +2914,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@textea/json-viewer@npm:^2.14.1":
-  version: 2.16.1
-  resolution: "@textea/json-viewer@npm:2.16.1"
+"@textea/json-viewer@npm:^2.16.2":
+  version: 2.16.2
+  resolution: "@textea/json-viewer@npm:2.16.2"
   dependencies:
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
@@ -2927,7 +2927,7 @@ __metadata:
   peerDependencies:
     react: ^17 || ^18
     react-dom: ^17 || ^18
-  checksum: 1224fb1235dd27dec30cdede4bffd14c1987f131cd202371e6b1d3fc6410a194ef6af0a98fc9f824fde8a442d61d5244f9ff86af4425e6c2c9f3b49fe7c555a4
+  checksum: b8c0bbcdd765fee958595f45912af13c881fee6d8d792528e64966f2f2bc71c1fa192f9c5d272a6389a09c2d647778f9ac999107bba18e26bf9acd290f1b7435
   languageName: node
   linkType: hard
 
@@ -13830,7 +13830,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.4.3
-    "@textea/json-viewer": ^2.14.1
+    "@textea/json-viewer": ^2.16.2
     "@types/jest": ^29.5.0
     "@types/node": ^18.14.6
     "@types/react": ^18.0.20
