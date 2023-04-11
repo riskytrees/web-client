@@ -105,13 +105,21 @@ export class RiskyRisk {
         let riskPrivacy = null;
         let riskSafety = null;
 
+        if (!this.isNodeComputable(nodeId)) {
+            return null;
+        }
+
         if (node) {
             safetyImpact = node.modelAttributes['safetyImpact'] ? node.modelAttributes['safetyImpact']['value_int'] : null;
             financialImpact = node.modelAttributes['financialImpact'] ? node.modelAttributes['financialImpact']['value_int'] : null;
             privacyImpact = node.modelAttributes['privacyImpact'] ? node.modelAttributes['privacyImpact']['value_int'] : null;
             operationalImpact = node.modelAttributes['operationalImpact'] ? node.modelAttributes['operationalImpact']['value_int'] : null;
 
-            const childValues = node.children.map(childId => this.computeEVITARisk(childId));
+            const childValues = node.children.map(childId => this.computeEVITARisk(childId)).filter(sub => {
+                if (sub) {
+                    return sub;
+                }
+            });
             let nodeType = node.modelAttributes['node_type'] ? node.modelAttributes['node_type']['value_string'] : null; 
 
             if (node.modelAttributes['time']) {
@@ -196,6 +204,10 @@ export class RiskyRisk {
         const likelihood = this.computeAttackerLikelihood(nodeId).computed.likelihoodOfSuccess;
         let impact = null;
 
+        if (!this.isNodeComputable(nodeId)) {
+            return null;
+        }
+
         if (node) {
             if (node.modelAttributes['impactToDefender']) {
                 impact = node.modelAttributes['impactToDefender']['value_float'];
@@ -214,9 +226,19 @@ export class RiskyRisk {
         }
     }
 
+    isNodeComputable(nodeId: string) {
+        const node = this.getNode(nodeId);
+
+        return node && (!node.hasOwnProperty('conditionResolved') || node.conditionResolved == true);
+    }
+
     computeAttackerLikelihood(nodeId: string) {
         const node = this.getNode(nodeId);
         let result = null;
+
+        if (!this.isNodeComputable(nodeId)) {
+            return null;
+        }
 
         if (node) {
             if (node.modelAttributes['likelihoodOfSuccess']) {
@@ -228,7 +250,11 @@ export class RiskyRisk {
                     nodeType = node.modelAttributes['node_type']['value_string'];
                 }
     
-                const childLikelihoodValues = node.children.map(childId => this.computeAttackerLikelihood(childId));
+                const childLikelihoodValues = node.children.map(childId => this.computeAttackerLikelihood(childId)).filter(subres => {
+                    if (subres) {
+                        return subres;
+                    }
+                });
     
                 if (nodeType === 'and') {
                     result = childLikelihoodValues.reduce((acc, val) => acc * val['computed']['likelihoodOfSuccess'], 1);
