@@ -37,7 +37,7 @@ class ConfigPicker extends React.Component<{
     }
 
     async loadAvailableConfigs() {
-        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/configs", {});
+        let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/configs", {});
         
         if (data['ok'] === false) {
             this.setState({
@@ -51,7 +51,7 @@ class ConfigPicker extends React.Component<{
     }
 
     async loadSelectedConfig() {
-        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/config", {});
+        let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/config", {});
 
         if (data['ok'] === false) {
             this.setState({
@@ -69,7 +69,7 @@ class ConfigPicker extends React.Component<{
     }
 
     async switchConfig(desiredConfigId: string) {
-        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/config", {
+        let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/config", {
             method: 'PUT',
             body: JSON.stringify({ 
                 desiredConfig: desiredConfigId
@@ -85,7 +85,7 @@ class ConfigPicker extends React.Component<{
     }
 
     async addClicked() {
-        let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/configs", {
+        let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/configs", {
             method: 'POST',
             body: JSON.stringify({ 
                 attributes: {}

@@ -11,7 +11,7 @@ class ProjectsList extends React.Component {
   async loadProjects() {
     this.state = { projects: [] };
 
-    let data = await RiskyApi.call("http://localhost:8000/projects", {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {});
 
     if (data['ok'] === true && data['result']['projects']) {
       for (const project of data['result']['projects']) {

@@ -44,7 +44,7 @@ class Projects extends React.Component<{
   }
 
   async loadCurrentProjectName(projectId: string) {
-    let data = await RiskyApi.call("http://localhost:8000/projects", {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {});
 
     if (data['result']['projects']) {
       for (const project of data['result']['projects']) {

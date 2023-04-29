@@ -62,7 +62,7 @@ class NodePane extends React.Component<{
 
     const projectId = urlParams.get('projectId');
 
-    let data = await RiskyApi.call("http://localhost:8000/nodes/" + nodeId, {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/" + nodeId, {});
     return data['result']['treeId'];
   }
 

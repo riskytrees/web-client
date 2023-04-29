@@ -43,7 +43,7 @@ class CreateProjectButton extends React.Component<{
 
     if (createProjectButtonField) {
       const title = createProjectButtonField.value;
-      let data = await RiskyApi.call("http://localhost:8000/projects", {
+      let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {
         method: 'POST',
         body: JSON.stringify({
           title
@@ -52,7 +52,7 @@ class CreateProjectButton extends React.Component<{
 
       this.setState({ projectId: data['result']['id'] })
 
-      data = await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + '/trees', {
+      data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.state.projectId + '/trees', {
         method: 'POST',
         body: JSON.stringify({ title: 'Untitled' }),
       })
@@ -73,13 +73,13 @@ class CreateProjectButton extends React.Component<{
         ]
       }
 
-      await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + '/trees/' + data['result']["id"], {
+      await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.state.projectId + '/trees/' + data['result']["id"], {
         method: 'PUT',
         body: JSON.stringify(newData)
       })
 
 
-      window.location.href = "http://localhost:8080/tree?id=" + data['result']["id"] + "&projectId=" + this.state.projectId;
+      window.location.href = process.env.REACT_APP_API_ROOT_URL + "/tree?id=" + data['result']["id"] + "&projectId=" + this.state.projectId;
     }
   };
 

@@ -43,7 +43,7 @@ class CreateTreeWidget extends React.Component<{
       const title = (treeNameField as HTMLInputElement).value;
       const projectId = this.props['projectId'];
   
-      let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + '/trees', {
+      let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + '/trees', {
         method: 'POST',
         body: JSON.stringify({
           title
@@ -64,7 +64,7 @@ class CreateTreeWidget extends React.Component<{
 
       data['result']['rootNodeId'] = newRootNodeId;
 
-      let addNodeResponse = await RiskyApi.call("http://localhost:8000/projects/" + projectId + '/trees/' + data['result']['id'], {
+      let addNodeResponse = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + '/trees/' + data['result']['id'], {
         method: 'PUT',
         body: JSON.stringify(data['result'])
       })
