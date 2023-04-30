@@ -31,7 +31,7 @@ class ConfigEditorPage extends React.Component<{
     }
 
     loadInitialConfig = async (projectId: string, configId: string) => {
-        let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/configs/" + configId, {});
+        let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/configs/" + configId, {});
         
         if (data.ok) {
             let attributes = data.result.attributes;
@@ -65,7 +65,7 @@ class ConfigEditorPage extends React.Component<{
         }
 
         if (this.state.projectId && this.state.configId) {
-            let data = await RiskyApi.call("http://localhost:8000/projects/" + this.state.projectId + "/configs/" + this.state.configId, {
+            let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.state.projectId + "/configs/" + this.state.configId, {
                 method: 'PUT',
                 body: JSON.stringify({ 
                     attributes: parsedJSONData

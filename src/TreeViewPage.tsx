@@ -62,7 +62,7 @@ class TreeViewPage extends React.Component<{
 
     const projectId = urlParams.get('projectId');
 
-    let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/model", {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/model", {});
 
     if (data.ok) {
       this.setState({
@@ -126,10 +126,10 @@ class TreeViewPage extends React.Component<{
     let result = {}
 
     for (const childId of childrenToResolve) {
-      let treeData = await RiskyApi.call("http://localhost:8000/nodes/" + childId, {});
+      let treeData = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/" + childId, {});
 
       if (treeData.ok === true) {
-        let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/trees/" + treeData.result.treeId, {});
+        let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeData.result.treeId, {});
   
         result[treeData.result.treeId] = data.result;
         result = { ...result, ...(await this.resolveImports(data.result, projectId)) };
@@ -146,7 +146,7 @@ class TreeViewPage extends React.Component<{
     const projectId = urlParams.get('projectId');
     const treeId = urlParams.get('id');
 
-    let data = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/trees/" + treeId, {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeId, {});
 
     if (data.ok) {
       let treeMap = {};
@@ -174,7 +174,7 @@ class TreeViewPage extends React.Component<{
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
 
-    let response = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/trees/" + treeIdToUpdate, {
+    let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeIdToUpdate, {
       method: 'PUT',
       body: JSON.stringify(this.state.treeMap[treeIdToUpdate])
     })
@@ -286,7 +286,7 @@ class TreeViewPage extends React.Component<{
   }
 
   async getListOfModels() {
-    let data = await RiskyApi.call("http://localhost:8000/models", {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/models", {});
 
     if (data.ok) {
       this.setState({
@@ -306,7 +306,7 @@ class TreeViewPage extends React.Component<{
     const projectId = urlParams.get('projectId');
     const treeId = urlParams.get('id');
 
-    let response = await RiskyApi.call("http://localhost:8000/projects/" + projectId + "/model", {
+    let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/model", {
       method: 'PUT',
       body: JSON.stringify({
         modelId: modelId

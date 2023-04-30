@@ -34,7 +34,7 @@ class LoginPage extends React.Component<{
 
     if (code && code !== "") {
       // Forward request to backend and extract token
-      let response = await fetch("http://localhost:8000/auth/login?code=" + encodeURIComponent(code) + "&state=" + encodeURIComponent(state));
+      let response = await fetch(process.env.REACT_APP_API_ROOT_URL + "/auth/login?code=" + encodeURIComponent(code) + "&state=" + encodeURIComponent(state));
       let authData = await response.json();
       if (authData.result.sessionToken) {
         localStorage.setItem('sessionToken', authData.result.sessionToken);
@@ -46,7 +46,7 @@ class LoginPage extends React.Component<{
 
   async loginClicked() {
     console.log(this.state['email'])
-    let response = await fetch("http://localhost:8000/auth/login?provider=google", {
+    let response = await fetch(process.env.REACT_APP_API_ROOT_URL + "/auth/login?provider=google", {
       method: 'POST',
       body: JSON.stringify({
         email: this.state['email']
