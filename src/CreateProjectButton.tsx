@@ -79,7 +79,7 @@ class CreateProjectButton extends React.Component<{
       })
 
 
-      window.location.href = process.env.REACT_APP_API_ROOT_URL + "/tree?id=" + data['result']["id"] + "&projectId=" + this.state.projectId;
+      window.location.href = process.env.REACT_APP_CLIENT_ROOT_URL + "/tree?id=" + data['result']["id"] + "&projectId=" + this.state.projectId;
     }
   };
 
