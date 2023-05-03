@@ -97,7 +97,7 @@ class Projects extends React.Component<{
             aria-describedby="modal-modal-description"
           >
 
-            <Box id="projectDetailsModal">
+            <Box className="treeSelectCenter">
               <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
               <TextField label="Project Name" variant="outlined" size="small" onChange={this.handleProjectNameChanged} defaultValue={this.state['projectName']} />
 
