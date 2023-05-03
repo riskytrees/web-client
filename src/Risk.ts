@@ -201,29 +201,33 @@ export class RiskyRisk {
 
     computeAttackRisk(nodeId: string) {
         const node = this.getNode(nodeId);
-        const likelihood = this.computeAttackerLikelihood(nodeId).computed.likelihoodOfSuccess;
-        let impact = null;
-
-        if (!this.isNodeComputable(nodeId)) {
-            return null;
-        }
-
-        if (node) {
-            if (node.modelAttributes['impactToDefender']) {
-                impact = node.modelAttributes['impactToDefender']['value_float'];
+        if (this.computeAttackerLikelihood(nodeId) !== null) {
+            const likelihood = this.computeAttackerLikelihood(nodeId).computed.likelihoodOfSuccess;
+            let impact = null;
+    
+            if (!this.isNodeComputable(nodeId)) {
+                return null;
+            }
+    
+            if (node) {
+                if (node.modelAttributes['impactToDefender']) {
+                    impact = node.modelAttributes['impactToDefender']['value_float'];
+                }
+            }
+    
+            return {
+                computed: {
+                    likelihoodOfSuccess: likelihood,
+                    impactToDefender: impact,
+                    risk: impact ? likelihood * impact : null
+                },
+                interface: {
+                    primary: 'risk'
+                }
             }
         }
 
-        return {
-            computed: {
-                likelihoodOfSuccess: likelihood,
-                impactToDefender: impact,
-                risk: impact ? likelihood * impact : null
-            },
-            interface: {
-                primary: 'risk'
-            }
-        }
+        return null;
     }
 
     isNodeComputable(nodeId: string) {
