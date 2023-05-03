@@ -401,7 +401,7 @@ class TreeViewPage extends React.Component<{
             aria-describedby="modal-modal-description"
           >
 
-            <Box id="treeSelectCenter">
+            <Box className="treeSelectCenter">
               <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
                 <TextField label="Tree Name" variant="outlined" size="small" onChange={this.handleTreeNameChanged} defaultValue={this.getTreeName()} />
                 <ConfigPicker projectId={projectId}></ConfigPicker>

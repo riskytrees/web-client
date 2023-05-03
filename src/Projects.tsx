@@ -22,12 +22,14 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { RiskyRisk } from './Risk';
 import { RiskyApi } from './api';
+import TextField from '@mui/material/TextField';
 
 
 class Projects extends React.Component<{
 
 }, {
   modalOpen: boolean;
+  renameModalOpen: boolean;
   projectName: any[];
   projectId: string;
 }> {
@@ -36,11 +38,14 @@ class Projects extends React.Component<{
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
-    this.state = { projectId: urlParams.get('id'), projectName: null, modalOpen: false };
+    this.state = { projectId: urlParams.get('id'), projectName: null, modalOpen: false, renameModalOpen: false };
 
     this.loadCurrentProjectName(this.state['projectId']);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleModalOpen = this.handleModalOpen.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
+    this.handleProjectNameChanged = this.handleProjectNameChanged.bind(this);
   }
 
   async loadCurrentProjectName(projectId: string) {
@@ -65,14 +70,57 @@ class Projects extends React.Component<{
     this.setState({ modalOpen: false })
   }
 
+  handleModalOpen() {
+    this.setState({ renameModalOpen: true })
+  }
+
+  handleModalClose() {
+    this.setState({ renameModalOpen: false })
+  }
+
+  async handleProjectNameChanged(event) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('id');
+    if (projectId) {
+      let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId, {
+        method: 'PUT',
+        body: JSON.stringify({
+          title: event.target.value
+        })
+      })
+  
+      this.loadCurrentProjectName(projectId);  
+    }
+    
+  }
 
   render() {
     return (
       <>
         <AppBar>
           <Box display="flex" justifyContent="center" alignItems="center" marginTop="11.75px">
-            <Button id="treeNameSelect" variant="text" endIcon={<Home />}>{this.state['projectName']}</Button>
+            <Button id="treeNameSelect" onClick={this.handleModalOpen} variant="text" endIcon={<ArrowDropDownIcon />}>{this.state['projectName']}</Button>
           </Box>
+
+          <Modal
+            open={this.state.renameModalOpen}
+            onClose={this.handleModalClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+
+            <Box className="treeSelectCenter">
+              <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
+              <TextField label="Project Name" variant="outlined" size="small" onChange={this.handleProjectNameChanged} defaultValue={this.state['projectName']} />
+
+                
+
+              </Stack>
+            </Box>
+
+          </Modal>
         </AppBar>
         <Stack direction="row">
           <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
