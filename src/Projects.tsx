@@ -78,8 +78,22 @@ class Projects extends React.Component<{
     this.setState({ renameModalOpen: false })
   }
 
-  handleProjectNameChanged() {
+  async handleProjectNameChanged(event) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
 
+    const projectId = urlParams.get('id');
+    if (projectId) {
+      let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId, {
+        method: 'PUT',
+        body: JSON.stringify({
+          title: event.target.value
+        })
+      })
+  
+      this.loadCurrentProjectName(projectId);  
+    }
+    
   }
 
   render() {
