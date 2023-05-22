@@ -3223,10 +3223,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.1.5":
-  version: 20.1.5
-  resolution: "@types/node@npm:20.1.5"
-  checksum: 0d073ed7b9cc51e2354dcf3a8ccca84d08c7d513fa8fac9462cabc164435b30f2ad296e9f2f911e6ce72da837b704f1075379be84a93bb24f76d328a2d9e8561
+"@types/node@npm:^20.2.3":
+  version: 20.2.3
+  resolution: "@types/node@npm:20.2.3"
+  checksum: 576065e8fc1fa45798c8f59a6bf809169582d04abc2e25fab1a048ffc734975b9992ae31be0d960cf705a21fb37112f7fcde11aa322beddf7491e73d5a5a988c
   languageName: node
   linkType: hard
 
@@ -13892,7 +13892,7 @@ __metadata:
     "@testing-library/user-event": ^14.4.3
     "@textea/json-viewer": ^3.0.0
     "@types/jest": ^29.5.1
-    "@types/node": ^20.1.5
+    "@types/node": ^20.2.3
     "@types/react": ^18.2.6
     "@types/react-dom": ^18.2.4
     cypress: 12.12.0
