@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import TreeData from './interfaces/TreeData';
 
 
+
 class TreeViewer extends React.Component<{
   treeMap: Record<string, TreeData>
 
@@ -25,12 +26,12 @@ class TreeViewer extends React.Component<{
 
     if (nodeModelAttributes && nodeModelAttributes['node_type'] && nodeModelAttributes['node_type']['value_string']) {
       if (nodeModelAttributes['node_type']['value_string'] === 'and') {
-        return 'triangle';
+        return 'And';
       } else if (nodeModelAttributes['node_type']['value_string'] === 'or') {
-        return 'triangleDown';
+        return 'Or';
       }
     }
-    return 'square';
+    return 'Condition';
   }
 
   loadAndRender() {
@@ -41,12 +42,121 @@ class TreeViewer extends React.Component<{
       for (const node of tree.nodes) {
         nodes.push({
           id: node.id,
-          label: node.title,
+          label: this.getShapeForNodeType(node.modelAttributes) + '---' + node.title,
           description: node.description,
           modelAttributes: node.modelAttributes,
           conditionAttribute: node.conditionAttribute,
-          size: 15,
-          shape: this.getShapeForNodeType(node.modelAttributes)
+          size: 25,
+          margin:10,
+          padding:14,
+          color: {
+            border: '#DBDBDB',
+            background: 'rgb(07, 07, 07)',
+            highlight: {
+              border: '#2B7CE9',
+              background: '#D2E5FF'
+            },
+            hover: {
+              border: '#2B7CE9',
+              background: '#D2E5FF'
+            }
+          },
+          font: {
+            color: '#EEE',
+            size: 10, // px
+            face: 'Open Sans',
+            background: 'none',
+            strokeWidth: 0, // px
+            strokeColor: '#ffffff',
+            align: 'center',
+            multi: false,
+            vadjust: 0,
+          },
+          shape: 'custom',
+          ctxRenderer: ({
+            ctx,
+            x,
+            y,
+            state: { selected, hover },
+            style,
+            label,
+          }) => {
+            const splittedLabel = label.split("---");
+            ctx.save();
+            ctx.restore();
+            const labelText = splittedLabel[0];
+            const valueText = splittedLabel[1];
+            const r = 5;
+            
+            ctx.font = "normal 14px sans-serif";
+            const labelWidth = ctx.measureText(labelText).width;
+            const valueWidth = ctx.measureText(valueText).width;
+    
+            const wPadding = 10;
+            const hPadding = 10;
+    
+            const w = valueWidth + 20;
+            const h = 40;
+            const drawNode = () => {
+              const r2d = Math.PI / 180;
+              if (w - 2 * r < 0) {
+                r = w / 2;
+              } //ensure that the radius isn't too large for x
+              if (h - 2 * r < 0) {
+                r = h / 2;
+              } //ensure that the radius isn't too large for y
+    
+              const top = y - h / 2;
+              const left = x - w / 2;
+    
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.moveTo(left + r, top);
+              ctx.lineTo(left + w - r, top);
+              ctx.arc(left + w - r, top + r, r, r2d * 270, r2d * 360, false);
+              ctx.lineTo(left + w, top + h - r);
+              ctx.arc(left + w - r, top + h - r, r, 0, r2d * 90, false);
+              ctx.lineTo(left + r, top + h);
+              ctx.arc(left + r, top + h - r, r, r2d * 90, r2d * 180, false);
+              ctx.lineTo(left, top + r);
+              ctx.arc(left + r, top + r, r, r2d * 180, r2d * 270, false);
+              ctx.closePath();
+              ctx.save();
+              ctx.fillStyle = style.color || "#56CCF2";
+              ctx.fill();
+              ctx.strokeStyle = "#3300FF";
+              ctx.stroke();
+    
+              // label text
+              ctx.font = "normal 12px sans-serif";
+              ctx.fillStyle = "#eee";
+              ctx.textAlign = "left";
+              ctx.textBaseline = "middle";
+              const textHeight1 = 12;
+              ctx.fillText(
+                labelText,
+                left + 15,
+                top - 8,
+                
+              );
+    
+              // value text
+              ctx.font = "normal 14px sans-serif";
+              ctx.fillStyle = "#eee";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "bottom";
+              const textHeight2 = 12;
+    
+              ctx.fillText(valueText, left + w / 2, top + h / 2 + hPadding, );
+            };
+    
+            ctx.save();
+            ctx.restore();
+            return {
+              drawNode,
+              nodeDimensions: { width: w, height: h },
+            };
+          }
         })
   
         for (const child of node.children) {
