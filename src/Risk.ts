@@ -245,7 +245,7 @@ export class RiskyRisk {
         }
 
         if (node) {
-            if (node.modelAttributes['likelihoodOfSuccess']) {
+            if (node.modelAttributes['likelihoodOfSuccess'] && node.modelAttributes['likelihoodOfSuccess']['value_float']) {
                 result = node.modelAttributes['likelihoodOfSuccess']['value_float'];
             } else {
                 // Need to inherit from children
@@ -271,7 +271,7 @@ export class RiskyRisk {
                 }
             }
         }
-
+        console.log(result)
         return {
             computed: {
                 likelihoodOfSuccess: result as number
