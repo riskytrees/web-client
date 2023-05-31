@@ -62,7 +62,7 @@ class NodePane extends React.Component<{
 
     const projectId = urlParams.get('projectId');
 
-    let data = await RiskyApi.call("http://localhost:8000/nodes/" + nodeId, {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/" + nodeId, {});
     return data['result']['treeId'];
   }
 
@@ -125,7 +125,7 @@ class NodePane extends React.Component<{
     
     if (event.target.value === '' || Number.isNaN(Number(event.target.value)) || event.target.value.endsWith('.')) {
       newModelAttributes[event.target.id] = {'value_string': event.target.value, 'value_int': null, 'value_float': null};
-    } else if (Number.isInteger(Number(event.target.value))) {
+    } else if (Number.isInteger(Number(event.target.value)) && !event.target.value.includes('.')) {
       newModelAttributes[event.target.id] = {'value_string': null, 'value_int': Number(event.target.value), 'value_float': null};
     } else {
       newModelAttributes[event.target.id] = {'value_string': null, 'value_int': null, 'value_float': Number(event.target.value)};
@@ -198,7 +198,11 @@ class NodePane extends React.Component<{
       } else if (typeof(valueDict['value_int']) === 'number') {
         return Number(valueDict['value_int']);
       } else if (typeof(valueDict['value_float']) === 'number') {
-        return Number(valueDict['value_float']);
+        let tentative = '' + Number(valueDict['value_float']);
+        if (!tentative.includes('.')) {
+          tentative += '.0'
+        }
+        return tentative;
       }
     }
     

@@ -15,7 +15,7 @@ class TreesList extends React.Component<{
   async loadTrees() {
     this.state = { trees: [] };
 
-    let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + "/trees", {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/trees", {});
 
     if (data['result']['trees']) {
       for (const tree of data['result']['trees']) {

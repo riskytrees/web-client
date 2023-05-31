@@ -32,7 +32,7 @@ class SubTreePane extends React.Component<{
   }
 
   async getDag() {
-    let data = await RiskyApi.call("http://localhost:8000/projects/" + this.props.projectId + '/trees/' + this.props.rootTreeId + '/dag/down', {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + '/trees/' + this.props.rootTreeId + '/dag/down', {});
 
     if (data.ok) {
       this.setState({

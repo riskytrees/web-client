@@ -227,7 +227,11 @@ class TreeViewer extends React.Component<{
          let foundNode = false;
          for (const node of nodes) {
            if (node.id === id) {
-             this.nodeClicked(node);
+             // Now remove our title hack
+             console.log(node)
+             let nodeCopy = {...node}
+             nodeCopy.label = node.label.split("---")[1]
+             this.nodeClicked(nodeCopy);
              foundNode = true;
            }
          }
@@ -236,7 +240,7 @@ class TreeViewer extends React.Component<{
           this.nodeClicked(null);
          }
       });
-    }
+    }    
   }
 
   componentDidMount() {

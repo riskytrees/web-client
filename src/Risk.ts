@@ -201,29 +201,33 @@ export class RiskyRisk {
 
     computeAttackRisk(nodeId: string) {
         const node = this.getNode(nodeId);
-        const likelihood = this.computeAttackerLikelihood(nodeId).computed.likelihoodOfSuccess;
-        let impact = null;
-
-        if (!this.isNodeComputable(nodeId)) {
-            return null;
-        }
-
-        if (node) {
-            if (node.modelAttributes['impactToDefender']) {
-                impact = node.modelAttributes['impactToDefender']['value_float'];
+        if (this.computeAttackerLikelihood(nodeId) !== null) {
+            const likelihood = this.computeAttackerLikelihood(nodeId).computed.likelihoodOfSuccess;
+            let impact = null;
+    
+            if (!this.isNodeComputable(nodeId)) {
+                return null;
+            }
+    
+            if (node) {
+                if (node.modelAttributes['impactToDefender']) {
+                    impact = node.modelAttributes['impactToDefender']['value_float'];
+                }
+            }
+    
+            return {
+                computed: {
+                    likelihoodOfSuccess: likelihood,
+                    impactToDefender: impact,
+                    risk: impact ? likelihood * impact : null
+                },
+                interface: {
+                    primary: 'risk'
+                }
             }
         }
 
-        return {
-            computed: {
-                likelihoodOfSuccess: likelihood,
-                impactToDefender: impact,
-                risk: impact ? likelihood * impact : null
-            },
-            interface: {
-                primary: 'risk'
-            }
-        }
+        return null;
     }
 
     isNodeComputable(nodeId: string) {
@@ -241,7 +245,7 @@ export class RiskyRisk {
         }
 
         if (node) {
-            if (node.modelAttributes['likelihoodOfSuccess']) {
+            if (node.modelAttributes['likelihoodOfSuccess'] && node.modelAttributes['likelihoodOfSuccess']['value_float']) {
                 result = node.modelAttributes['likelihoodOfSuccess']['value_float'];
             } else {
                 // Need to inherit from children
@@ -267,7 +271,7 @@ export class RiskyRisk {
                 }
             }
         }
-
+        console.log(result)
         return {
             computed: {
                 likelihoodOfSuccess: result as number
