@@ -86,16 +86,27 @@ class TreeViewer extends React.Component<{
             ctx.restore();
             const labelText = splittedLabel[0];
             const valueText = splittedLabel[1];
+            let nodeColor = "#1F1DA2";
+            let labelBGColor = "#0D0C4B";
+            let nodeBGColor = "#090920";
+              if (labelText === "And"){nodeColor = "#00FF38";labelBGColor = "#154B0C";nodeBGColor="#0B1C09";}
+              if (labelText === "Condition"){nodeColor = "#1F1DA2";labelBGColor = "#0D0C4B";nodeBGColor="#090920"}
+              if (labelText === "Or"){nodeColor = "#4E0943";labelBGColor = "#4B0C45";nodeBGColor = "#1A0818"}
+
+
+              
             const r = 5;
             
-            ctx.font = "normal 14px sans-serif";
+            ctx.font = "normal 11px sans-serif";
             const labelWidth = ctx.measureText(labelText).width;
+            ctx.font = "normal 14px sans-serif";
             const valueWidth = ctx.measureText(valueText).width;
     
             const wPadding = 10;
             const hPadding = 10;
     
             const w = valueWidth + 20;
+            const lw = labelWidth + 10
             const h = 40;
             const drawNode = () => {
               const r2d = Math.PI / 180;
@@ -110,6 +121,16 @@ class TreeViewer extends React.Component<{
               const left = x - w / 2;
     
               ctx.lineWidth = 2;
+
+              ctx.beginPath();
+              ctx.moveTo(left + r , top);
+              ctx.lineTo(left + r, top - 16);
+              ctx.lineTo(left + lw + r, top - 16);
+              ctx.lineTo(left + lw + r, top);
+              ctx.fillStyle = labelBGColor;
+              ctx.fill();
+              ctx.closePath();
+
               ctx.beginPath();
               ctx.moveTo(left + r, top);
               ctx.lineTo(left + w - r, top);
@@ -120,22 +141,25 @@ class TreeViewer extends React.Component<{
               ctx.arc(left + r, top + h - r, r, r2d * 90, r2d * 180, false);
               ctx.lineTo(left, top + r);
               ctx.arc(left + r, top + r, r, r2d * 180, r2d * 270, false);
-              ctx.closePath();
               ctx.save();
-              ctx.fillStyle = style.color || "#56CCF2";
+              ctx.fillStyle = nodeBGColor;
               ctx.fill();
-              ctx.strokeStyle = "#3300FF";
+              ctx.strokeStyle = nodeColor;
               ctx.stroke();
+              ctx.closePath();
+
+
+
     
               // label text
-              ctx.font = "normal 12px sans-serif";
+              ctx.font = "normal 11px sans-serif";
               ctx.fillStyle = "#eee";
               ctx.textAlign = "left";
               ctx.textBaseline = "middle";
               const textHeight1 = 12;
               ctx.fillText(
                 labelText,
-                left + 15,
+                left + 10,
                 top - 8,
                 
               );
