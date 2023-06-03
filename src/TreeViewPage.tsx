@@ -21,6 +21,7 @@ import InputLabel from "@mui/material/InputLabel";
 import SubTreePane from './SubTreePane';
 import ConfigPicker from './ConfigPicker';
 import { RiskyApi } from './api';
+import Item from '@mui/material/Grid';
 
 class TreeViewPage extends React.Component<{
 
@@ -390,9 +391,30 @@ class TreeViewPage extends React.Component<{
 
 
         <AppBar>
-          <Box display="flex" justifyContent="center" alignItems="center" marginTop="11.75px">
-            <Button id="treeNameSelect" onClick={this.handleOpen} variant="text" endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
-          </Box>
+          <Grid container>
+            <Grid item xs={4} marginTop="11.75px">
+            
+            </Grid>
+
+            <Grid item xs={4} marginTop="11.75px">
+              <Stack alignContent="center">
+                <Button id="treeNameSelect" onClick={this.handleOpen} variant="text" endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
+              </Stack>
+            </Grid>
+
+
+
+            <Grid item xs={4}  marginTop="11.75px">
+              <Stack spacing={2} direction="row" justifyContent="flex-end">
+                <Button> Show Analysis </Button>
+                <Box></Box>
+              </Stack>
+             
+              
+            </Grid>
+          </Grid>
+         
+
 
           <Modal
             open={this.state.modalOpen}
@@ -411,7 +433,6 @@ class TreeViewPage extends React.Component<{
             </Box>
 
           </Modal>
-
         </AppBar>
         <Stack direction="row">
           <Paper variant="riskypane">
