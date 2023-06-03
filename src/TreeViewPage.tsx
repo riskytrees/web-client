@@ -34,12 +34,13 @@ class TreeViewPage extends React.Component<{
   modalOpen: boolean;
   models: any[];
   selectedModel: string;
+  analysisModeEnabled: boolean;
 }> {
   riskEngine: RiskyRisk;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, models: [], selectedModel: "" };
+    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -49,6 +50,7 @@ class TreeViewPage extends React.Component<{
     this.handleClose = this.handleClose.bind(this);
     this.modelDropdownChanged = this.modelDropdownChanged.bind(this);
     this.handleTreeNameChanged = this.handleTreeNameChanged.bind(this);
+    this.handleAnalysisClicked = this.handleAnalysisClicked.bind(this);
 
     this.loadTree()
     this.getListOfModels();
@@ -354,6 +356,20 @@ class TreeViewPage extends React.Component<{
     return "";
   }
 
+  handleAnalysisClicked(event) {
+    console.log("Analysis Clicked")
+
+    if (this.state.analysisModeEnabled) {
+      this.setState({
+        analysisModeEnabled: false
+      });
+    } else {
+      this.setState({
+        analysisModeEnabled: true
+      });
+    }
+  }
+
   render() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -386,6 +402,13 @@ class TreeViewPage extends React.Component<{
                 </Select>
               </FormControl>
     }
+
+    let rightPane: JSX.Element = <NodePane selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />;
+
+    if (this.state.analysisModeEnabled) {
+      rightPane = <Box>Testing</Box>
+    }
+
     return (
       <>
 
@@ -406,7 +429,7 @@ class TreeViewPage extends React.Component<{
 
             <Grid item xs={4}  marginTop="11.75px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
-                <Button> Show Analysis </Button>
+                <Button onClick={this.handleAnalysisClicked}> {this.state.analysisModeEnabled ? "Close Analysis" : "Show Analysis"} </Button>
                 <Box></Box>
               </Stack>
              
@@ -440,8 +463,8 @@ class TreeViewPage extends React.Component<{
           </Paper>
           {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} />}
 
-
-          <NodePane selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />
+          {rightPane}
+          
 
         </Stack>
       </>
