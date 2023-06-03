@@ -22,6 +22,7 @@ import SubTreePane from './SubTreePane';
 import ConfigPicker from './ConfigPicker';
 import { RiskyApi } from './api';
 import Item from '@mui/material/Grid';
+import AnalysisPane from './AnalysisPane';
 
 class TreeViewPage extends React.Component<{
 
@@ -406,7 +407,7 @@ class TreeViewPage extends React.Component<{
     let rightPane: JSX.Element = <NodePane selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />;
 
     if (this.state.analysisModeEnabled) {
-      rightPane = <Box>Testing</Box>
+      rightPane = <AnalysisPane>Testing</AnalysisPane>
     }
 
     return (
