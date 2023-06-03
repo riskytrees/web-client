@@ -407,7 +407,12 @@ class TreeViewPage extends React.Component<{
     let rightPane: JSX.Element = <NodePane selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />;
 
     if (this.state.analysisModeEnabled) {
-      rightPane = <AnalysisPane>Testing</AnalysisPane>
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+  
+      const treeId = urlParams.get('id');
+
+      rightPane = <AnalysisPane  rootNodeId={this.state.treeMap[treeId].rootNodeId} riskEngine={this.riskEngine} selectedModel={this.state.selectedModel}></AnalysisPane>
     }
 
     return (
