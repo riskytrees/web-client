@@ -20,36 +20,25 @@ describe('Page should not crash when selecting nodes', () => {
       let treeId = loc.search.split('id=')[1].split('&')[0];
 
       cy.contains(treeId, { timeout: 20000 })
-      cy.get('.MuiBox-root > .MuiButton-root').click()
+      cy.get('#treeNameSelect').click()
       cy.get('#model-dropdown').click()
       cy.get('[data-value="bf4397f7-93ae-4502-a4a2-397f40f5cc49"]').click()
       cy.get('.MuiModal-root > .MuiBox-root').contains("EVITA", { timeout: 80000 })
       cy.get('.MuiBackdrop-root').first().click()
       cy.get('body').should('not.contain', "EVITA")
-    })
 
-    // Lets you add nodes
-    cy.get('canvas').then(canvas => {
-      const width = canvas.width();
-      const height = canvas.height();
-      const canvasCenterX = width / 2;
-      const canvasCenterY = height / 2;
-
-      cy.wrap(canvas)
-        .click(canvasCenterX - 45, canvasCenterY)
-      cy.wait(100)
-
-      cy.contains('Add Node').click()
-
-      cy.get('body').then(canvas => {
+      // Lets you add nodes
+      cy.get('canvas').then(canvas => {
         const width = canvas.width();
         const height = canvas.height();
         const canvasCenterX = width / 2;
         const canvasCenterY = height / 2;
+
         cy.wrap(canvas)
-          .click(canvasCenterX - 45, canvasCenterY + 60)
-        cy.get('#node-type-dropdown').click()
-        cy.contains("And").click()
+          .click(canvasCenterX - 45, canvasCenterY)
+        cy.wait(100)
+
+        cy.contains('Add Node').click()
 
         cy.get('body').then(canvas => {
           const width = canvas.width();
@@ -57,14 +46,27 @@ describe('Page should not crash when selecting nodes', () => {
           const canvasCenterX = width / 2;
           const canvasCenterY = height / 2;
           cy.wrap(canvas)
-            .click(canvasCenterX - 45, canvasCenterY - 30)
-
+            .click(canvasCenterX - 45, canvasCenterY + 60)
           cy.get('#node-type-dropdown').click()
-          cy.contains("Or").click()
-        })
+          cy.contains("And").click()
 
+          cy.get('body').then(canvas => {
+            const width = canvas.width();
+            const height = canvas.height();
+            const canvasCenterX = width / 2;
+            const canvasCenterY = height / 2;
+            cy.wrap(canvas)
+              .click(canvasCenterX - 45, canvasCenterY - 30)
+
+            cy.get('#node-type-dropdown').click()
+            cy.contains("Or").click()
+          })
+
+        })
       })
     })
+
+
   })
 
 })
