@@ -424,7 +424,7 @@ class TreeViewPage extends React.Component<{
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
-                <Button variant='inlineNavButton'> Action Panel </Button>
+                <Button variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
               </Stack>
             </Grid>
 
