@@ -101,7 +101,7 @@ class Projects extends React.Component<{
       <>
         <AppBar>
           <Box display="flex" justifyContent="center" alignItems="center" marginTop="11.75px">
-            <Button id="treeNameSelect" onClick={this.handleModalOpen} variant="text" endIcon={<ArrowDropDownIcon />}>{this.state['projectName']}</Button>
+            <Button variant='inlineNavButton' onClick={this.handleModalOpen} endIcon={<ArrowDropDownIcon />}>{this.state['projectName']}</Button>
           </Box>
 
           <Modal
