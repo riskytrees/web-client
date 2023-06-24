@@ -422,12 +422,15 @@ class TreeViewPage extends React.Component<{
         <AppBar>
           <Grid container>
             <Grid item xs={4} marginTop="11.75px">
-            
+              <Stack spacing={2} direction="row">
+                <Box></Box>
+                <Button variant='inlineNavButton'> Action Panel </Button>
+              </Stack>
             </Grid>
 
             <Grid item xs={4} marginTop="11.75px">
               <Stack alignContent="center">
-                <Button id="treeNameSelect" onClick={this.handleOpen} variant="text" endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
+                <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
 

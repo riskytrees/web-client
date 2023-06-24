@@ -7,7 +7,7 @@ import ConfigEditorPage from './ConfigEditorPage';
 import { RiskyColors } from './colors.ts';
 import { Variables } from './variables.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { createTheme, ThemeProvider }  from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 import { NoEncryption } from '@mui/icons-material';
 
 
@@ -20,54 +20,54 @@ const baseComponents = {
         fontSize: "24px",
         fontFamily: 'Open Sans, Sans-Serif',
       }
-    } 
+    }
   },
 
   MuiTypography: {
     styleOverrides: {
       root: {
-        fontFamily:'Open Sans',
-      
+        fontFamily: 'Open Sans',
+
       }
     },
     variants: [
       {
         props: { variant: 'h3' },
         style: {
-          fontSize:'14px',
-          fontWeight:'700',
+          fontSize: '14px',
+          fontWeight: '700',
         },
-    },
-    {
-      props: { variant: 'h1' },
-      style: {
-        fontSize:'24px',
-        fontWeight:'700',
-        color: RiskyColors.uiColors.mainText,
       },
-  },
-    {
-      props: { variant: 'h2' },
-      style: {
-        fontSize:'16px',
-        fontWeight:'500',
-        color: RiskyColors.uiColors.mainText,
+      {
+        props: { variant: 'h1' },
+        style: {
+          fontSize: '24px',
+          fontWeight: '700',
+          color: RiskyColors.uiColors.mainText,
+        },
       },
-  },]
+      {
+        props: { variant: 'h2' },
+        style: {
+          fontSize: '16px',
+          fontWeight: '500',
+          color: RiskyColors.uiColors.mainText,
+        },
+      },]
   },
 
   MuiModal: {
     styleOverrides: {
       root: {
 
-        
+
       }
     }
   },
-  MuiFormControl:{
+  MuiFormControl: {
     styleOverrides: {
       root: {
-        borderRadius:'4px',
+        borderRadius: '4px',
         '& label': {
           color: RiskyColors.uiColors.mainHighlightBorder,
         },
@@ -79,11 +79,11 @@ const baseComponents = {
         },
         '& .MuiOutlinedInput-root': {
           '& fieldset': {
-            borderColor:'transparent',
+            borderColor: 'transparent',
           },
           '&:hover fieldset': {
             borderColor: RiskyColors.uiColors.mainHighlightBorder,
- 
+
           },
           '&.Mui-focused fieldset': {
             borderColor: RiskyColors.uiColors.mainHighlightBorder,
@@ -97,9 +97,9 @@ const baseComponents = {
       root: {
         padding: 0,
 
-        backgroundColor:'none',
+        backgroundColor: 'none',
 
-        borderRadius:'4px',
+        borderRadius: '4px',
         '& label': {
           color: RiskyColors.uiColors.mainHighlightBorder,
         },
@@ -111,11 +111,11 @@ const baseComponents = {
         },
         '& .MuiOutlinedInput-root': {
           '& fieldset': {
-            borderColor:'transparent',
+            borderColor: 'transparent',
           },
           '&:hover fieldset': {
             borderColor: RiskyColors.uiColors.mainHighlightBorder,
- 
+
           },
           '&.Mui-focused fieldset': {
             borderColor: RiskyColors.uiColors.mainHighlightBorder,
@@ -138,51 +138,65 @@ const baseComponents = {
         style: {
           backgroundColor: 'transparent',
           border: 'none',
-          justifyContent:'flex-start',
+          justifyContent: 'flex-start',
           paddingLeft: '10px',
           '&:hover': {
             backgroundColor: RiskyColors.uiColors.primaryCTA,
+          },
         },
-        },
-      },{
+      }, {
         props: { variant: 'deleteButton' },
         style: {
           backgroundColor: 'transparent',
           border: 'none',
-          justifyContent:'flex-start',
+          justifyContent: 'flex-start',
           paddingLeft: '10px',
           '&:hover': {
             backgroundColor: RiskyColors.uiColors.negative,
+          },
         },
-        },
-      },{
+      }, {
         props: { variant: 'primaryButton' },
         style: {
           backgroundColor: RiskyColors.uiColors.primaryCTA,
           border: 'none',
-          borderRadius:'16px',
-          justifyContent:'center',
+          borderRadius: '16px',
+          justifyContent: 'center',
           paddingLeft: '15px',
           paddingRight: '15px',
           '&:hover': {
             backgroundColor: RiskyColors.uiColors.primaryCTAhover,
-        },
-        },
-        },
-        {
-          props: { variant: 'createButton' },
-          style: {
-            backgroundColor: RiskyColors.uiColors.primaryCTA,
-            border: 'none',
-            justifyContent:'flex-center',
-            '&:hover': {
-              backgroundColor: RiskyColors.uiColors.primaryCTAhover,
           },
-            '&:disabled':{
-              backgroundColor: RiskyColors.uiColors.primaryCTAdisabled,
-            }
+        },
+      },
+      {
+        props: { variant: 'createButton' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.primaryCTA,
+          border: 'none',
+          justifyContent: 'flex-center',
+          '&:hover': {
+            backgroundColor: RiskyColors.uiColors.primaryCTAhover,
           },
+          '&:disabled': {
+            backgroundColor: RiskyColors.uiColors.primaryCTAdisabled,
+          }
+        },
+      },
+      {
+        props: { variant: 'inlineNavButton' },
+        style: {
+          backgroundColor: 'transparent',
+          border: 'none',
+          justifyContent: 'flex-center',
+          '&:hover': {
+            backgroundColor: 'transparent',
           },
+          '&:disabled': {
+            backgroundColor: 'transparent',
+          }
+        },
+      },
     ]
   },
   MuiTextField: {
@@ -190,7 +204,7 @@ const baseComponents = {
       root: {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
         fontFamily: 'Open Sans',
-        borderRadius:'4px',
+        borderRadius: '4px',
         '& label': {
           color: RiskyColors.uiColors.mainHighlightBorder,
         },
@@ -202,11 +216,11 @@ const baseComponents = {
         },
         '& .MuiOutlinedInput-root': {
           '& fieldset': {
-            borderColor:'transparent',
+            borderColor: 'transparent',
           },
           '&:hover fieldset': {
             borderColor: RiskyColors.uiColors.mainHighlightBorder,
- 
+
           },
           '&.Mui-focused fieldset': {
             borderColor: RiskyColors.uiColors.mainHighlightBorder,
@@ -222,51 +236,51 @@ const baseComponents = {
         style: {
 
         },
-    },]
+      },]
   },
   MuiSelect: {
     styleOverrides: {
       root: {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
         fontFamily: 'Open Sans, sans-serif',
-        
+
       }
     },
     variants: [
       {
         props: { variant: 'outlined' },
         style: {
-          
+
         },
         props: { variant: 'treeSelect' },
         style: {
-          marginTop:'50px',
-          
+          marginTop: '50px',
+
         },
-    },]
+      },]
   },
 
-ListItemText: {
-  styleOverrides: {
-    root: {
-      backgroundColor:'none',
+  ListItemText: {
+    styleOverrides: {
+      root: {
+        backgroundColor: 'none',
 
+      },
     },
   },
-},
 
 
   MuiPaper: {
     styleOverrides: {
       root: {
-        borderRadius:'0px',
+        borderRadius: '0px',
 
 
       },
 
     },
     variants: [
-    
+
       {
         props: { variant: 'riskypane' },
         style: {
@@ -275,69 +289,69 @@ ListItemText: {
           padding: '15px',
           width: Variables.widthsList.paneWidth,
           overflow: 'auto',
-          display:'inline-block',
-          overflowY:'hidden',
+          display: 'inline-block',
+          overflowY: 'hidden',
         },
-    },
-    {
-      props: { variant: 'loginpane' },
-      style: {
-        backgroundColor: RiskyColors.uiColors.paneBackground,
-        height: 'calc(100vh - 30px)',
-        padding: '15px',
-        width: Variables.widthsList.paneWidth,
-        overflow: 'auto',
-        display:'inline-block',
-        position:'absolute',
-        overflowY:'hidden',
       },
-  },  {
-      props: { variant: 'treearea' },
-      style: {
-        backgroundColor: RiskyColors.uiColors.mainBackground,
-        height: 'calc(100vh)',
-        width: '100%',
+      {
+        props: { variant: 'loginpane' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.paneBackground,
+          height: 'calc(100vh - 30px)',
+          padding: '15px',
+          width: Variables.widthsList.paneWidth,
+          overflow: 'auto',
+          display: 'inline-block',
+          position: 'absolute',
+          overflowY: 'hidden',
+        },
+      }, {
+        props: { variant: 'treearea' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.mainBackground,
+          height: 'calc(100vh)',
+          width: '100%',
+        },
       },
-    }, 
-    {
-      props: { variant: 'loginback' },
-      style: {
+      {
+        props: { variant: 'loginback' },
+        style: {
 
-        height: 'calc(100vh)',
-        width: '100%',
-        margin:'0',
-        background: 'linear-gradient(118.16deg, #020302 63.92%, #0A0B20 106.58%)',
+          height: 'calc(100vh)',
+          width: '100%',
+          margin: '0',
+          background: 'linear-gradient(118.16deg, #020302 63.92%, #0A0B20 106.58%)',
+        },
       },
-    },
-    {
-      props: { variant: 'loginlogo' },
-      style: {
+      {
+        props: { variant: 'loginlogo' },
+        style: {
 
-        height: '200px',
-        width: 'calc(100% - ' + Variables.widthsList.paneWidth + ' - 200px)',
-        position:'absolute',
-        display:'inline',
-        backgroundColor:'transparent',
-        margin: '0 auto',
-        textAlign:'center',
-        top:'50%',
+          height: '200px',
+          width: 'calc(100% - ' + Variables.widthsList.paneWidth + ' - 200px)',
+          position: 'absolute',
+          display: 'inline',
+          backgroundColor: 'transparent',
+          margin: '0 auto',
+          textAlign: 'center',
+          top: '50%',
 
+        },
       },
-    }, 
-    {
-      props: { variant: 'loginBox' },
-      style: {
-        height: 'calc(100vh)',
-        width: 'calc(97vw - ' + Variables.widthsList.paneWidth +' - 200px)',
-        overflow: 'auto',
+      {
+        props: { variant: 'loginBox' },
+        style: {
+          height: 'calc(100vh)',
+          width: 'calc(97vw - ' + Variables.widthsList.paneWidth + ' - 200px)',
+          overflow: 'auto',
 
-        display:'inline-block',
-        overflowY:'hidden',
+          display: 'inline-block',
+          overflowY: 'hidden',
+        },
       },
-  },
     ]
   },
-  
+
   MuiAppBar: {
     styleOverrides: {
       root: {
@@ -348,7 +362,7 @@ ListItemText: {
         boxShadow: '2px 2px 4px 0px rgb(5 5 5 / 10%)',
         position: 'relative'
       },
-},
+    },
 
   },
 
@@ -365,29 +379,29 @@ const theme = createTheme({
     fontFamily: 'Open Sans',
   },
   components: baseComponents
-  
+
 });
 
 function App() {
   return (
     <>
-    <ThemeProvider theme={theme} >
+      <ThemeProvider theme={theme} >
 
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />}>
-          </Route>
-          <Route path="/projects" element={<Projects />}>
-          </Route>
-          <Route path="/projects/:projectId/config/:configId" element={<ConfigEditorPage />}>
-          </Route>
-          <Route path="/tree" element={<TreeViewPage />}>
-          </Route>
-          <Route path="/login" element={<LoginPage />}>
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />}>
+            </Route>
+            <Route path="/projects" element={<Projects />}>
+            </Route>
+            <Route path="/projects/:projectId/config/:configId" element={<ConfigEditorPage />}>
+            </Route>
+            <Route path="/tree" element={<TreeViewPage />}>
+            </Route>
+            <Route path="/login" element={<LoginPage />}>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
 
     </>
   );
