@@ -2325,17 +2325,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jy95/material-ui-image@npm:^4.0.8":
-  version: 4.0.8
-  resolution: "@jy95/material-ui-image@npm:4.0.8"
+"@jy95/material-ui-image@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "@jy95/material-ui-image@npm:4.0.9"
   dependencies:
-    prop-types: ^15.5.8
+    prop-types: ^15.8.1
   peerDependencies:
     "@mui/icons-material": ^5.0.0
     "@mui/material": ^5.0.0
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
-  checksum: 0963e8ff1a99551b203d2ff917b5ec0926dc99a87062e1a60708ffb0b605cca50ea226ff1f0e6829732318ac0ed7fd2b03562551dff163524e28ea87f4df015c
+  checksum: d76c8290ec90c3ecbf164a90be2670580be6c1ac5d8f5e264f6d8a6b020158095b1e9f4c4bf83d1baf02df623174731c5e499f777cff094b79805156e4f72e87
   languageName: node
   linkType: hard
 
@@ -11526,7 +11526,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.8, prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -13892,7 +13892,7 @@ __metadata:
   dependencies:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
-    "@jy95/material-ui-image": ^4.0.8
+    "@jy95/material-ui-image": ^4.0.9
     "@mui/icons-material": ^5.11.16
     "@mui/material": ^5.13.6
     "@testing-library/jest-dom": ^5.16.5
