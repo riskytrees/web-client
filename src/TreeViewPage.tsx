@@ -10,7 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Stack, Typography } from "@mui/material";
+import { Divider, List, ListItem, ListItemText, Stack, Typography } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import NodePane from './NodePane';
@@ -49,7 +49,9 @@ class TreeViewPage extends React.Component<{
     this.localTreeNodeUpdate = this.localTreeNodeUpdate.bind(this);
     this.updateTree = this.updateTree.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
+    this.handleActionPanelOpen = this.handleActionPanelOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleActionPanelClose = this.handleActionPanelClose.bind(this);
     this.modelDropdownChanged = this.modelDropdownChanged.bind(this);
     this.handleTreeNameChanged = this.handleTreeNameChanged.bind(this);
     this.handleAnalysisClicked = this.handleAnalysisClicked.bind(this);
@@ -286,8 +288,16 @@ class TreeViewPage extends React.Component<{
     this.setState({ modalOpen: true })
   }
 
+  handleActionPanelOpen() {
+    this.setState({actionModalOpen: true})
+  }
+
   handleClose() {
     this.setState({ modalOpen: false })
+  }
+
+  handleActionPanelClose() {
+    this.setState({ actionModalOpen: false })
   }
 
   async getListOfModels() {
@@ -425,15 +435,49 @@ class TreeViewPage extends React.Component<{
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
-                <Button aria-describedby="actionButton" variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
+                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
                 <Popover
+                  id="actionButton"
+
                   open={this.state.actionModalOpen}
+                  onClose={this.handleActionPanelClose}
                   anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'left',
                   }}
                 >
-                  <Typography>Hello</Typography>
+                  <Stack>
+                  <List component="nav">
+                    <ListItem button>
+                      <ListItemText primary="Back to Projects" />
+                    </ListItem>
+                    <ListItem button divider>
+                      <ListItemText primary="Export Text Tree" />
+                    </ListItem>
+                    <ListItem button>
+                      <ListItemText primary="Export Analysis" />
+                    </ListItem>
+                    <Divider light />
+                    <ListItem button>
+                      <ListItemText primary="Add Child Node" />
+                    </ListItem>
+                    <ListItem button>
+                      <ListItemText primary="Delete Selected" />
+                    </ListItem>
+                    <Divider light />
+                    <ListItem button>
+                      <ListItemText primary="Config Settings" />
+                    </ListItem>
+                    <ListItem button>
+                      <ListItemText primary="Model Settings" />
+                    </ListItem>
+                    <Divider light />
+                    <ListItem button>
+                      <ListItemText primary="App Settings" />
+                    </ListItem>
+                  </List>
+                  </Stack>
+
                 </Popover>
               </Stack>
             </Grid>
@@ -459,7 +503,6 @@ class TreeViewPage extends React.Component<{
 
 
           <Modal
-            id="actionButton"
             open={this.state.modalOpen}
             onClose={this.handleClose}
             aria-labelledby="modal-modal-title"
