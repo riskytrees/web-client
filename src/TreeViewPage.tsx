@@ -10,7 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import NodePane from './NodePane';
@@ -33,6 +33,7 @@ class TreeViewPage extends React.Component<{
     label: string;
   } | null;
   modalOpen: boolean;
+  actionModalOpen: boolean;
   models: any[];
   selectedModel: string;
   analysisModeEnabled: boolean;
@@ -41,7 +42,7 @@ class TreeViewPage extends React.Component<{
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false };
+    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -424,7 +425,16 @@ class TreeViewPage extends React.Component<{
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
-                <Button variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
+                <Button aria-describedby="actionButton" variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
+                <Popover
+                  open={this.state.actionModalOpen}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                >
+                  <Typography>Hello</Typography>
+                </Popover>
               </Stack>
             </Grid>
 
@@ -449,6 +459,7 @@ class TreeViewPage extends React.Component<{
 
 
           <Modal
+            id="actionButton"
             open={this.state.modalOpen}
             onClose={this.handleClose}
             aria-labelledby="modal-modal-title"
