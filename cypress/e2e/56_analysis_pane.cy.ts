@@ -25,7 +25,7 @@ describe('Analysis pane', () => {
         cy.contains(treeId, { timeout: 20000 })
       })
 
-      cy.get('#treeNameSelect').click()
+      cy.get(':nth-child(2) > .MuiStack-root > .MuiButtonBase-root').click()
       cy.get('#model-dropdown').click()
       cy.get('[data-value="f1644cb9-b2a5-4abb-813f-98d0277e42f2"]').click()
 
