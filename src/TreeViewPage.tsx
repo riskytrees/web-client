@@ -438,12 +438,13 @@ class TreeViewPage extends React.Component<{
                 <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
                 <Popover
                   id="actionButton"
-
+                  anchorReference="anchorPosition"
+                  anchorPosition={{ top: 50, left: 0 }}
                   open={this.state.actionModalOpen}
                   onClose={this.handleActionPanelClose}
                   anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
+                    vertical: 'bottom',
+                    horizontal: 'center',
                   }}
                 >
                   <Stack>
