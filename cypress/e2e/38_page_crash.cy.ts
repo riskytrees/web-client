@@ -20,7 +20,7 @@ describe('Page should not crash when selecting nodes', () => {
       let treeId = loc.search.split('id=')[1].split('&')[0];
 
       cy.contains(treeId, { timeout: 20000 })
-      cy.get('#treeNameSelect').click()
+      cy.get(':nth-child(2) > .MuiStack-root > .MuiButtonBase-root').click()
       cy.get('#model-dropdown').click()
       cy.get('[data-value="bf4397f7-93ae-4502-a4a2-397f40f5cc49"]').click()
       cy.get('.MuiModal-root > .MuiBox-root').contains("EVITA", { timeout: 80000 })

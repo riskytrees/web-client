@@ -21,11 +21,14 @@ describe('Config Editor', () => {
     cy.contains(newProjectUUID, { timeout: 80000 })
 
     // Lets you create a config
-    cy.get('#treeNameSelect').click();
+    cy.get(':nth-child(2) > .MuiStack-root > .MuiButtonBase-root').click();
     cy.get(':nth-child(3) > .MuiGrid-root > .MuiButtonBase-root').click()
     cy.wait('@postConfig', { timeout: 20000 })
     cy.wait('@getConfig', { timeout: 20000 })
     cy.wait('@putConfig', { timeout: 20000 })
+
+    // Can take a few ms to update the selected config async
+    cy.wait(10)
 
     cy.get(':nth-child(2) > .MuiGrid-root > .MuiButtonBase-root').click()
 
