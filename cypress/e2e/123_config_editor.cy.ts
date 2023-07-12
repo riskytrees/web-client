@@ -27,6 +27,9 @@ describe('Config Editor', () => {
     cy.wait('@getConfig', { timeout: 20000 })
     cy.wait('@putConfig', { timeout: 20000 })
 
+    // Can take a few ms to update the selected config async
+    cy.wait(10)
+
     cy.get(':nth-child(2) > .MuiGrid-root > .MuiButtonBase-root').click()
 
     cy.url().should('include', '/config/')
