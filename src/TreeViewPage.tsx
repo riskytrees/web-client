@@ -10,7 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Divider, List, ListItem, ListItemText, Stack, Typography } from "@mui/material";
+import { Divider, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import NodePane from './NodePane';
@@ -55,6 +55,7 @@ class TreeViewPage extends React.Component<{
     this.modelDropdownChanged = this.modelDropdownChanged.bind(this);
     this.handleTreeNameChanged = this.handleTreeNameChanged.bind(this);
     this.handleAnalysisClicked = this.handleAnalysisClicked.bind(this);
+    this.goBackToProjects = this.goBackToProjects.bind(this);
 
     this.loadTree()
     this.getListOfModels();
@@ -76,6 +77,16 @@ class TreeViewPage extends React.Component<{
         selectedModel: data.result.modelId
       })
     }
+  }
+
+  goBackToProjects() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+
+
+    window.location.href = '/projects?id=' + projectId;
   }
 
   // Only acts on root tree
@@ -449,33 +460,58 @@ class TreeViewPage extends React.Component<{
                 >
                   <Stack>
                   <List component="nav">
-                    <ListItem button>
-                      <ListItemText primary="Back to Projects" />
+                    <ListItem>
+                      <ListItemButton onClick={this.goBackToProjects}>
+                        <ListItemText primary="Back to Projects" />
+                      </ListItemButton>
                     </ListItem>
-                    <ListItem button divider>
-                      <ListItemText primary="Export Text Tree" />
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Export Text Tree" />
+                      </ListItemButton>
                     </ListItem>
-                    <ListItem button>
-                      <ListItemText primary="Export Analysis" />
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Export Analysis" />
+                      </ListItemButton>
                     </ListItem>
+
                     <Divider light />
-                    <ListItem button>
-                      <ListItemText primary="Add Child Node" />
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Add Child Node" />
+                      </ListItemButton>
                     </ListItem>
-                    <ListItem button>
-                      <ListItemText primary="Delete Selected" />
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Delete Selected" />
+                      </ListItemButton>
                     </ListItem>
+
                     <Divider light />
-                    <ListItem button>
-                      <ListItemText primary="Config Settings" />
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Config Settings" />
+                      </ListItemButton>
                     </ListItem>
-                    <ListItem button>
-                      <ListItemText primary="Model Settings" />
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Model Settings" />
+                      </ListItemButton>
                     </ListItem>
+
                     <Divider light />
-                    <ListItem button>
-                      <ListItemText primary="App Settings" />
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="App Settings" />
+                      </ListItemButton>
                     </ListItem>
+
                   </List>
                   </Stack>
 
