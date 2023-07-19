@@ -462,7 +462,7 @@ class TreeViewPage extends React.Component<{
                   <List component="nav">
                     <ListItem>
                       <ListItemButton onClick={this.goBackToProjects}>
-                        <ListItemText primary="Back to Projects" />
+                        <ListItemText primary="Back to Trees" />
                       </ListItemButton>
                     </ListItem>
 
