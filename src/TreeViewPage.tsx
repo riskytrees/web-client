@@ -10,7 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Stack } from "@mui/material";
+import { Divider, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import NodePane from './NodePane';
@@ -33,6 +33,7 @@ class TreeViewPage extends React.Component<{
     label: string;
   } | null;
   modalOpen: boolean;
+  actionModalOpen: boolean;
   models: any[];
   selectedModel: string;
   analysisModeEnabled: boolean;
@@ -41,17 +42,20 @@ class TreeViewPage extends React.Component<{
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false };
+    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
     this.localTreeNodeUpdate = this.localTreeNodeUpdate.bind(this);
     this.updateTree = this.updateTree.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
+    this.handleActionPanelOpen = this.handleActionPanelOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleActionPanelClose = this.handleActionPanelClose.bind(this);
     this.modelDropdownChanged = this.modelDropdownChanged.bind(this);
     this.handleTreeNameChanged = this.handleTreeNameChanged.bind(this);
     this.handleAnalysisClicked = this.handleAnalysisClicked.bind(this);
+    this.goBackToProjects = this.goBackToProjects.bind(this);
 
     this.loadTree()
     this.getListOfModels();
@@ -73,6 +77,16 @@ class TreeViewPage extends React.Component<{
         selectedModel: data.result.modelId
       })
     }
+  }
+
+  goBackToProjects() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+
+
+    window.location.href = '/projects?id=' + projectId;
   }
 
   // Only acts on root tree
@@ -285,8 +299,16 @@ class TreeViewPage extends React.Component<{
     this.setState({ modalOpen: true })
   }
 
+  handleActionPanelOpen() {
+    this.setState({actionModalOpen: true})
+  }
+
   handleClose() {
     this.setState({ modalOpen: false })
+  }
+
+  handleActionPanelClose() {
+    this.setState({ actionModalOpen: false })
   }
 
   async getListOfModels() {
@@ -424,7 +446,76 @@ class TreeViewPage extends React.Component<{
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
-                <Button variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
+                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
+                <Popover
+                  id="actionButton"
+                  anchorReference="anchorPosition"
+                  anchorPosition={{ top: 50, left: 0 }}
+                  open={this.state.actionModalOpen}
+                  onClose={this.handleActionPanelClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                >
+                  <Stack>
+                  <List component="nav">
+                    <ListItem>
+                      <ListItemButton onClick={this.goBackToProjects}>
+                        <ListItemText primary="Back to Projects" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Export Text Tree" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Export Analysis" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <Divider light />
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Add Child Node" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Delete Selected" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <Divider light />
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Config Settings" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="Model Settings" />
+                      </ListItemButton>
+                    </ListItem>
+
+                    <Divider light />
+                    <ListItem>
+                      <ListItemButton disabled={true}>
+                        <ListItemText primary="App Settings" />
+                      </ListItemButton>
+                    </ListItem>
+
+                  </List>
+                  </Stack>
+
+                </Popover>
               </Stack>
             </Grid>
 
