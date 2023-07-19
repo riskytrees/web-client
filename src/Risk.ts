@@ -233,10 +233,11 @@ export class RiskyRisk {
     isNodeComputable(nodeId: string) {
         const node = this.getNode(nodeId);
 
-        return node && (!node.hasOwnProperty('conditionResolved') || node.conditionResolved == true);
+        return node && (!node.hasOwnProperty('conditionResolved') || node['conditionAttribute'] === "" || node.conditionResolved == true);
     }
 
     computeAttackerLikelihood(nodeId: string) {
+        console.log("Computing risk for " + nodeId)
         const node = this.getNode(nodeId);
         let result = null;
 
