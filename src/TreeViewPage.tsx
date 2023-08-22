@@ -23,6 +23,7 @@ import ConfigPicker from './ConfigPicker';
 import { RiskyApi } from './api';
 import Item from '@mui/material/Grid';
 import AnalysisPane from './AnalysisPane';
+import LogoMark from './img/logomark.svg';
 
 class TreeViewPage extends React.Component<{
 
@@ -343,7 +344,6 @@ class TreeViewPage extends React.Component<{
       selectedModel: modelId
     })
 
-
   }
 
   handleTreeNameChanged(event) {
@@ -446,7 +446,8 @@ class TreeViewPage extends React.Component<{
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
-                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}> Action Panel </Button>
+
+                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img></Button>
                 <Popover
                   id="actionButton"
                   anchorReference="anchorPosition"
