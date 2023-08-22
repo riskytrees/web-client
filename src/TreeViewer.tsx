@@ -240,6 +240,25 @@ class TreeViewer extends React.Component<{
           this.nodeClicked(null);
          }
       });
+
+      network.on('zoom', (zoomInfo) => {
+
+        if (zoomInfo.scale < 0.5) {
+          network.setOptions({
+            interaction: {
+              zoomView: false
+            }
+          })
+
+          setTimeout(() => {
+            network.setOptions({
+              interaction: {
+                zoomView: true
+              }
+            })
+          }, 1000)
+        }
+      })
     }    
   }
 
