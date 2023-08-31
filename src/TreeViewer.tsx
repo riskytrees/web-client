@@ -12,11 +12,12 @@ class TreeViewer extends React.Component<{
 
   onNodeClicked: Function;
 }, {
-  treeMap: Record<string, TreeData>
+  treeMap: Record<string, TreeData>,
+  network: Network | null
 }> {
   constructor(props) {
     super(props);
-    this.state = { treeMap: this.props.treeMap };
+    this.state = { treeMap: this.props.treeMap, network: null };
 
     this.loadAndRender = this.loadAndRender.bind(this);
 
@@ -220,7 +221,30 @@ class TreeViewer extends React.Component<{
     }
 
     if (container) {
-      let network = new Network(container, data, options);
+      let network = this.state.network ? this.state.network : new Network(container, data, options);
+
+      if (this.state.network !== null) {
+        let currentScale = network.getScale();
+        let currentViewPos = network.getViewPosition();
+        network.setData(data);
+        network.setOptions(options)
+
+        console.log(currentScale)
+        console.log(currentViewPos)
+        
+        if (currentScale !== 1 || currentViewPos['x'] !== 0 || currentViewPos['y'] !== 0) {
+          network.moveTo({
+            position: currentViewPos,
+            scale: currentScale
+          })
+        }
+
+      }
+
+      this.setState({
+        network: network
+      })
+      
       network.on('click', (properties) => {
          var id = properties.nodes[0];
          let selectedNodes = [];

@@ -14,7 +14,7 @@ describe('Add Node', () => {
     cy.get('#createProjectButtonField').type(newProjectUUID)
     cy.contains('Create New Project').click()
 
-    cy.contains("Tree Viewer", { timeout: 80000 }).click()
+    cy.contains("Tree Viewer", { timeout: 80000 })
     cy.wait('@getProject', { timeout: 20000 })
 
     // lets you select a node
