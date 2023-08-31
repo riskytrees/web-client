@@ -228,10 +228,17 @@ class TreeViewer extends React.Component<{
         let currentViewPos = network.getViewPosition();
         network.setData(data);
         network.setOptions(options)
-        network.moveTo({
-          position: currentViewPos,
-          scale: currentScale
-        })
+
+        console.log(currentScale)
+        console.log(currentViewPos)
+        
+        if (currentScale !== 1 || currentViewPos['x'] !== 0 || currentViewPos['y'] !== 0) {
+          network.moveTo({
+            position: currentViewPos,
+            scale: currentScale
+          })
+        }
+
       }
 
       this.setState({
