@@ -1,6 +1,10 @@
 import React from 'react';
 import { RiskyApi } from './api';
-
+import treeImg from './img/tree.png';
+import Box from "@mui/material/Box";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
 class TreesList extends React.Component<{
   projectId: string;
 }, {
@@ -33,7 +37,7 @@ class TreesList extends React.Component<{
 
     for (const tree of trees) {
       const path = "../tree?id=" + tree.id + "&projectId=" + this.props.projectId;
-      rows.push(<tr key={tree.id}><td><a href={path}>{tree.title}</a></td></tr>)
+      rows.push(<tr key={tree.id}><td><a href={path}><div className="test1"><div className="imgContainer"><img src={treeImg} width="100%" height="auto"></img></div><div className="itemContent1">{tree.title}</div></div></a></td></tr>)
 
     }
 

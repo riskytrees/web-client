@@ -65,3 +65,21 @@ code {
   font-family: 'Open Sans';
   src: local('Open Sans'), url(./fonts/OpenSans.ttf) format('truetype');
 }
+
+.test1 {
+  height:auto;
+  width:auto;
+  border: 2px solid blue;
+
+
+}
+.imgContainer{
+
+  width:250px;
+  border: 2px solid gray;
+position:relative;
+padding:10px;
+object-fit:contain;
+margin-bottom:12px;
+
+}
