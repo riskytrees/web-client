@@ -246,7 +246,11 @@ class TreeViewPage extends React.Component<{
         treeData['nodes'].push({
           title: "New Node",
           description: "",
-          modelAttributes: {},
+          modelAttributes: {
+            "node_type": {
+              "value_string": "or"
+            }
+          },
           conditionAttribute: "",
           id: uuid,
           children: []

@@ -55,7 +55,11 @@ class CreateTreeWidget extends React.Component<{
         {
           title: "New Root node",
           description: "This is the root node",
-          modelAttributes: {},
+          modelAttributes: {
+            "node_type": {
+              "value_string": "or"
+            }
+          },
           conditionAttribute: "",
           id: newRootNodeId,
           children: []
