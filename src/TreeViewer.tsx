@@ -36,6 +36,7 @@ class TreeViewer extends React.Component<{
   }
 
   loadAndRender() {
+    console.log("rendering...")
     const nodes: Record<string, any>[] = [];
     const edges: Record<string, any>[] = [];
 
