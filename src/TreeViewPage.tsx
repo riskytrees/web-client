@@ -56,6 +56,8 @@ class TreeViewPage extends React.Component<{
     this.handleTreeNameChanged = this.handleTreeNameChanged.bind(this);
     this.handleAnalysisClicked = this.handleAnalysisClicked.bind(this);
     this.goBackToProjects = this.goBackToProjects.bind(this);
+    this.handleUndo = this.handleUndo.bind(this);
+    this.loadTree = this.loadTree.bind(this);
 
     this.loadTree()
     this.getListOfModels();
@@ -173,7 +175,6 @@ class TreeViewPage extends React.Component<{
       // Recursively resolve tree imports
       const result = await this.resolveImports(data.result, projectId);
       treeMap = { ...treeMap, ...result };
-  
       this.setState({
         treeMap
       }, () => {
@@ -297,6 +298,24 @@ class TreeViewPage extends React.Component<{
     } else {
       console.log("No tree map!")
     }
+  }
+
+  async handleUndo() {
+    console.log("Undo")
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+    const treeId = urlParams.get('id');
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeId + "/undo", {
+      method: 'PUT'
+    });
+
+    if (data.ok) {
+      await this.loadTree()
+    }
+
   }
 
   handleOpen() {
@@ -481,6 +500,15 @@ class TreeViewPage extends React.Component<{
                         <ListItemText primary="Export Analysis" />
                       </ListItemButton>
                     </ListItem>
+
+                    <Divider light />
+
+                    <ListItem>
+                      <ListItemButton>
+                        <ListItemText primary="Undo" onClick={this.handleUndo} />
+                      </ListItemButton>
+                    </ListItem>
+
 
                     <Divider light />
 
