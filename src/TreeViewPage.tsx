@@ -37,12 +37,13 @@ class TreeViewPage extends React.Component<{
   models: any[];
   selectedModel: string;
   analysisModeEnabled: boolean;
+  zoomLevel: number;
 }> {
   riskEngine: RiskyRisk;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false };
+    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0 };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -58,6 +59,7 @@ class TreeViewPage extends React.Component<{
     this.goBackToProjects = this.goBackToProjects.bind(this);
     this.handleUndo = this.handleUndo.bind(this);
     this.loadTree = this.loadTree.bind(this);
+    this.handleZoomChange = this.handleZoomChange.bind(this);
 
     this.loadTree()
     this.getListOfModels();
@@ -79,6 +81,14 @@ class TreeViewPage extends React.Component<{
         selectedModel: data.result.modelId
       })
     }
+  }
+
+  handleZoomChange(event) {
+    let desiredLevel = event.target.value;
+
+    this.setState({
+      zoomLevel: desiredLevel
+    })
   }
 
   goBackToProjects() {
@@ -460,6 +470,13 @@ class TreeViewPage extends React.Component<{
       rightPane = <AnalysisPane  rootNodeId={this.state.treeMap[treeId].rootNodeId} riskEngine={this.riskEngine} selectedModel={this.state.selectedModel}></AnalysisPane>
     }
 
+    let customZoomEntry = null;
+    
+    if (![0.5, 0.75, 1.0, 2.0].includes(this.state.zoomLevel)) {
+    
+      customZoomEntry = <MenuItem value={this.state.zoomLevel}>{Number(this.state.zoomLevel.toFixed(2)) * 100}%</MenuItem>
+    }
+
     return (
       <>
 
@@ -561,6 +578,22 @@ class TreeViewPage extends React.Component<{
 
             <Grid item xs={4}  marginTop="11.75px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
+              <FormControl size="small">
+                  <Select
+                    id="zoom-select"
+                    value={this.state.zoomLevel}
+                    onChange={this.handleZoomChange}
+                  >
+
+                    <MenuItem value={0.50}>50%</MenuItem>
+                    <MenuItem value={0.75}>75%</MenuItem>
+                    <MenuItem value={1.0}>100%</MenuItem>
+                    <MenuItem value={2.0}>200%</MenuItem>
+
+                    {customZoomEntry}
+
+                  </Select>
+                </FormControl>
                 <Button onClick={this.handleAnalysisClicked}> {this.state.analysisModeEnabled ? "Close Analysis" : "Show Analysis"} </Button>
                 <Box></Box>
               </Stack>
@@ -593,11 +626,11 @@ class TreeViewPage extends React.Component<{
           <Paper variant="riskypane">
             <SubTreePane rootTreeId={treeId} projectId={projectId} />
           </Paper>
-          {<TreeViewer onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} />}
+          {<TreeViewer onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} />}
 
           {rightPane}
           
-
+x
         </Stack>
       </>
     )

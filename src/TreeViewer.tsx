@@ -9,17 +9,20 @@ import TreeData from './interfaces/TreeData';
 
 class TreeViewer extends React.Component<{
   treeMap: Record<string, TreeData>
-
+  zoomLevel: number,
   onNodeClicked: Function;
+  onZoomChanged: Function;
 }, {
   treeMap: Record<string, TreeData>,
   network: Network | null
+  debouncing: boolean;
 }> {
   constructor(props) {
     super(props);
-    this.state = { treeMap: this.props.treeMap, network: null };
+    this.state = { treeMap: this.props.treeMap, network: null, debouncing: false };
 
     this.loadAndRender = this.loadAndRender.bind(this);
+    this.updateZoom = this.updateZoom.bind(this);
 
   }
 
@@ -282,6 +285,26 @@ class TreeViewer extends React.Component<{
               }
             })
           }, 1000)
+        } else {
+          if (!this.state.debouncing) {
+            this.setState({
+              debouncing: true
+            }, () => {
+              this.props.onZoomChanged({
+                "target": {
+                  "value": zoomInfo.scale
+                }
+              })
+
+              window.setTimeout(() => {
+                this.setState({
+                  debouncing: false
+                })
+              }, 10)
+            })
+
+          }
+
         }
       })
     }    
@@ -289,6 +312,25 @@ class TreeViewer extends React.Component<{
 
   componentDidMount() {
     this.loadAndRender()
+  }
+
+  updateZoom(level: number) {
+    let network = this.state.network;
+
+    if (network !== null) {
+      let currentViewPos = network.getViewPosition();
+      
+      if (currentViewPos['x'] !== 0 || currentViewPos['y'] !== 0) {
+        network.moveTo({
+          position: currentViewPos,
+          scale: level
+        })
+      }
+
+      this.setState({
+        network: network
+      })
+    }
   }
 
   nodeClicked(node) {
@@ -301,6 +343,10 @@ class TreeViewer extends React.Component<{
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       if (this.props.treeMap) {
         this.setState ({ treeMap: this.props.treeMap }, this.loadAndRender);
+      }
+
+      if (this.props.zoomLevel) {
+        this.updateZoom(this.props.zoomLevel);
       }
     }
   }
