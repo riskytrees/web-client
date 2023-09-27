@@ -333,10 +333,21 @@ class TreeViewer extends React.Component<{
                 
                 // There should be only one parent.
                 if (connectedNodes?.length === 1) {
-                  console.log(this.state.network.body.nodes)
                   let node = this.state.network.body.nodes[connectedNodes[0]].options;
                   this.nodeClicked(node);
                 }
+              }
+            } else if (event.code === "ArrowDown") {
+              let network = this.state.network;
+              
+              if (this.state.currentNode !== null) {
+                let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'to');
+                
+                if (connectedNodes.length > 0) {
+                  let node = this.state.network.body.nodes[connectedNodes[0]].options;
+                  this.nodeClicked(node);
+                }
+
               }
             }
         }
