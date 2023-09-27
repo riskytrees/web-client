@@ -629,8 +629,6 @@ class TreeViewPage extends React.Component<{
           {<TreeViewer onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} />}
 
           {rightPane}
-          
-x
         </Stack>
       </>
     )
