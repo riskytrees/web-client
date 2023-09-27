@@ -16,10 +16,11 @@ class TreeViewer extends React.Component<{
   treeMap: Record<string, TreeData>,
   network: Network | null
   debouncing: boolean;
+  currentNode: Record<string, unknown> | null
 }> {
   constructor(props) {
     super(props);
-    this.state = { treeMap: this.props.treeMap, network: null, debouncing: false };
+    this.state = { treeMap: this.props.treeMap, network: null, debouncing: false, currentNode: null };
 
     this.loadAndRender = this.loadAndRender.bind(this);
     this.updateZoom = this.updateZoom.bind(this);
@@ -218,11 +219,24 @@ class TreeViewer extends React.Component<{
           levelSeparation: 100
         }
       },
-      interaction: { dragNodes: false },
+      interaction: { 
+        dragNodes: false
+      },
       physics: {
         enabled: false
       }
     }
+
+    let getNodeById = (id, searchNodes) => {
+      for (const node of searchNodes) {
+        if (node.id === id) {
+          return node;
+        }
+      }
+
+      return null;
+    }
+
 
     if (container) {
       let network = this.state.network ? this.state.network : new Network(container, data, options);
@@ -255,17 +269,17 @@ class TreeViewer extends React.Component<{
          let foundNode = false;
          for (const node of nodes) {
            if (node.id === id) {
-             // Now remove our title hack
-             console.log(node)
-             let nodeCopy = {...node}
-             nodeCopy.label = node.label.split("---")[1]
-             this.nodeClicked(nodeCopy);
+             this.nodeClicked(node);
              foundNode = true;
+             this.setState({
+              currentNode: node
+             })
            }
          }
 
          if (!foundNode) {
           this.nodeClicked(null);
+
          }
       });
 
@@ -307,6 +321,27 @@ class TreeViewer extends React.Component<{
 
         }
       })
+
+      let keydownListener = function(relevantNodes) {
+        return function curried_func(event) {
+            // do something here
+            if (event.code === "ArrowUp") {
+              let network = this.state.network;
+              
+              if (this.state.currentNode !== null) {
+                let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
+                
+                // There should be only one parent.
+                if (connectedNodes?.length === 1) {
+                  console.log(this.state.network.body.nodes)
+                  let node = this.state.network.body.nodes[connectedNodes[0]].options;
+                  this.nodeClicked(node);
+                }
+              }
+            }
+        }
+      }
+      container.addEventListener("keydown", keydownListener(nodes).bind(this));
     }    
   }
 
@@ -334,9 +369,21 @@ class TreeViewer extends React.Component<{
   }
 
   nodeClicked(node) {
-    if (this.props.onNodeClicked) {
-      this.props.onNodeClicked(node);
+    let nodeCopy: Record<string, unknown> | null = null;
+
+    if (node) {
+      // Now remove our title hack
+      nodeCopy = {...node} as Record<string, unknown>
+      nodeCopy.label = node.label.split("---")[1]  
     }
+
+    if (this.props.onNodeClicked) {
+      this.props.onNodeClicked(nodeCopy);
+    }
+
+    this.setState({
+      currentNode: nodeCopy
+    })
   }
 
   componentDidUpdate(prevProps) {
