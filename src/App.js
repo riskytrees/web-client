@@ -309,7 +309,7 @@ const baseComponents = {
         props: { variant: 'treearea' },
         style: {
           backgroundColor: RiskyColors.uiColors.mainBackground,
-          height: 'calc(100vh)',
+          height: 'calc(100%)',
           width: '100%',
         },
       },
@@ -321,6 +321,14 @@ const baseComponents = {
           width: '100%',
           margin: '0',
           background: 'linear-gradient(118.16deg, #020302 63.92%, #0A0B20 106.58%)',
+        },
+      },
+      {
+        props: { variant: 'treelist' },
+        style: {
+          display:'flex-row',
+          flexWrap:'wrap',
+          justifyContent:'space-between',
         },
       },
       {
@@ -350,6 +358,24 @@ const baseComponents = {
         },
       },
     ]
+  },
+
+  MuiCard: {
+    styleOverrides: {
+      root: {
+
+
+      }
+    },
+    variants: [
+      {
+        props: { variant: 'outlined' },
+        style: {
+          display:'flex-row',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+        },
+      },]
   },
 
   MuiAppBar: {
