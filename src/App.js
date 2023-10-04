@@ -324,6 +324,14 @@ const baseComponents = {
         },
       },
       {
+        props: { variant: 'treelist' },
+        style: {
+          display:'flex-row',
+          flexWrap:'wrap',
+          justifyContent:'space-between',
+        },
+      },
+      {
         props: { variant: 'loginlogo' },
         style: {
 
@@ -350,6 +358,24 @@ const baseComponents = {
         },
       },
     ]
+  },
+
+  MuiCard: {
+    styleOverrides: {
+      root: {
+
+
+      }
+    },
+    variants: [
+      {
+        props: { variant: 'outlined' },
+        style: {
+          display:'flex-row',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+        },
+      },]
   },
 
   MuiAppBar: {
