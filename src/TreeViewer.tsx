@@ -324,7 +324,17 @@ class TreeViewer extends React.Component<{
 
       let keydownListener = function(relevantNodes) {
         return function curried_func(event) {
-            // do something here
+            if (!this.state.debouncing) {
+              this.setState({
+                debouncing: true
+              }, () => {
+                window.setTimeout(() => {
+                  this.setState({
+                    debouncing: false
+                  })
+                }, 10)
+
+                            // do something here
             if (event.code === "ArrowUp") {
               let network = this.state.network;
               
@@ -349,7 +359,75 @@ class TreeViewer extends React.Component<{
                 }
 
               }
+            } else if (event.code === "ArrowLeft") {
+              let network = this.state.network;
+              
+              if (this.state.currentNode !== null) {
+                let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
+                let selfNode = this.state.network.body.nodes[this.state.currentNode['id'] as string];
+                
+                // There should be only one parent.
+                if (connectedNodes?.length === 1) {
+                  let siblings = network?.getConnectedNodes(connectedNodes[0] as string, 'to');
+                  let closetSiblingToLeft = null;
+
+                  for (const siblingId of siblings) {
+                    const sibling = this.state.network.body.nodes[siblingId];
+                    if (sibling.id !== selfNode.id) {
+                      if (closetSiblingToLeft === null || closetSiblingToLeft['x'] < sibling.x) {
+                        if (sibling.x < selfNode.x) {
+                          closetSiblingToLeft = sibling;
+
+                        }
+                      }
+                    }
+                  }
+
+                  if (closetSiblingToLeft !== null) {
+                    console.log(closetSiblingToLeft)
+                    let node = this.state.network.body.nodes[closetSiblingToLeft['id']].options;
+                    this.nodeClicked(node);
+                  }
+                }
+
+              }
+            } else if (event.code === "ArrowRight") {
+              let network = this.state.network;
+              
+              if (this.state.currentNode !== null) {
+                let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
+                let selfNode = this.state.network.body.nodes[this.state.currentNode['id'] as string];
+                
+                // There should be only one parent.
+                if (connectedNodes?.length === 1) {
+                  let siblings = network?.getConnectedNodes(connectedNodes[0] as string, 'to');
+                  let closetSiblingToRight = null;
+
+                  for (const siblingId of siblings) {
+                    const sibling = this.state.network.body.nodes[siblingId];
+                    if (sibling.id !== selfNode.id) {
+                      if (closetSiblingToRight === null || closetSiblingToRight['x'] > sibling.x) {
+                        if (sibling.x > selfNode.x) {
+                          closetSiblingToRight = sibling;
+                        }
+                      }
+                    }
+                  }
+
+                  if (closetSiblingToRight !== null) {
+                    console.log(closetSiblingToRight)
+                    let node = this.state.network.body.nodes[closetSiblingToRight['id']].options;
+                    this.nodeClicked(node);
+                  }
+                }
+
+              }
             }
+
+              })
+            }
+
+
         }
       }
       container.addEventListener("keydown", keydownListener(nodes).bind(this));
