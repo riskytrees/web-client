@@ -22,7 +22,7 @@ describe('Add Node', () => {
       let treeId = loc.search.split('id=')[1].split('&')[0];
 
 
-      cy.contains(treeId, { timeout: 20000 })
+      cy.contains(newProjectUUID, { timeout: 20000 })
 
       cy.wait('@dagDown', { timeout: 20000 })
       cy.wait('@getModels', { timeout: 20000 })
