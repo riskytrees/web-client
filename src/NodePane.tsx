@@ -184,7 +184,8 @@ class NodePane extends React.Component<{
           nodeDescription: "",
           nodeId: "",
           modelAttributes: {},
-          conditionAttribute: ""
+          conditionAttribute: "",
+          showSubtreeDialog: false
         });
 
       }
