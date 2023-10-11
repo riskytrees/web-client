@@ -17,6 +17,7 @@ declare module '@mui/material/Button' {
         primaryButton: true;
         createButton: true;
         inlineNavButton: true;
+        backButton: true;
     }
 }
 
