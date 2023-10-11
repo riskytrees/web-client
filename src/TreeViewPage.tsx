@@ -238,7 +238,6 @@ class TreeViewPage extends React.Component<{
   }
 
   onNodeClicked(data) {
-    console.log(data)
     this.setState({
       selectedNode: data
     });
