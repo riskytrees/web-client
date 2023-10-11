@@ -81,7 +81,7 @@ class SubTreePane extends React.Component<{
       this.lineItemClicked(key)
   }}>
       <ListItemIcon></ListItemIcon>
-      <ListItemText primary={data['id']}/>
+      <ListItemText primary={data['title']}/>
       {this.state[key] ? <ExpandLess /> : <ExpandMore />}
   </ListItemButton>)
 

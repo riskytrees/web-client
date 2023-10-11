@@ -25,7 +25,7 @@ describe('Deselect Node', () => {
         let treeId = loc.search.split('id=')[1].split('&')[0];
 
 
-        cy.contains(treeId, { timeout: 20000 })
+        cy.contains(newProjectUUID, { timeout: 20000 })
 
         cy.get('canvas').as('canvas').as('canvas');
         cy.get('canvas').then(canvas => {
