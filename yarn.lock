@@ -5724,9 +5724,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:13.3.0":
-  version: 13.3.0
-  resolution: "cypress@npm:13.3.0"
+"cypress@npm:13.3.2":
+  version: 13.3.2
+  resolution: "cypress@npm:13.3.2"
   dependencies:
     "@cypress/request": ^3.0.0
     "@cypress/xvfb": ^1.2.4
@@ -5773,7 +5773,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 6ad11bd6aabccfaf8be78afff0e854c9c8ccc935704c41efe4d8e9412ccfcb652f23791931c3aa26fc41068eeeb739a51563308670c9dada91cb272d08227caf
+  checksum: eee7c06136dcf23c400e1042380b67a568d403677fccd835fa7f47868c382624aae272e1cb2b161d3216e2c5ab73e740e243d0f2c76721600d0270dbe50d2560
   languageName: node
   linkType: hard
 
@@ -14065,7 +14065,7 @@ __metadata:
     "@types/node": ^20.8.4
     "@types/react": ^18.2.23
     "@types/react-dom": ^18.2.13
-    cypress: 13.3.0
+    cypress: 13.3.2
     install: ^0.13.0
     react: ^18.0.0
     react-dom: ^18.0.0
