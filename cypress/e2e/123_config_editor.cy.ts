@@ -34,6 +34,7 @@ describe('Config Editor', () => {
 
     cy.url().should('include', '/config/')
     cy.get('body').should('contain', 'Configuration')
+    cy.wait(1000)
 
     // lets you provide json and will visualize types
     cy.get('#config-json-field').type("{backspace}{backspace}{{}\"Hello\": \"World\"\}")

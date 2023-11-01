@@ -256,8 +256,8 @@ class NodePane extends React.Component<{
       for (const [key, value] of Object.entries(this.state.modelAttributes)) {
         if (relevantAttributes.includes(key)) {
           attributes.push(
-            <Grid container spacing={1}>
-              <Grid item xs={9} >
+            <Grid key={"container_" + key} container spacing={1}>
+              <Grid key={"item_" + key} item xs={9} >
                 <TextField id={key} key={key}  sx={{
           marginBottom: '10px',
         }} label={key} onChange={this.handleAttributeChange} variant="outlined" size="small" value={this.getAttributeValue(value)} /> 
