@@ -10,10 +10,11 @@ import Grid from "@mui/material/Grid";
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import { Button, CardActionArea, CardActions, IconButton } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import  CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Stack from '@mui/material/Stack';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 class TreesList extends React.Component<{
   projectId: string;
 }, {
@@ -86,7 +87,7 @@ class TreesList extends React.Component<{
 
     return (
 
-      <Grid item xs={2} ><Button variant="backButton">Test</Button><Typography variant="h1" display="inline" margin="18px" >Project ID.Title</Typography>
+      <Grid item xs={2}><Stack direction="row" padding="15px" alignItems="Center"><IconButton>{<ArrowBackIcon />}</IconButton><Typography variant="h1" display="inline" margin="18px" >Project ID.Title</Typography></Stack>
       <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
         {rows}
         </Stack>
