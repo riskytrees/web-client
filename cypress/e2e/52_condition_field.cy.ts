@@ -22,7 +22,7 @@ describe('Condition field', () => {
       cy.location().then((loc) => {
         let treeId = loc.search.split('id=')[1].split('&')[0];
   
-        cy.contains(treeId, { timeout: 20000 })
+        cy.contains(newProjectUUID, { timeout: 20000 })
 
         cy.get('canvas').as('canvas').then(canvas => {
             const width = canvas.width();

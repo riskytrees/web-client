@@ -62,11 +62,13 @@ class TreeViewPage extends React.Component<{
     this.loadTree = this.loadTree.bind(this);
     this.handleZoomChange = this.handleZoomChange.bind(this);
 
+    this.riskEngine = new RiskyRisk(this.state.treeMap, null);
+  }
+
+  componentDidMount() {
     this.loadTree()
     this.getListOfModels();
     this.getCurrentModel();
-
-    this.riskEngine = new RiskyRisk(this.state.treeMap, null);
   }
 
   async getCurrentModel() {
@@ -238,7 +240,6 @@ class TreeViewPage extends React.Component<{
   }
 
   onNodeClicked(data) {
-    console.log(data)
     this.setState({
       selectedNode: data
     });

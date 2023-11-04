@@ -22,7 +22,7 @@ describe('Adding risk model', () => {
       cy.location().then((loc) => {
         let treeId = loc.search.split('id=')[1].split('&')[0];
   
-        cy.contains(treeId, { timeout: 20000 })
+        cy.contains(newProjectUUID, { timeout: 20000 })
       })
 
       cy.get(':nth-child(2) > .MuiStack-root > .MuiButtonBase-root').click()
