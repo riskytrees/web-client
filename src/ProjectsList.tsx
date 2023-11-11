@@ -42,7 +42,7 @@ class ProjectsList extends React.Component<{
 
     for (const project of projects) {
       if (!this.props.org || this.props.org === project.orgId) {
-        const path = "projects?id=" + project.projectId;
+        const path = "/projects?id=" + project.projectId;
         rows.push(
   
           <Card sx={{ maxWidth: 285, m:2,}} variant="outlined" key={project.projectId}>
