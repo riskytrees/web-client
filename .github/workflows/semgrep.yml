@@ -17,6 +17,6 @@ jobs:
       with:
         submodules: 'true'
         token: ${{ secrets.REPO_PAT }}
-    - uses: returntocorp/semgrep-action@v1
+    - uses: semgrep/semgrep-action@v1
       with:
         publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
