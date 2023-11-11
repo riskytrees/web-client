@@ -297,7 +297,7 @@ const baseComponents = {
         props: { variant: 'riskypane' },
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
-          height: 'calc(100vh - 90px)',
+          minHeight: 'calc(100vh - 60px)',
 
           padding: '15px',
           width: Variables.widthsList.paneWidth,
@@ -323,7 +323,7 @@ const baseComponents = {
         props: { variant: 'treearea' },
         style: {
           backgroundColor: RiskyColors.uiColors.mainBackground,
-          height: 'calc(100vh - 90px)',
+          minHeight: 'calc(100vh)',
 
           width: '100%',
           marginTop: '60px',
