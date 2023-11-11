@@ -23,16 +23,21 @@ import { RiskyRisk } from './Risk';
 import LogoMark from './img/logomark.svg';
 import Popover from '@mui/material/Popover';
 import { Grid } from '@mui/material';
+import OrgList from './OrgList';
+import CreateOrgButton from './CreateOrgButton';
+
 class HomePage extends React.Component<{
 }, {
   modalOpen: boolean;
+  orgModalOpen: boolean;
 }> {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, };
+    this.state = { modalOpen: false, orgModalOpen: false };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
-
+    this.handleOrgOpen = this.handleOrgOpen.bind(this);
+    this.handleOrgClose = this.handleOrgClose.bind(this);
   }
   handleOpen() {
     this.setState({ modalOpen: true })
@@ -40,6 +45,14 @@ class HomePage extends React.Component<{
 
   handleClose() {
     this.setState({ modalOpen: false })
+  }
+
+  handleOrgOpen() {
+    this.setState({orgModalOpen: true})
+  }
+
+  handleOrgClose() {
+    this.setState({orgModalOpen: false})
   }
 
   render() {
@@ -150,13 +163,29 @@ class HomePage extends React.Component<{
             <Box sx={{}}>
               <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton">New Project</Button>
               <Modal
+                open={this.state.orgModalOpen}
+                onClose={this.handleOrgClose}
+                aria-labelledby="org-modal-modal-title"
+                aria-describedby="org-modal-modal-description"
+              >
+
+                <Box className="riskyModal">
+                  <Typography variant="h2">Enter Org Name</Typography>
+                  <Box height={"20px"}></Box>
+                  <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
+                    <CreateOrgButton />
+                  </Stack>
+                </Box>
+              </Modal>
+
+              <Modal
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
 
-                <Box id="projectName">
+                <Box className="riskyModal">
                   <Typography variant="h2">Enter Project Name</Typography>
                   <Box height={"20px"}></Box>
                   <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
@@ -189,6 +218,9 @@ class HomePage extends React.Component<{
           </Paper>
           <Paper variant="treearea">
             <Box px='60px'></Box>
+            <OrgList />
+            <Button id="orgButton" onClick={this.handleOrgOpen} variant="primaryButton">New Org</Button>
+            
             <ProjectsList />
           </Paper>
         </Stack>
