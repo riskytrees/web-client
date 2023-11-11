@@ -38,7 +38,7 @@ class OrgList extends React.Component {
     const rows: JSX.Element[] = [];
 
     for (const org of orgs) {
-      const path = "orgs?id=" + org.id;
+      const path = "orgs/" + org.id;
       rows.push(
 
         <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={org.id}>

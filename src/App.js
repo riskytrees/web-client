@@ -1,4 +1,6 @@
 import HomePage from './HomePage';
+import OrgHomePage from './OrgHomePage';
+
 import Projects from './Projects.tsx';
 import TreeViewPage from './TreeViewPage';
 import LoginPage from './LoginPage';
@@ -425,6 +427,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />}>
+            </Route>
+            <Route path="/orgs/:orgId" element={<OrgHomePage />}>
             </Route>
             <Route path="/projects" element={<Projects />}>
             </Route>
