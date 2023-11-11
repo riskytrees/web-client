@@ -49,25 +49,19 @@ class OrgList extends React.Component {
               image={projectImg}
               alt="picture of project map"
             />
-            <CardContent><Stack direction="row" alignItems="center" gap={1}>
-              <Typography variant="h1" display="inline">
-                {org.name}
-              </Typography> 
-              </Stack>
-
-              <br></br><Stack direction="row" alignItems="bottom" gap={1}>
-                <PersonIcon fontSize="small"></PersonIcon>
-                <Typography variant="body2" gutterBottom>
-                  [Personal]
-                </Typography>
-              </Stack>
+            <CardContent>
 
               <Stack direction="row" alignItems="bottom" gap={1}>
-                <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
-                <Typography variant="body2">
-                  [DateModified]
+                <PersonIcon fontSize="small"></PersonIcon>
+                <Typography variant="body2" gutterBottom>
+                  {org.name}
+                </Typography>
+                •
+                <Typography variant="body2" gutterBottom>
+                  [# Projects]
                 </Typography>
               </Stack>
+
 
             </CardContent>
           </CardActionArea>
