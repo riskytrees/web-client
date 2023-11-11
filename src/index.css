@@ -44,7 +44,7 @@ code {
   border-radius: 4px;
 }
 
-#projectName {
+.riskyModal {
 
   background-color:rgb(42, 42, 42); /*same as paneBackground*/
   width:15vw;

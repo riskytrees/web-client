@@ -11,7 +11,11 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 
-class ProjectsList extends React.Component {
+class ProjectsList extends React.Component<{
+  org: string | undefined;
+}, {
+
+}> {
   constructor(props) {
     super(props);
     this.state = { projects: [] };
@@ -24,11 +28,10 @@ class ProjectsList extends React.Component {
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {});
 
     if (data['ok'] === true && data['result']['projects']) {
-      for (const project of data['result']['projects']) {
-        this.setState({
-          projects: this.state['projects'].concat(project)
-        })
-      }
+      this.setState({
+        projects: data['result']['projects']
+      })
+
     }
   }
 
@@ -38,44 +41,46 @@ class ProjectsList extends React.Component {
     const rows: JSX.Element[] = [];
 
     for (const project of projects) {
-      const path = "projects?id=" + project.projectId;
-      rows.push(
-
-        <Card sx={{ maxWidth: 285, m:2,}} variant="outlined" key={project.projectId}>
-      <CardActionArea href={path}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={projectImg}
-          alt="picture of project map"
-        />
-        <CardContent><Stack direction="row" alignItems="center" gap={1}>
-          <Typography variant="h1" display="inline">
-          {project.name} •
-          </Typography> <Typography variant="body1" display="inline">[#]Trees</Typography></Stack>
-          
-          <br></br><Stack direction="row" alignItems="bottom" gap={1}>
-          <PersonIcon fontSize="small"></PersonIcon>
-  <Typography variant="body2" gutterBottom>
-          [Personal]
-          </Typography>
-</Stack>
-
-<Stack direction="row" alignItems="bottom" gap={1}>
-          <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
-  <Typography variant="body2">
-          [DateModified]
-          </Typography>
-</Stack>
-
-        </CardContent>
-      </CardActionArea>
-    </Card>)
+      if (!this.props.org || this.props.org === project.orgId) {
+        const path = "/projects?id=" + project.projectId;
+        rows.push(
+  
+          <Card sx={{ maxWidth: 285, m:2,}} variant="outlined" key={project.projectId}>
+        <CardActionArea href={path}>
+          <CardMedia
+            component="img"
+            height="140"
+            image={projectImg}
+            alt="picture of project map"
+          />
+          <CardContent><Stack direction="row" alignItems="center" gap={1}>
+            <Typography variant="h1" display="inline">
+            {project.name} •
+            </Typography> <Typography variant="body1" display="inline">[#]Trees</Typography></Stack>
+            
+            <br></br><Stack direction="row" alignItems="bottom" gap={1}>
+            <PersonIcon fontSize="small"></PersonIcon>
+    <Typography variant="body2" gutterBottom>
+            [Personal]
+            </Typography>
+  </Stack>
+  
+  <Stack direction="row" alignItems="bottom" gap={1}>
+            <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
+    <Typography variant="body2">
+            [DateModified]
+            </Typography>
+  </Stack>
+  
+          </CardContent>
+        </CardActionArea>
+      </Card>)
+      }
     }
 
     return (                
       <Grid item xs={2}>
-<Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">Your Projects</Typography>
+<Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">{this.props.org ? "Org Projects" : "Your Projects"}</Typography>
       <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
 
         {rows}

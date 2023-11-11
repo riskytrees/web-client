@@ -45,7 +45,7 @@ describe('Page should not crash when selecting nodes', () => {
           const canvasCenterX = width / 2;
           const canvasCenterY = height / 2;
           cy.wrap(canvas)
-            .click(canvasCenterX - 45, canvasCenterY - 30)
+            .click(canvasCenterX - 45, canvasCenterY - 5)
           cy.wait(100)
           cy.get('#node-type-dropdown').click()
           cy.contains("And").click()

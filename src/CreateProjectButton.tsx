@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { RiskyApi } from './api';
 
 class CreateProjectButton extends React.Component<{
-
+  org: string | undefined
 }, { readyCheck: boolean, projectId: string; }>{
   constructor(props) {
     super(props);
@@ -75,11 +75,17 @@ class CreateProjectButton extends React.Component<{
 
     if (createProjectButtonField) {
       const title = createProjectButtonField.value;
+      let payload = {
+        title
+      }
+
+      if (this.props.org) {
+        payload['orgId'] = this.props.org
+      }
+
       let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {
         method: 'POST',
-        body: JSON.stringify({
-          title
-        })
+        body: JSON.stringify(payload)
       })
 
       this.setState({ projectId: data['result']['id'] }, () => this.createTree(title))
