@@ -248,6 +248,8 @@ export class RiskyRisk {
         if (node) {
             if (node.modelAttributes['likelihoodOfSuccess'] && node.modelAttributes['likelihoodOfSuccess']['value_float']) {
                 result = node.modelAttributes['likelihoodOfSuccess']['value_float'];
+            } else if (node.modelAttributes['likelihoodOfSuccess'] && node.modelAttributes['likelihoodOfSuccess']['value_int']) {
+                result = node.modelAttributes['likelihoodOfSuccess']['value_int'];
             } else {
                 // Need to inherit from children
                 let nodeType = '';
