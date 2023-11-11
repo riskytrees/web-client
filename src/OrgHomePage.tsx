@@ -172,7 +172,7 @@ class OrgHomePage extends React.Component<{
                   <Typography variant="h2">Enter Project Name</Typography>
                   <Box height={"20px"}></Box>
                   <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
-                    <CreateProjectButton />
+                    <CreateProjectButton org={this.getOrgId()} />
                   </Stack>
                 </Box>
               </Modal>

@@ -28,11 +28,10 @@ class ProjectsList extends React.Component<{
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {});
 
     if (data['ok'] === true && data['result']['projects']) {
-      for (const project of data['result']['projects']) {
-        this.setState({
-          projects: this.state['projects'].concat(project)
-        })
-      }
+      this.setState({
+        projects: data['result']['projects']
+      })
+
     }
   }
 
