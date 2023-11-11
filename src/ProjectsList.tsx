@@ -1,5 +1,15 @@
 import React from 'react';
 import { RiskyApi } from './api';
+import PersonIcon from '@mui/icons-material/Person';
+import  CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Stack from '@mui/material/Stack';
+import Grid from "@mui/material/Grid";
+import Card from '@mui/material/Card';
+import projectImg from './img/projects_temp.png';
+import Typography from '@mui/material/Typography';
+import { Button, CardActionArea, CardActions } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 
 class ProjectsList extends React.Component {
   constructor(props) {
@@ -29,16 +39,48 @@ class ProjectsList extends React.Component {
 
     for (const project of projects) {
       const path = "projects?id=" + project.projectId;
-      rows.push(<tr key={project.projectId}><td><a href={path}>{project.name} - {project.projectId}</a></td></tr>)
+      rows.push(
+
+        <Card sx={{ maxWidth: 285, m:2,}} variant="outlined" key={project.projectId}>
+      <CardActionArea href={path}>
+        <CardMedia
+          component="img"
+          height="140"
+          image={projectImg}
+          alt="picture of project map"
+        />
+        <CardContent><Stack direction="row" alignItems="center" gap={1}>
+          <Typography variant="h1" display="inline">
+          {project.name} •
+          </Typography> <Typography variant="body1" display="inline">[#]Trees</Typography></Stack>
+          
+          <br></br><Stack direction="row" alignItems="bottom" gap={1}>
+          <PersonIcon fontSize="small"></PersonIcon>
+  <Typography variant="body2" gutterBottom>
+          [Personal]
+          </Typography>
+</Stack>
+
+<Stack direction="row" alignItems="bottom" gap={1}>
+          <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
+  <Typography variant="body2">
+          [DateModified]
+          </Typography>
+</Stack>
+
+        </CardContent>
+      </CardActionArea>
+    </Card>)
     }
 
-    return (
-      <table>
-        <tbody>
-          {rows}
+    return (                
+      <Grid item xs={2}>
+<Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">Your Projects</Typography>
+      <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
 
-        </tbody>
-      </table>
+        {rows}
+        </Stack>
+        </Grid>
     )
   }
 }

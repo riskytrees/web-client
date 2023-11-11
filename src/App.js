@@ -196,6 +196,18 @@ const baseComponents = {
             backgroundColor: 'transparent',
           }
         },
+      },{
+        props: { variant: 'backButton' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.primaryCTA,
+          border: 'none',
+          justifyContent: 'flex-start',
+          padding: '20px',
+          height: '15px',
+          '&:hover': {
+            backgroundColor: RiskyColors.uiColors.primaryCTAhover,
+          },
+        },
       },
     ]
   },
@@ -285,12 +297,14 @@ const baseComponents = {
         props: { variant: 'riskypane' },
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
-          height: 'calc(100vh - 90px)',
+          minHeight: 'calc(100vh - 60px)',
+
           padding: '15px',
           width: Variables.widthsList.paneWidth,
           overflow: 'auto',
           display: 'inline-block',
           overflowY: 'hidden',
+          marginTop:'60px',
         },
       },
       {
@@ -309,8 +323,10 @@ const baseComponents = {
         props: { variant: 'treearea' },
         style: {
           backgroundColor: RiskyColors.uiColors.mainBackground,
-          height: 'calc(100vh - 60px)',
+          height: 'calc(100vh)',
+
           width: '100%',
+          marginTop: '60px',
         },
       },
       {
@@ -323,14 +339,7 @@ const baseComponents = {
           background: 'linear-gradient(118.16deg, #020302 63.92%, #0A0B20 106.58%)',
         },
       },
-      {
-        props: { variant: 'treelist' },
-        style: {
-          display:'flex-row',
-          flexWrap:'wrap',
-          justifyContent:'space-between',
-        },
-      },
+
       {
         props: { variant: 'loginlogo' },
         style: {
@@ -386,7 +395,7 @@ const baseComponents = {
         backgroundColor: RiskyColors.uiColors.headerBackground,
         backgroundImage: 'none',
         boxShadow: '2px 2px 4px 0px rgb(5 5 5 / 10%)',
-        position: 'relative'
+        position: 'fixed'
       },
     },
 
