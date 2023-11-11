@@ -323,7 +323,7 @@ const baseComponents = {
         props: { variant: 'treearea' },
         style: {
           backgroundColor: RiskyColors.uiColors.mainBackground,
-          minHeight: 'calc(100vh)',
+          height: 'calc(100vh)',
 
           width: '100%',
           marginTop: '60px',
