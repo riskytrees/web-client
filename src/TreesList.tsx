@@ -40,6 +40,9 @@ class TreesList extends React.Component<{
     }
   }
 
+  handleBackClick() {
+    window.location.href = "/";
+  }
 
 
   render() {
@@ -87,7 +90,7 @@ class TreesList extends React.Component<{
 
     return (
 
-      <Grid item xs={2}><Stack direction="row" padding="15px" alignItems="Center"><IconButton>{<ArrowBackIcon />}</IconButton><Typography variant="h1" display="inline" margin="18px" >Project ID.Title</Typography></Stack>
+      <Grid item xs={2}><Stack direction="row" padding="15px" alignItems="Center"><IconButton onClick={this.handleBackClick} >{<ArrowBackIcon />}</IconButton><Typography variant="h1" display="inline" margin="18px" >Project ID.Title</Typography></Stack>
       <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
         {rows}
         </Stack>
