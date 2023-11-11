@@ -23,6 +23,9 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import { RiskyRisk } from './Risk';
 import { RiskyApi } from './api';
 import TextField from '@mui/material/TextField';
+import { Grid } from '@mui/material';
+import LogoMark from './img/logomark.svg';
+import Popover from '@mui/material/Popover';
 
 
 class Projects extends React.Component<{
@@ -99,8 +102,96 @@ class Projects extends React.Component<{
   render() {
     return (
       <>
-        <AppBar>
-          <Box display="flex" justifyContent="center" alignItems="center" marginTop="11.75px">
+      <AppBar>
+<Grid container>
+            <Grid item xs={4} marginTop="11.75px">
+              <Stack spacing={2} direction="row">
+                <Box></Box>
+                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img></Button>
+                <Popover
+                  id="actionButton"
+                  anchorReference="anchorPosition"
+                  anchorPosition={{ top: 50, left: 0 }}
+                  open={this.state.actionModalOpen}
+                  onClose={this.handleActionPanelClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                >
+                  <Stack>
+                    <List component="nav">
+                      <ListItem>
+                        <ListItemButton onClick={this.goBackToProjects}>
+                          <ListItemText primary="Back to Trees" />
+                        </ListItemButton>
+                      </ListItem>
+
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Export Text Tree" />
+                        </ListItemButton>
+                      </ListItem>
+
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Export Analysis" />
+                        </ListItemButton>
+                      </ListItem>
+
+                      <Divider light />
+
+                      <ListItem>
+                        <ListItemButton>
+                          <ListItemText primary="Undo" onClick={this.handleUndo} />
+                        </ListItemButton>
+                      </ListItem>
+
+
+                      <Divider light />
+
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Add Child Node" />
+                        </ListItemButton>
+                      </ListItem>
+
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Delete Selected" />
+                        </ListItemButton>
+                      </ListItem>
+
+                      <Divider light />
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Config Settings" />
+                        </ListItemButton>
+                      </ListItem>
+
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Model Settings" />
+                        </ListItemButton>
+                      </ListItem>
+
+                      <Divider light />
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="App Settings" />
+                        </ListItemButton>
+                      </ListItem>
+
+                    </List>
+                  </Stack>
+
+                </Popover>
+              </Stack>
+            </Grid>
+
+            <Grid item xs={4} marginTop="11.75px">
+              <Stack alignContent="center">
+            <Box display="flex" justifyContent="center" alignItems="center" >
             <Button variant='inlineNavButton' onClick={this.handleModalOpen} endIcon={<ArrowDropDownIcon />}>{this.state['projectName']}</Button>
           </Box>
 
@@ -121,7 +212,15 @@ class Projects extends React.Component<{
             </Box>
 
           </Modal>
+         
+              </Stack>
+            </Grid>
+          </Grid>
+      
+
         </AppBar>
+
+        
         <Stack direction="row">
           <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
 

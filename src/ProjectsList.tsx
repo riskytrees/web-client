@@ -75,7 +75,7 @@ class ProjectsList extends React.Component {
 
     return (                
       <Grid item xs={2}>
-<Typography variant="h1" display="block" margin="18px">Your Projects</Typography>
+<Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">Your Projects</Typography>
       <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
 
         {rows}

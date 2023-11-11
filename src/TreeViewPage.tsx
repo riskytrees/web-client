@@ -574,9 +574,6 @@ class TreeViewPage extends React.Component<{
                 <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
-
-
-
             <Grid item xs={4}  marginTop="11.75px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
               <FormControl size="small">
@@ -601,11 +598,8 @@ class TreeViewPage extends React.Component<{
              
               
             </Grid>
-          </Grid>
-         
-
-
-          <Modal
+         </Grid>
+            <Modal
             open={this.state.modalOpen}
             onClose={this.handleClose}
             aria-labelledby="modal-modal-title"
