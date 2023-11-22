@@ -1,5 +1,7 @@
 import HomePage from './HomePage';
 import OrgHomePage from './OrgHomePage';
+import OrgMembersPage from './OrgMembersPage';
+
 
 import Projects from './Projects.tsx';
 import TreeViewPage from './TreeViewPage';
@@ -10,7 +12,6 @@ import { RiskyColors } from './colors.ts';
 import { Variables } from './variables.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@mui/material";
-import { NoEncryption } from '@mui/icons-material';
 
 
 const baseComponents = {
@@ -429,6 +430,8 @@ function App() {
             <Route path="/" element={<HomePage />}>
             </Route>
             <Route path="/orgs/:orgId" element={<OrgHomePage />}>
+            </Route>
+            <Route path="/orgs/:orgId/members" element={<OrgMembersPage />}>
             </Route>
             <Route path="/projects" element={<Projects />}>
             </Route>

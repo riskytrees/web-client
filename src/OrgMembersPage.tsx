@@ -25,8 +25,9 @@ import Popover from '@mui/material/Popover';
 import { Grid } from '@mui/material';
 import OrgList from './OrgList';
 import CreateOrgButton from './CreateOrgButton';
+import AddUserButton from './AddUserButton';
 
-class OrgHomePage extends React.Component<{
+class OrgMembersPage extends React.Component<{
 }, {
   modalOpen: boolean;
 }> {
@@ -45,19 +46,17 @@ class OrgHomePage extends React.Component<{
     this.setState({ modalOpen: false })
   }
 
-  getOrgId() {
-    const path = window.location.href;
-    const orgId = path.split("/")[4];
-
-    console.log(orgId)
-    return orgId;
-  }
-
   teamMembersClicked() {
     const path = window.location.href;
     const orgId = path.split("/")[4];
 
     window.location.href += "/members"
+  }
+
+  getOrgId() {
+    const path = window.location.href;
+    const orgId = path.split("/")[4];
+    return orgId;
   }
 
   render() {
@@ -152,14 +151,14 @@ class OrgHomePage extends React.Component<{
 
             <Grid item xs={4} marginTop="11.75px">
               <Stack alignContent="center">
-            <Box display="flex" justifyContent="center" alignItems="center" >
-            <Button variant='inlineNavButton' endIcon={<Home />}>Home</Button>
-          </Box>
-         
+                <Box display="flex" justifyContent="center" alignItems="center" >
+                  <Button variant='inlineNavButton' endIcon={<Home />}>Home</Button>
+                </Box>
+
               </Stack>
             </Grid>
           </Grid>
-      
+
 
         </AppBar>
         <Stack direction="row">
@@ -177,10 +176,10 @@ class OrgHomePage extends React.Component<{
               >
 
                 <Box className="riskyModal">
-                  <Typography variant="h2">Enter Project Name</Typography>
+                  <Typography variant="h2">Enter Member Email</Typography>
                   <Box height={"20px"}></Box>
                   <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
-                    <CreateProjectButton org={this.getOrgId()} />
+                    <AddUserButton orgId={this.getOrgId()}></AddUserButton>
                   </Stack>
                 </Box>
               </Modal>
@@ -192,7 +191,7 @@ class OrgHomePage extends React.Component<{
               <Divider />
               <nav aria-label="secondary mailbox folders">
                 <List>
-                <ListItem disablePadding>
+                  <ListItem disablePadding>
                     <ListItemButton>
                       <ListItemText primary="Team Members" onClick={this.teamMembersClicked} />
                     </ListItemButton>
@@ -214,8 +213,8 @@ class OrgHomePage extends React.Component<{
           </Paper>
           <Paper variant="treearea">
             <Box px='60px'></Box>
-            
-            <ProjectsList org={this.getOrgId()}/>
+            <Button onClick={this.handleOpen}>Invite User</Button>
+
           </Paper>
         </Stack>
       </>
@@ -223,4 +222,4 @@ class OrgHomePage extends React.Component<{
   }
 }
 
-export default OrgHomePage;
+export default OrgMembersPage;
