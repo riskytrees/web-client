@@ -93,17 +93,17 @@ class Projects extends React.Component<{
           title: event.target.value
         })
       })
-  
-      this.loadCurrentProjectName(projectId);  
+
+      this.loadCurrentProjectName(projectId);
     }
-    
+
   }
 
   render() {
     return (
       <>
-      <AppBar>
-<Grid container>
+        <AppBar>
+          <Grid container>
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
@@ -191,36 +191,36 @@ class Projects extends React.Component<{
 
             <Grid item xs={4} marginTop="11.75px">
               <Stack alignContent="center">
-            <Box display="flex" justifyContent="center" alignItems="center" >
-            <Button variant='inlineNavButton' onClick={this.handleModalOpen} endIcon={<ArrowDropDownIcon />}>{this.state['projectName']}</Button>
-          </Box>
+                <Box display="flex" justifyContent="center" alignItems="center" >
+                  <Button variant='inlineNavButton' onClick={this.handleModalOpen} endIcon={<ArrowDropDownIcon />}>{this.state['projectName']}</Button>
+                </Box>
 
-          <Modal
-            open={this.state.renameModalOpen}
-            onClose={this.handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
+                <Modal
+                  open={this.state.renameModalOpen}
+                  onClose={this.handleModalClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
 
-            <Box className="treeSelectCenter">
-              <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
-              <TextField label="Project Name" variant="outlined" size="small" onChange={this.handleProjectNameChanged} defaultValue={this.state['projectName']} />
+                  <Box className="treeSelectCenter">
+                    <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
+                      <TextField label="Project Name" variant="outlined" size="small" onChange={this.handleProjectNameChanged} defaultValue={this.state['projectName']} />
 
-                
 
-              </Stack>
-            </Box>
 
-          </Modal>
-         
+                    </Stack>
+                  </Box>
+
+                </Modal>
+
               </Stack>
             </Grid>
           </Grid>
-      
+
 
         </AppBar>
 
-        
+
         <Stack direction="row">
           <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
 
@@ -269,7 +269,7 @@ class Projects extends React.Component<{
             <Box px='60px'></Box>
 
 
-            <TreesList projectId={this.state['projectId']} />
+            <TreesList projectId={this.state['projectId']} projectName={this.state['projectName']} />
 
           </Paper>
         </Stack>

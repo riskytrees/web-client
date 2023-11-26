@@ -53,7 +53,7 @@ class CreateOrgButton extends React.Component<{
 
       this.setState({ orgId: data['result']['id'] }, () => {})
 
-
+      window.location.reload()
     }
   };
 

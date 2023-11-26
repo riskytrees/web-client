@@ -152,14 +152,16 @@ class OrgHomePage extends React.Component<{
 
             <Grid item xs={4} marginTop="11.75px">
               <Stack alignContent="center">
-            <Box display="flex" justifyContent="center" alignItems="center" >
-            <Button variant='inlineNavButton' endIcon={<Home />}>Home</Button>
-          </Box>
-         
+                <Box display="flex" justifyContent="center" alignItems="center" >
+                  <Button variant='inlineNavButton' endIcon={<Home />} onClick={() => {
+                    window.location.href = "/"
+                  }}>Home</Button>
+                </Box>
+
               </Stack>
             </Grid>
           </Grid>
-      
+
 
         </AppBar>
         <Stack direction="row">
@@ -192,7 +194,7 @@ class OrgHomePage extends React.Component<{
               <Divider />
               <nav aria-label="secondary mailbox folders">
                 <List>
-                <ListItem disablePadding>
+                  <ListItem disablePadding>
                     <ListItemButton>
                       <ListItemText primary="Team Members" onClick={this.teamMembersClicked} />
                     </ListItemButton>
@@ -214,8 +216,8 @@ class OrgHomePage extends React.Component<{
           </Paper>
           <Paper variant="treearea">
             <Box px='60px'></Box>
-            
-            <ProjectsList org={this.getOrgId()}/>
+
+            <ProjectsList org={this.getOrgId()} />
           </Paper>
         </Stack>
       </>

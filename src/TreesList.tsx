@@ -12,11 +12,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, IconButton } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import  CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Stack from '@mui/material/Stack';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 class TreesList extends React.Component<{
   projectId: string;
+  projectName: string;
 }, {
   trees: any[];
 }> {
@@ -55,46 +56,46 @@ class TreesList extends React.Component<{
 
       rows.push(
 
-        <Card sx={{ maxWidth: 285, m:2,}} variant="outlined" key={tree.id}>
-      <CardActionArea href={path}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={treeImg}
-          alt="picture of project map"
-        />
-        <CardContent><Stack direction="row" alignItems="center" gap={1}>
-          <Typography variant="h1" display="inline">
-          {tree.title} •
-          </Typography> <Typography variant="body1" display="inline">[#]subtrees</Typography></Stack>
-          
-          <br></br><Stack direction="row" alignItems="bottom" gap={1}>
-          <PersonIcon fontSize="small"></PersonIcon>
-  <Typography variant="body2" gutterBottom>
-          [Personal]
-          </Typography>
-</Stack>
+        <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={tree.id}>
+          <CardActionArea href={path}>
+            <CardMedia
+              component="img"
+              height="140"
+              image={treeImg}
+              alt="picture of project map"
+            />
+            <CardContent><Stack direction="row" alignItems="center" gap={1}>
+              <Typography variant="h1" display="inline">
+                {tree.title} •
+              </Typography> <Typography variant="body1" display="inline">[#]subtrees</Typography></Stack>
 
-<Stack direction="row" alignItems="bottom" gap={1}>
-          <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
-  <Typography variant="body2">
-          [DateModified]
-          </Typography>
-</Stack>
+              <br></br><Stack direction="row" alignItems="bottom" gap={1}>
+                <PersonIcon fontSize="small"></PersonIcon>
+                <Typography variant="body2" gutterBottom>
+                  [Personal]
+                </Typography>
+              </Stack>
 
-        </CardContent>
-      </CardActionArea>
-    </Card>)
+              <Stack direction="row" alignItems="bottom" gap={1}>
+                <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
+                <Typography variant="body2">
+                  [DateModified]
+                </Typography>
+              </Stack>
+
+            </CardContent>
+          </CardActionArea>
+        </Card>)
 
     }
 
     return (
 
-      <Grid item xs={2}><Stack direction="row" padding="15px" alignItems="Center"><IconButton onClick={this.handleBackClick} >{<ArrowBackIcon />}</IconButton><Typography variant="h1" display="inline" margin="18px" >Project ID.Title</Typography></Stack>
-      <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
-        {rows}
+      <Grid item xs={2}><Stack direction="row" padding="15px" alignItems="Center"><IconButton onClick={this.handleBackClick} >{<ArrowBackIcon />}</IconButton><Typography variant="h1" display="inline" margin="18px" >{this.props.projectName}</Typography></Stack>
+        <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
+          {rows}
         </Stack>
-        </Grid>
+      </Grid>
     )
   }
 }
