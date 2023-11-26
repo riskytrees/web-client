@@ -39,13 +39,15 @@ describe('Page should not crash when selecting nodes', () => {
 
         cy.contains('Add Node').click()
 
-        cy.get('body').then(canvas => {
+        cy.get('canvas').as('canvas').then(canvas => {
           const width = canvas.width();
           const height = canvas.height();
           const canvasCenterX = width / 2;
           const canvasCenterY = height / 2;
-          cy.wrap(canvas)
-            .click(canvasCenterX - 45, canvasCenterY - 10)
+
+          cy.get('@canvas')
+            .click(canvasCenterX - 40, canvasCenterY + 55)
+
           cy.wait(100)
           cy.get('#node-type-dropdown').click()
           cy.contains("And").click()
@@ -61,8 +63,8 @@ describe('Page should not crash when selecting nodes', () => {
             cy.get('#node-type-dropdown').click()
             cy.contains("Or").click()
           })
-
         })
+
       })
     })
 
