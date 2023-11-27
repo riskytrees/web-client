@@ -152,7 +152,9 @@ class OrgMembersPage extends React.Component<{
             <Grid item xs={4} marginTop="11.75px">
               <Stack alignContent="center">
                 <Box display="flex" justifyContent="center" alignItems="center" >
-                  <Button variant='inlineNavButton' endIcon={<Home />}>Home</Button>
+                  <Button variant='inlineNavButton' endIcon={<Home />} onClick={() => {
+                    window.location.href = "/"
+                  }}>Home</Button>
                 </Box>
 
               </Stack>
