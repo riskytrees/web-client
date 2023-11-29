@@ -26,18 +26,40 @@ import { Grid } from '@mui/material';
 import OrgList from './OrgList';
 import CreateOrgButton from './CreateOrgButton';
 import AddUserButton from './AddUserButton';
+import { RiskyApi } from './api';
 
 class OrgMembersPage extends React.Component<{
 }, {
   modalOpen: boolean;
+  orgUsers: Record<string, any>[]
 }> {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false };
+    this.state = { modalOpen: false, orgUsers: [] };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.teamMembersClicked = this.teamMembersClicked.bind(this);
   }
+
+  componentDidMount() {
+    this.getOrgUsers();
+  }
+
+  async getOrgUsers() {
+    const path = window.location.href;
+    const orgId = path.split("/")[4];
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs/" + orgId + "/members", {});
+
+    if (data['result']['members']) {
+      this.setState({
+        orgUsers: data['result']['members']
+      })
+
+    }
+
+  }
+
   handleOpen() {
     this.setState({ modalOpen: true })
   }
@@ -59,7 +81,38 @@ class OrgMembersPage extends React.Component<{
     return orgId;
   }
 
+  async removeMember(member: Record<string, any>) {
+    const path = window.location.href;
+    const orgId = path.split("/")[4];
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs/" + orgId + "/members", {
+      method: 'DELETE',
+      body: JSON.stringify({
+        email: member['email']
+      })
+    });
+
+    if (data['ok']) {
+      await this.getOrgUsers()
+    }
+
+  }
+
+  generateOrgUserList() {
+    let result: JSX.Element[] = [];
+
+    for (const member of this.state.orgUsers) {
+      result.push(<ListItem key={"member-" + member['email']}>{member['email']} <Button onClick={() => {
+        this.removeMember(member)
+      }}>Remove</Button></ListItem>)
+    }
+
+    return <List>{result}</List>;
+  }
+  
+
   render() {
+    
     return (
       <>
         <AppBar>
@@ -216,6 +269,7 @@ class OrgMembersPage extends React.Component<{
           <Paper variant="treearea">
             <Box px='60px'></Box>
             <Button onClick={this.handleOpen}>Invite User</Button>
+            {this.generateOrgUserList()}
 
           </Paper>
         </Stack>
