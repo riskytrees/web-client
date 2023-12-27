@@ -69,6 +69,8 @@ class TreeViewPage extends React.Component<{
     this.loadTree()
     this.getListOfModels();
     this.getCurrentModel();
+
+    setInterval(this.loadTree, 10000)
   }
 
   async getCurrentModel() {
