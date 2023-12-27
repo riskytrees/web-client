@@ -5,7 +5,7 @@ import Container, { ContainerProps } from "@mui/material/Container";
 import Paper from '@mui/material/Paper';
 import TreeData from './interfaces/TreeData';
 
-
+const MAX_NODE_TEXT_SIZE = 25
 
 class TreeViewer extends React.Component<{
   treeMap: Record<string, TreeData>
@@ -52,9 +52,8 @@ class TreeViewer extends React.Component<{
           description: node.description,
           modelAttributes: node.modelAttributes,
           conditionAttribute: node.conditionAttribute,
-          size: 25,
-          margin:10,
-          padding:14,
+          margin: 10,
+          padding: 14,
           color: {
             border: '#DBDBDB',
             background: 'rgb(07, 07, 07)',
@@ -67,6 +66,7 @@ class TreeViewer extends React.Component<{
               background: '#D2E5FF'
             }
           },
+
           font: {
             color: '#EEE',
             size: 10, // px
@@ -91,26 +91,31 @@ class TreeViewer extends React.Component<{
             ctx.save();
             ctx.restore();
             const labelText = splittedLabel[0];
-            const valueText = splittedLabel[1];
+            let valueText = splittedLabel[1];
+
+            if (valueText.length > MAX_NODE_TEXT_SIZE) {
+              valueText = valueText.substring(0, MAX_NODE_TEXT_SIZE) + '...'
+            }
+
             let nodeColor = "#1F1DA2";
             let labelBGColor = "#0D0C4B";
             let nodeBGColor = "#090920";
-              if (labelText === "And"){nodeColor = "#00FF38";labelBGColor = "#154B0C";nodeBGColor="#0B1C09";}
-              if (labelText === "Condition"){nodeColor = "#1F1DA2";labelBGColor = "#0D0C4B";nodeBGColor="#090920"}
-              if (labelText === "Or"){nodeColor = "#4E0943";labelBGColor = "#4B0C45";nodeBGColor = "#1A0818"}
+            if (labelText === "And") { nodeColor = "#00FF38"; labelBGColor = "#154B0C"; nodeBGColor = "#0B1C09"; }
+            if (labelText === "Condition") { nodeColor = "#1F1DA2"; labelBGColor = "#0D0C4B"; nodeBGColor = "#090920" }
+            if (labelText === "Or") { nodeColor = "#4E0943"; labelBGColor = "#4B0C45"; nodeBGColor = "#1A0818" }
 
 
-              
+
             const r = 5;
-            
+
             ctx.font = "normal 11px sans-serif";
             const labelWidth = ctx.measureText(labelText).width;
             ctx.font = "normal 14px sans-serif";
             const valueWidth = ctx.measureText(valueText).width;
-    
+
             const wPadding = 10;
             const hPadding = 10;
-    
+
             const w = valueWidth + 20;
             const lw = labelWidth + 10
             const h = 40;
@@ -122,14 +127,14 @@ class TreeViewer extends React.Component<{
               if (h - 2 * r < 0) {
                 r = h / 2;
               } //ensure that the radius isn't too large for y
-    
+
               const top = y - h / 2;
               const left = x - w / 2;
-    
+
               ctx.lineWidth = 2;
 
               ctx.beginPath();
-              ctx.moveTo(left + r , top);
+              ctx.moveTo(left + r, top);
               ctx.lineTo(left + r, top - 16);
               ctx.lineTo(left + lw + r, top - 16);
               ctx.lineTo(left + lw + r, top);
@@ -156,7 +161,7 @@ class TreeViewer extends React.Component<{
 
 
 
-    
+
               // label text
               ctx.font = "normal 11px sans-serif";
               ctx.fillStyle = "#eee";
@@ -167,19 +172,19 @@ class TreeViewer extends React.Component<{
                 labelText,
                 left + 10,
                 top - 8,
-                
+
               );
-    
+
               // value text
               ctx.font = "normal 14px sans-serif";
               ctx.fillStyle = "#eee";
               ctx.textAlign = "center";
               ctx.textBaseline = "bottom";
               const textHeight2 = 12;
-    
-              ctx.fillText(valueText, left + w / 2, top + h / 2 + hPadding, );
+
+              ctx.fillText(valueText, left + w / 2, top + h / 2 + hPadding,);
             };
-    
+
             ctx.save();
             ctx.restore();
             return {
@@ -188,7 +193,7 @@ class TreeViewer extends React.Component<{
             };
           }
         })
-  
+
         for (const child of node.children) {
           edges.push({
             from: node.id,
@@ -201,16 +206,16 @@ class TreeViewer extends React.Component<{
     // create an array with nodes
     const visNodes = new DataSet(nodes);
 
-     // create an array with edges
-     var visEdges = new DataSet(edges);
+    // create an array with edges
+    var visEdges = new DataSet(edges);
 
-     // create a network
-     var container = document.getElementById("mynetwork");
-     var data = {
-       nodes: visNodes,
-       edges: visEdges,
-     };
-     const options = {
+    // create a network
+    var container = document.getElementById("mynetwork");
+    var data = {
+      nodes: visNodes,
+      edges: visEdges,
+    };
+    const options = {
       layout: {
         hierarchical: {
           direction: 'UD',
@@ -219,7 +224,7 @@ class TreeViewer extends React.Component<{
           levelSeparation: 100
         }
       },
-      interaction: { 
+      interaction: {
         dragNodes: false
       },
       physics: {
@@ -249,7 +254,7 @@ class TreeViewer extends React.Component<{
 
         console.log(currentScale)
         console.log(currentViewPos)
-        
+
         if (currentScale !== 1 || currentViewPos['x'] !== 0 || currentViewPos['y'] !== 0) {
           network.moveTo({
             position: currentViewPos,
@@ -262,25 +267,25 @@ class TreeViewer extends React.Component<{
       this.setState({
         network: network
       })
-      
-      network.on('click', (properties) => {
-         var id = properties.nodes[0];
-         let selectedNodes = [];
-         let foundNode = false;
-         for (const node of nodes) {
-           if (node.id === id) {
-             this.nodeClicked(node);
-             foundNode = true;
-             this.setState({
-              currentNode: node
-             })
-           }
-         }
 
-         if (!foundNode) {
+      network.on('click', (properties) => {
+        var id = properties.nodes[0];
+        let selectedNodes = [];
+        let foundNode = false;
+        for (const node of nodes) {
+          if (node.id === id) {
+            this.nodeClicked(node);
+            foundNode = true;
+            this.setState({
+              currentNode: node
+            })
+          }
+        }
+
+        if (!foundNode) {
           this.nodeClicked(null);
 
-         }
+        }
       });
 
       network.on('zoom', (zoomInfo) => {
@@ -322,116 +327,116 @@ class TreeViewer extends React.Component<{
         }
       })
 
-      let keydownListener = function(relevantNodes) {
+      let keydownListener = function (relevantNodes) {
         return function curried_func(event) {
-            if (!this.state.debouncing) {
-              this.setState({
-                debouncing: true
-              }, () => {
-                window.setTimeout(() => {
-                  this.setState({
-                    debouncing: false
-                  })
-                }, 10)
+          if (!this.state.debouncing) {
+            this.setState({
+              debouncing: true
+            }, () => {
+              window.setTimeout(() => {
+                this.setState({
+                  debouncing: false
+                })
+              }, 10)
 
-                            // do something here
-            if (event.code === "ArrowUp") {
-              let network = this.state.network;
-              
-              if (this.state.currentNode !== null) {
-                let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
-                
-                // There should be only one parent.
-                if (connectedNodes?.length === 1) {
-                  let node = this.state.network.body.nodes[connectedNodes[0]].options;
-                  this.nodeClicked(node);
-                }
-              }
-            } else if (event.code === "ArrowDown") {
-              let network = this.state.network;
-              
-              if (this.state.currentNode !== null) {
-                let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'to');
-                
-                if (connectedNodes.length > 0) {
-                  let node = this.state.network.body.nodes[connectedNodes[0]].options;
-                  this.nodeClicked(node);
-                }
+              // do something here
+              if (event.code === "ArrowUp") {
+                let network = this.state.network;
 
-              }
-            } else if (event.code === "ArrowLeft") {
-              let network = this.state.network;
-              
-              if (this.state.currentNode !== null) {
-                let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
-                let selfNode = this.state.network.body.nodes[this.state.currentNode['id'] as string];
-                
-                // There should be only one parent.
-                if (connectedNodes?.length === 1) {
-                  let siblings = network?.getConnectedNodes(connectedNodes[0] as string, 'to');
-                  let closetSiblingToLeft = null;
+                if (this.state.currentNode !== null) {
+                  let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
 
-                  for (const siblingId of siblings) {
-                    const sibling = this.state.network.body.nodes[siblingId];
-                    if (sibling.id !== selfNode.id) {
-                      if (closetSiblingToLeft === null || closetSiblingToLeft['x'] < sibling.x) {
-                        if (sibling.x < selfNode.x) {
-                          closetSiblingToLeft = sibling;
-
-                        }
-                      }
-                    }
-                  }
-
-                  if (closetSiblingToLeft !== null) {
-                    console.log(closetSiblingToLeft)
-                    let node = this.state.network.body.nodes[closetSiblingToLeft['id']].options;
+                  // There should be only one parent.
+                  if (connectedNodes?.length === 1) {
+                    let node = this.state.network.body.nodes[connectedNodes[0]].options;
                     this.nodeClicked(node);
                   }
                 }
+              } else if (event.code === "ArrowDown") {
+                let network = this.state.network;
 
-              }
-            } else if (event.code === "ArrowRight") {
-              let network = this.state.network;
-              
-              if (this.state.currentNode !== null) {
-                let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
-                let selfNode = this.state.network.body.nodes[this.state.currentNode['id'] as string];
-                
-                // There should be only one parent.
-                if (connectedNodes?.length === 1) {
-                  let siblings = network?.getConnectedNodes(connectedNodes[0] as string, 'to');
-                  let closetSiblingToRight = null;
+                if (this.state.currentNode !== null) {
+                  let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'to');
 
-                  for (const siblingId of siblings) {
-                    const sibling = this.state.network.body.nodes[siblingId];
-                    if (sibling.id !== selfNode.id) {
-                      if (closetSiblingToRight === null || closetSiblingToRight['x'] > sibling.x) {
-                        if (sibling.x > selfNode.x) {
-                          closetSiblingToRight = sibling;
+                  if (connectedNodes.length > 0) {
+                    let node = this.state.network.body.nodes[connectedNodes[0]].options;
+                    this.nodeClicked(node);
+                  }
+
+                }
+              } else if (event.code === "ArrowLeft") {
+                let network = this.state.network;
+
+                if (this.state.currentNode !== null) {
+                  let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
+                  let selfNode = this.state.network.body.nodes[this.state.currentNode['id'] as string];
+
+                  // There should be only one parent.
+                  if (connectedNodes?.length === 1) {
+                    let siblings = network?.getConnectedNodes(connectedNodes[0] as string, 'to');
+                    let closetSiblingToLeft = null;
+
+                    for (const siblingId of siblings) {
+                      const sibling = this.state.network.body.nodes[siblingId];
+                      if (sibling.id !== selfNode.id) {
+                        if (closetSiblingToLeft === null || closetSiblingToLeft['x'] < sibling.x) {
+                          if (sibling.x < selfNode.x) {
+                            closetSiblingToLeft = sibling;
+
+                          }
                         }
                       }
                     }
+
+                    if (closetSiblingToLeft !== null) {
+                      console.log(closetSiblingToLeft)
+                      let node = this.state.network.body.nodes[closetSiblingToLeft['id']].options;
+                      this.nodeClicked(node);
+                    }
                   }
 
-                  if (closetSiblingToRight !== null) {
-                    console.log(closetSiblingToRight)
-                    let node = this.state.network.body.nodes[closetSiblingToRight['id']].options;
-                    this.nodeClicked(node);
-                  }
                 }
+              } else if (event.code === "ArrowRight") {
+                let network = this.state.network;
 
+                if (this.state.currentNode !== null) {
+                  let connectedNodes = network?.getConnectedNodes(this.state.currentNode['id'] as string, 'from');
+                  let selfNode = this.state.network.body.nodes[this.state.currentNode['id'] as string];
+
+                  // There should be only one parent.
+                  if (connectedNodes?.length === 1) {
+                    let siblings = network?.getConnectedNodes(connectedNodes[0] as string, 'to');
+                    let closetSiblingToRight = null;
+
+                    for (const siblingId of siblings) {
+                      const sibling = this.state.network.body.nodes[siblingId];
+                      if (sibling.id !== selfNode.id) {
+                        if (closetSiblingToRight === null || closetSiblingToRight['x'] > sibling.x) {
+                          if (sibling.x > selfNode.x) {
+                            closetSiblingToRight = sibling;
+                          }
+                        }
+                      }
+                    }
+
+                    if (closetSiblingToRight !== null) {
+                      console.log(closetSiblingToRight)
+                      let node = this.state.network.body.nodes[closetSiblingToRight['id']].options;
+                      this.nodeClicked(node);
+                    }
+                  }
+
+                }
               }
-            }
 
-              })
-            }
+            })
+          }
 
 
         }
       }
       container.addEventListener("keydown", keydownListener(nodes).bind(this));
-    }    
+    }
   }
 
   componentDidMount() {
@@ -443,7 +448,7 @@ class TreeViewer extends React.Component<{
 
     if (network !== null) {
       let currentViewPos = network.getViewPosition();
-      
+
       if (currentViewPos['x'] !== 0 || currentViewPos['y'] !== 0) {
         network.moveTo({
           position: currentViewPos,
@@ -462,8 +467,8 @@ class TreeViewer extends React.Component<{
 
     if (node) {
       // Now remove our title hack
-      nodeCopy = {...node} as Record<string, unknown>
-      nodeCopy.label = node.label.split("---")[1]  
+      nodeCopy = { ...node } as Record<string, unknown>
+      nodeCopy.label = node.label.split("---")[1]
     }
 
     if (this.props.onNodeClicked) {
@@ -478,7 +483,7 @@ class TreeViewer extends React.Component<{
   componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       if (this.props.treeMap) {
-        this.setState ({ treeMap: this.props.treeMap }, this.loadAndRender);
+        this.setState({ treeMap: this.props.treeMap }, this.loadAndRender);
       }
 
       if (this.props.zoomLevel) {
