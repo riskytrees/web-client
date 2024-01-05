@@ -27,6 +27,14 @@ import OrgList from './OrgList';
 import CreateOrgButton from './CreateOrgButton';
 import AddUserButton from './AddUserButton';
 import { RiskyApi } from './api';
+import { CardActionArea, CardActions } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import PersonIcon from '@mui/icons-material/Person';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Card from '@mui/material/Card';
+import projectImg from './img/projects_temp.png';
+
 
 class OrgMembersPage extends React.Component<{
 }, {
@@ -102,9 +110,33 @@ class OrgMembersPage extends React.Component<{
     let result: JSX.Element[] = [];
 
     for (const member of this.state.orgUsers) {
-      result.push(<ListItem key={"member-" + member['email']}>{member['email']} <Button onClick={() => {
+      result.push(<ListItem key={"member-" + member['email']}><Box>
+<Paper variant="outlined" borderRadius="50px">
+   <img src={projectImg} height="140px"/>
+</Paper>
+<Stack direction="row" alignItems="center" gap={1}>
+          <Typography variant="h1" display="inline">
+          {member['email']} •
+          </Typography> <Typography variant="body1" display="inline">[#]Trees</Typography></Stack>
+  
+          <br></br><Stack direction="row" alignItems="bottom" gap={1}>
+            <PersonIcon fontSize="small"></PersonIcon>
+            <Typography variant="body2" gutterBottom>
+              [Personal]
+            </Typography>
+          </Stack>
+  
+          <Stack direction="row" alignItems="bottom" gap={1}>
+            <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
+            <Typography variant="body2">
+              [DateModified]
+            </Typography>
+          </Stack>
+          <Button onClick={() => {
         this.removeMember(member)
-      }}>Remove</Button></ListItem>)
+      }}>Remove</Button>
+
+ </Box></ListItem> )
     }
 
     return <List>{result}</List>;
@@ -268,8 +300,17 @@ class OrgMembersPage extends React.Component<{
           </Paper>
           <Paper variant="treearea">
             <Box px='60px'></Box>
-            <Button onClick={this.handleOpen}>Invite User</Button>
-            {this.generateOrgUserList()}
+            <Grid item xs={2}>        
+            <Stack display="flex-row" direction="row" justifyContent="space-between" padding="15px 15px 15px 0px" margin="18px">
+        <Typography variant="h1" display="block" >{this.props.org ? "Org Projects" : "Your Projects"}</Typography>
+        <Button onClick={this.handleOpen} max-height="15px">Invite User</Button>
+        </Stack>    
+        <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
+        {this.generateOrgUserList()}
+        </Stack>
+      </Grid>padding="15px 15px 15px 0px"
+
+
 
           </Paper>
         </Stack>
