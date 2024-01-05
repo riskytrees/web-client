@@ -300,14 +300,29 @@ const baseComponents = {
         props: { variant: 'riskypane' },
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
-          minHeight: 'calc(100vh - 60px)',
-
+          minHeight: 'calc(100vh - 90px)',
+          zIndex: '1',
+          position: 'absolute',
           padding: '15px',
           width: Variables.widthsList.paneWidth,
           overflow: 'auto',
           display: 'inline-block',
           overflowY: 'hidden',
-          marginTop:'60px',
+        },
+      },
+      {
+        props: { variant: 'rightriskypane' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.paneBackground,
+          minHeight: 'calc(100vh - 90px)',
+          zIndex: '1',
+          position: 'absolute',
+          right: '0px',
+          padding: '15px',
+          width: Variables.widthsList.paneWidth,
+          overflow: 'auto',
+          display: 'inline-block',
+          overflowY: 'hidden',
         },
       },
       {
@@ -326,7 +341,7 @@ const baseComponents = {
         props: { variant: 'treearea' },
         style: {
           backgroundColor: RiskyColors.uiColors.mainBackground,
-          height: 'calc(100vh)',
+          height: 'calc(100vh - 60px)',
 
           width: '100%',
           marginTop: '60px',

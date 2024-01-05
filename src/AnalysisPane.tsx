@@ -56,7 +56,7 @@ class AnalysisPane extends React.Component<{
 
     return (
       <>
-        <Paper variant="riskypane">
+        <Paper variant="rightriskypane">
           <Stack>
             <Typography variant="h1">Analysis</Typography>
             Total Tree Risk: {this.getSimpleRisk()}
