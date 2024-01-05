@@ -295,9 +295,21 @@ const baseComponents = {
 
     },
     variants: [
-
       {
         props: { variant: 'riskypane' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.paneBackground,
+          minHeight: 'calc(100vh - 60px)',
+          padding: '15px',
+          width: Variables.widthsList.paneWidth,
+          overflow: 'auto',
+          display: 'inline-block',
+          overflowY: 'hidden',
+          marginTop:'60px',
+        },
+      },
+      {
+        props: { variant: 'leftriskypane' },
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
           minHeight: 'calc(100vh - 90px)',

@@ -620,7 +620,7 @@ class TreeViewPage extends React.Component<{
 
           </Modal>
         </AppBar>
-        <Paper variant="riskypane">
+        <Paper variant="leftriskypane">
           <SubTreePane rootTreeId={treeId} projectId={projectId} />
         </Paper>
         {rightPane}
