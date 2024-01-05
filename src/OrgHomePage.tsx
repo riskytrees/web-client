@@ -25,6 +25,7 @@ import Popover from '@mui/material/Popover';
 import { Grid } from '@mui/material';
 import OrgList from './OrgList';
 import CreateOrgButton from './CreateOrgButton';
+import SettingsAppBar from './SettingsAppBar';
 
 class OrgHomePage extends React.Component<{
 }, {
@@ -36,6 +37,7 @@ class OrgHomePage extends React.Component<{
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.teamMembersClicked = this.teamMembersClicked.bind(this);
+    this.settingsClicked = this.settingsClicked.bind(this);
   }
   handleOpen() {
     this.setState({ modalOpen: true })
@@ -60,110 +62,17 @@ class OrgHomePage extends React.Component<{
     window.location.href += "/members"
   }
 
+  settingsClicked() {
+    const path = window.location.href;
+    const orgId = path.split("/")[4];
+
+    window.location.href += "/settings"
+  }
+
   render() {
     return (
       <>
-        <AppBar>
-          <Grid container>
-            <Grid item xs={4} marginTop="11.75px">
-              <Stack spacing={2} direction="row">
-                <Box></Box>
-                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img></Button>
-                <Popover
-                  id="actionButton"
-                  anchorReference="anchorPosition"
-                  anchorPosition={{ top: 50, left: 0 }}
-                  open={this.state.actionModalOpen}
-                  onClose={this.handleActionPanelClose}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                >
-                  <Stack>
-                    <List component="nav">
-                      <ListItem>
-                        <ListItemButton onClick={this.goBackToProjects}>
-                          <ListItemText primary="Back to Trees" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Export Text Tree" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Export Analysis" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-
-                      <ListItem>
-                        <ListItemButton>
-                          <ListItemText primary="Undo" onClick={this.handleUndo} />
-                        </ListItemButton>
-                      </ListItem>
-
-
-                      <Divider light />
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Add Child Node" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Delete Selected" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Config Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Model Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="App Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                    </List>
-                  </Stack>
-
-                </Popover>
-              </Stack>
-            </Grid>
-
-            <Grid item xs={4} marginTop="11.75px">
-              <Stack alignContent="center">
-                <Box display="flex" justifyContent="center" alignItems="center" >
-                  <Button variant='inlineNavButton' endIcon={<Home />} onClick={() => {
-                    window.location.href = "/"
-                  }}>Home</Button>
-                </Box>
-
-              </Stack>
-            </Grid>
-          </Grid>
-
-
-        </AppBar>
+        <SettingsAppBar></SettingsAppBar>
         <Stack direction="row">
           <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
 
@@ -205,8 +114,8 @@ class OrgHomePage extends React.Component<{
                     </ListItemButton>
                   </ListItem>
                   <ListItem disablePadding>
-                    <ListItemButton component="a" href="#simple-list">
-                      <ListItemText primary="Spam" />
+                    <ListItemButton>
+                      <ListItemText primary="Settings" onClick={this.settingsClicked} />
                     </ListItemButton>
                   </ListItem>
                 </List>
