@@ -396,7 +396,7 @@ class NodePane extends React.Component<{
 
     return (
       <>
-      <Paper variant="riskypane">
+      <Paper variant="rightriskypane">
       <Stack>
       <Typography variant="h3">Details</Typography>
       <Box height={"10px"}></Box>

@@ -620,14 +620,13 @@ class TreeViewPage extends React.Component<{
 
           </Modal>
         </AppBar>
-        <Stack direction="row">
-          <Paper variant="riskypane">
-            <SubTreePane rootTreeId={treeId} projectId={projectId} />
-          </Paper>
-          {<TreeViewer onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} />}
+        <Paper variant="leftriskypane">
+          <SubTreePane rootTreeId={treeId} projectId={projectId} />
+        </Paper>
+        {rightPane}
 
-          {rightPane}
-        </Stack>
+        {<TreeViewer onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} />}
+
       </>
     )
   }
