@@ -100,11 +100,14 @@ class TreeViewer extends React.Component<{
             let nodeColor = "#1F1DA2";
             let labelBGColor = "#0D0C4B";
             let nodeBGColor = "#090920";
-            if (labelText === "And") { nodeColor = "#00FF38"; labelBGColor = "#154B0C"; nodeBGColor = "#0B1C09"; }
-            if (labelText === "Condition") { nodeColor = "#1F1DA2"; labelBGColor = "#0D0C4B"; nodeBGColor = "#090920" }
-            if (labelText === "Or") { nodeColor = "#4E0943"; labelBGColor = "#4B0C45"; nodeBGColor = "#1A0818" }
+            
+            if (labelText === "And") { nodeColor = "#00FF38"; labelBGColor = "#154B0C"; nodeBGColor = "#0B1C09";  }
+            if (labelText === "Condition") { nodeColor = "#1F1DA2"; labelBGColor = "#0D0C4B"; nodeBGColor = "#090920"; }
+            if (labelText === "Or") { nodeColor = "#4E0943"; labelBGColor = "#4B0C45"; nodeBGColor = "#1A0818"; }
 
-
+            if (selected) {
+              nodeBGColor = labelBGColor;
+            }
 
             const r = 5;
 
