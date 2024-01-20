@@ -233,7 +233,7 @@ class Projects extends React.Component<{
                 aria-describedby="modal-modal-description"
               >
 
-                <Box id="projectName">
+                <Box className="riskyModal">
                   <Typography variant="h2">Enter Project Name</Typography>
                   <Box height={"20px"}></Box>
                   <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
