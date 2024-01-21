@@ -42,6 +42,13 @@ const baseComponents = {
         },
       },
       {
+        props: { variant: 'body3' },
+        style: {
+          fontSize: '14px',
+          color: RiskyColors.uiColors.secondaryText,
+        },
+      },
+      {
         props: { variant: 'h1' },
         style: {
           fontSize: '24px',
@@ -367,6 +374,13 @@ const baseComponents = {
 
           display: 'inline-block',
           overflowY: 'hidden',
+        },
+      },
+      {
+        props: { variant: 'circle' },
+        style: {
+          borderRadius: '120px',
+          overflow:'hidden',
         },
       },
     ]

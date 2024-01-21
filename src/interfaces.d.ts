@@ -8,6 +8,7 @@ declare module '@mui/material/Paper' {
         homepane:true;
         loginback:true;
         loginBox:true;
+        circle:true;
     }
 }
 declare module '@mui/material/Button' {
@@ -25,5 +26,6 @@ declare module '@mui/material/Typography' {
     interface TypographyPropsVariantOverrides {
         h3: true;
         h2: true;
+        body3:true;
     }
 }
