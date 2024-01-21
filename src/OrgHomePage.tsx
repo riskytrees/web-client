@@ -51,7 +51,6 @@ class OrgHomePage extends React.Component<{
     const path = window.location.href;
     const orgId = path.split("/")[4];
 
-    console.log(orgId)
     return orgId;
   }
 

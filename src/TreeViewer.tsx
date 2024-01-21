@@ -40,7 +40,6 @@ class TreeViewer extends React.Component<{
   }
 
   loadAndRender() {
-    console.log("rendering...")
     const nodes: Record<string, any>[] = [];
     const edges: Record<string, any>[] = [];
 
@@ -255,9 +254,6 @@ class TreeViewer extends React.Component<{
         network.setData(data);
         network.setOptions(options)
 
-        console.log(currentScale)
-        console.log(currentViewPos)
-
         if (currentScale !== 1 || currentViewPos['x'] !== 0 || currentViewPos['y'] !== 0) {
           network.moveTo({
             position: currentViewPos,
@@ -392,7 +388,6 @@ class TreeViewer extends React.Component<{
                     }
 
                     if (closetSiblingToLeft !== null) {
-                      console.log(closetSiblingToLeft)
                       let node = this.state.network.body.nodes[closetSiblingToLeft['id']].options;
                       this.nodeClicked(node);
                     }
@@ -423,7 +418,6 @@ class TreeViewer extends React.Component<{
                     }
 
                     if (closetSiblingToRight !== null) {
-                      console.log(closetSiblingToRight)
                       let node = this.state.network.body.nodes[closetSiblingToRight['id']].options;
                       this.nodeClicked(node);
                     }

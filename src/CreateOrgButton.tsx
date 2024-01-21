@@ -17,7 +17,6 @@ class CreateOrgButton extends React.Component<{
   }
 
   validate() {
-    console.log("Yep")
     const createOrgButtonField = document.getElementById("createOrgButtonField") as HTMLInputElement;
 
     if (createOrgButtonField) {

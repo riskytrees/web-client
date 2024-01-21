@@ -169,7 +169,6 @@ class NodePane extends React.Component<{
           conditionAttribute: this.state.conditionAttribute
         });
       } catch (err) {
-        console.log(err);
       }
 
     }

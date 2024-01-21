@@ -220,8 +220,6 @@ class TreeViewPage extends React.Component<{
   }
 
   localTreeNodeUpdate(treeIdToUpdate: string, newNodeData) {
-    console.log(this.state.treeMap)
-    console.log(treeIdToUpdate)
     for (const [idx, node] of this.state.treeMap[treeIdToUpdate].nodes.entries()) {
       if (node.id === newNodeData.id) {
         const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
@@ -231,8 +229,6 @@ class TreeViewPage extends React.Component<{
         treeData.nodes[idx]['conditionAttribute'] = newNodeData['conditionAttribute'];
         const treeMap = { ...this.state.treeMap };
         treeMap[treeIdToUpdate] = treeData;
-        console.log("Tree Update")
-        console.log(treeData)
         this.setState({
           treeMap: treeMap,
           selectedNode: this.state.selectedNode
@@ -258,7 +254,6 @@ class TreeViewPage extends React.Component<{
 
     if (this.state.treeMap[treeIdToUpdate]) {
       const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
-      console.log(treeData)
       let uuid = crypto.randomUUID();
       
      
@@ -305,16 +300,11 @@ class TreeViewPage extends React.Component<{
   
         treeData.nodes.splice(nodeToDelete, 1);
       } else if (!isAddAction) {
-        console.log("Node to delete was null!")
-        console.log(parentNodeId)
-
         // Right this second you can only have one copy of a subtree so simply find all the nodes that reference the subtree:
 
         for (const [idx, node] of treeData.nodes.entries()) {
-          console.log(node.children)
           if (node.children.includes(parentNodeId)) {
             treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
-            console.log("Will delete")
           }
         }
       }
@@ -328,12 +318,10 @@ class TreeViewPage extends React.Component<{
       }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
   
     } else {
-      console.log("No tree map!")
     }
   }
 
   async handleUndo() {
-    console.log("Undo")
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -434,8 +422,6 @@ class TreeViewPage extends React.Component<{
   }
 
   handleAnalysisClicked(event) {
-    console.log("Analysis Clicked")
-
     if (this.state.analysisModeEnabled) {
       this.setState({
         analysisModeEnabled: false
