@@ -41,7 +41,7 @@ class ProjectsList extends React.Component<{
     const rows: JSX.Element[] = [];
 
     for (const project of projects) {
-      if (!this.props.org || this.props.org === project.orgId) {
+      if ((!this.props.org && !project.orgId) || this.props.org === project.orgId) {
         const path = "/projects?id=" + project.projectId;
         rows.push(
 
