@@ -73,8 +73,21 @@ class NodePane extends React.Component<{
   }
 
   async handleDeleteNode(event) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+    const treeId = urlParams.get('id');
+
+    
     if (this.props.triggerAddDeleteNode) {
-      this.props.triggerAddDeleteNode(this.state['selectedTreeId'], this.state.nodeId, false);
+      let relevantTreeId = this.state['selectedTreeId'];
+
+      if (treeId !== this.state.selectedTreeId) {
+        // This is a subtree node
+        relevantTreeId = treeId;
+      }
+      this.props.triggerAddDeleteNode(relevantTreeId, this.state.nodeId, false);
     }
   }
 

@@ -241,7 +241,7 @@ class TreeViewPage extends React.Component<{
     }
   }
 
-  onNodeClicked(data) {
+  onNodeClicked(data, parentData) {
     this.setState({
       selectedNode: data
     });
@@ -252,8 +252,13 @@ class TreeViewPage extends React.Component<{
   }
 
   onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+
     if (this.state.treeMap[treeIdToUpdate]) {
       const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
+      console.log(treeData)
       let uuid = crypto.randomUUID();
       
      
@@ -299,6 +304,19 @@ class TreeViewPage extends React.Component<{
         }
   
         treeData.nodes.splice(nodeToDelete, 1);
+      } else if (!isAddAction) {
+        console.log("Node to delete was null!")
+        console.log(parentNodeId)
+
+        // Right this second you can only have one copy of a subtree so simply find all the nodes that reference the subtree:
+
+        for (const [idx, node] of treeData.nodes.entries()) {
+          console.log(node.children)
+          if (node.children.includes(parentNodeId)) {
+            treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
+            console.log("Will delete")
+          }
+        }
       }
   
       const treeMap = structuredClone(this.state.treeMap);
