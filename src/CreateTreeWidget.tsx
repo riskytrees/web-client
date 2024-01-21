@@ -18,7 +18,6 @@ class CreateTreeWidget extends React.Component<{
 
 
   validate(){
-    console.log("Yep")
     const treeNameFieldValidate = document.getElementById("treeNameField") as HTMLInputElement;
     
     if (treeNameFieldValidate) {

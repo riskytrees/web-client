@@ -18,7 +18,6 @@ class CreateProjectButton extends React.Component<{
   }
 
   validate() {
-    console.log("Yep")
     const createProjectButtonField = document.getElementById("createProjectButtonField") as HTMLInputElement;
 
     if (createProjectButtonField) {

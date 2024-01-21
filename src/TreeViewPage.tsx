@@ -220,8 +220,6 @@ class TreeViewPage extends React.Component<{
   }
 
   localTreeNodeUpdate(treeIdToUpdate: string, newNodeData) {
-    console.log(this.state.treeMap)
-    console.log(treeIdToUpdate)
     for (const [idx, node] of this.state.treeMap[treeIdToUpdate].nodes.entries()) {
       if (node.id === newNodeData.id) {
         const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
@@ -231,8 +229,6 @@ class TreeViewPage extends React.Component<{
         treeData.nodes[idx]['conditionAttribute'] = newNodeData['conditionAttribute'];
         const treeMap = { ...this.state.treeMap };
         treeMap[treeIdToUpdate] = treeData;
-        console.log("Tree Update")
-        console.log(treeData)
         this.setState({
           treeMap: treeMap,
           selectedNode: this.state.selectedNode
@@ -241,7 +237,7 @@ class TreeViewPage extends React.Component<{
     }
   }
 
-  onNodeClicked(data) {
+  onNodeClicked(data, parentData) {
     this.setState({
       selectedNode: data
     });
@@ -252,6 +248,10 @@ class TreeViewPage extends React.Component<{
   }
 
   onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+
     if (this.state.treeMap[treeIdToUpdate]) {
       const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
       let uuid = crypto.randomUUID();
@@ -299,6 +299,14 @@ class TreeViewPage extends React.Component<{
         }
   
         treeData.nodes.splice(nodeToDelete, 1);
+      } else if (!isAddAction) {
+        // Right this second you can only have one copy of a subtree so simply find all the nodes that reference the subtree:
+
+        for (const [idx, node] of treeData.nodes.entries()) {
+          if (node.children.includes(parentNodeId)) {
+            treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
+          }
+        }
       }
   
       const treeMap = structuredClone(this.state.treeMap);
@@ -310,12 +318,10 @@ class TreeViewPage extends React.Component<{
       }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
   
     } else {
-      console.log("No tree map!")
     }
   }
 
   async handleUndo() {
-    console.log("Undo")
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -416,8 +422,6 @@ class TreeViewPage extends React.Component<{
   }
 
   handleAnalysisClicked(event) {
-    console.log("Analysis Clicked")
-
     if (this.state.analysisModeEnabled) {
       this.setState({
         analysisModeEnabled: false

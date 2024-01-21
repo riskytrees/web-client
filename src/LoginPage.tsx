@@ -45,7 +45,6 @@ class LoginPage extends React.Component<{
   }
 
   async loginClicked() {
-    console.log(this.state['email'])
     let response = await fetch(process.env.REACT_APP_API_ROOT_URL + "/auth/login?provider=google", {
       method: 'POST',
       body: JSON.stringify({
