@@ -3111,20 +3111,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@textea/json-viewer@npm:^3.2.3":
-  version: 3.2.3
-  resolution: "@textea/json-viewer@npm:3.2.3"
+"@textea/json-viewer@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@textea/json-viewer@npm:3.3.0"
   dependencies:
     clsx: ^2.0.0
     copy-to-clipboard: ^3.3.3
-    zustand: ^4.4.1
+    zustand: ^4.4.7
   peerDependencies:
     "@emotion/react": ^11
     "@emotion/styled": ^11
     "@mui/material": ^5
     react: ^17 || ^18
     react-dom: ^17 || ^18
-  checksum: a858bfc7398d522685341ca702e457ba9d2cb19ce9e0c60724354583ed80b51945e5f90f1f95e9f500f214fe90f68604322bcc7e69411d18d9cc2933cdb7d88b
+  checksum: 9b3419e743bba76b8c68df2ec6c16a49966e7a484bcf5d01bd1b075984568b7fe5d6f9a1b344b33daecc42347ef9edd42ac7b79a3bed89d1d5fa8c945d73bc84
   languageName: node
   linkType: hard
 
@@ -14088,7 +14088,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.2.0
     "@testing-library/react": ^14.1.2
     "@testing-library/user-event": ^14.5.2
-    "@textea/json-viewer": ^3.2.3
+    "@textea/json-viewer": ^3.3.0
     "@types/jest": ^29.5.11
     "@types/node": ^20.11.2
     "@types/react": ^18.2.48
@@ -14770,14 +14770,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:^4.4.1":
-  version: 4.4.4
-  resolution: "zustand@npm:4.4.4"
+"zustand@npm:^4.4.7":
+  version: 4.5.0
+  resolution: "zustand@npm:4.5.0"
   dependencies:
     use-sync-external-store: 1.2.0
   peerDependencies:
     "@types/react": ">=16.8"
-    immer: ">=9.0"
+    immer: ">=9.0.6"
     react: ">=16.8"
   peerDependenciesMeta:
     "@types/react":
@@ -14786,6 +14786,6 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 371fd842dc704ed5983c6d64a77994c9c91867338c742d162ac95c4252b5f98fc38aeb2d5a07f48311babed5ca7dbff2d2258301db0ae143d32897bcf3ae651b
+  checksum: 91685492ab33bb656b98e07d8fff2be1794d8e68ac5dc546ec457f4ae3d709f0c19de9e93045b9ee5d6b704f64503d9e085ffe1f600f6ade0459e572d1cf5c0d
   languageName: node
   linkType: hard
