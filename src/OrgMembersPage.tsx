@@ -3,6 +3,7 @@ import ProjectsList from './ProjectsList';
 import CreateProjectButton from './CreateProjectButton';
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Home from '@mui/icons-material/Home';
 import TreeViewPane from './SubTreePane';
@@ -27,6 +28,15 @@ import OrgList from './OrgList';
 import CreateOrgButton from './CreateOrgButton';
 import AddUserButton from './AddUserButton';
 import { RiskyApi } from './api';
+import { CardActionArea, CardActions } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import MailIcon from '@mui/icons-material/Mail';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Card from '@mui/material/Card';
+import profileImg from './img/profile.png';
+import { RiskyColors } from './colors.ts';
+
 import SettingsAppBar from './SettingsAppBar';
 import OrgSidebar from './OrgSidebar';
 
@@ -112,9 +122,35 @@ class OrgMembersPage extends React.Component<{
     let result: JSX.Element[] = [];
 
     for (const member of this.state.orgUsers) {
-      result.push(<ListItem key={"member-" + member['email']}>{member['email']} <Button onClick={() => {
+      result.push(<ListItem  sx={{display: "inline-block", maxWidth:"200px", margin:"0px 34px 24px 0px"}}  key={"member-" + member['email']}>
+<Box margin="0px 0px 0px 24px">         
+
+<Stack direction="column" alignItems="center" gap={0.5}>
+  <Avatar
+  src={profileImg}
+  sx={{ width: 200, height: 200 }}></Avatar>
+          <Typography variant="h1" display="inline" >
+          Jane Doe
+          </Typography>
+          <Typography variant="h3" display="inline">Admin</Typography>
+          {/* <Stack  direction="row" alignItems="bottom" gap={1} >
+            <MailIcon fontSize="small"  style={{color: RiskyColors.uiColors.secondaryText}}></MailIcon>
+            <Typography variant="body3" alignItems="center" alignContent="center" gutterBottom>
+            {member['email']}
+            </Typography>
+          </Stack> 
+    */}
+          <Stack direction="row" alignItems="bottom" gap={0.5}>
+            <CalendarMonthIcon fontSize="small" style={{color: RiskyColors.uiColors.secondaryText}}></CalendarMonthIcon>
+            <Typography variant="body3">
+              Jul 1, 1999
+            </Typography>
+          </Stack>
+          <Button onClick={() => {
         this.removeMember(member)
-      }}>Remove</Button></ListItem>)
+      }}>Remove</Button></Stack>
+
+ </Box></ListItem> )
     }
 
     return <List>{result}</List>;
@@ -130,8 +166,17 @@ class OrgMembersPage extends React.Component<{
           <OrgSidebar></OrgSidebar>
           <Paper variant="treearea">
             <Box px='60px'></Box>
-            <Button onClick={this.handleOpen}>Invite User</Button>
-            {this.generateOrgUserList()}
+            <Grid item xs={2}>        
+            <Stack display="flex-row" direction="row" justifyContent="space-between" padding="15px 15px 15px 0px" margin="18px">
+        <Typography variant="h1" display="block" >Team Members</Typography>
+        <Button onClick={this.handleOpen} max-height="15px">Invite User</Button>
+        </Stack>    
+        
+        <Stack display="flex-row" direction="row" justifyContent="start" flexWrap="wrap">
+        {this.generateOrgUserList()}
+        </Stack>
+      </Grid>
+
 
           </Paper>
         </Stack>
