@@ -308,7 +308,7 @@ const baseComponents = {
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
           minHeight: 'calc(100vh - 60px)',
-
+          height: 'inherit',
           padding: '15px',
           width: Variables.widthsList.paneWidth,
           overflow: 'auto',
@@ -333,8 +333,8 @@ const baseComponents = {
         props: { variant: 'treearea' },
         style: {
           backgroundColor: RiskyColors.uiColors.mainBackground,
-          height: 'calc(100vh)',
-
+          minHeight: 'calc(100vh)',
+          height:'100%',
           width: '100%',
           marginTop: '60px',
         },

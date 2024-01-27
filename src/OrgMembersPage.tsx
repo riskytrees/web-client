@@ -111,28 +111,28 @@ class OrgMembersPage extends React.Component<{
     let result: JSX.Element[] = [];
 
     for (const member of this.state.orgUsers) {
-      result.push(<ListItem  sx={{display: "inline-block", maxWidth:"200px"}}  key={"member-" + member['email']}>
-<Box>         
-<Avatar
+      result.push(<ListItem  sx={{display: "inline-block", maxWidth:"200px", margin:"0px 34px 24px 0px"}}  key={"member-" + member['email']}>
+<Box margin="0px 0px 0px 24px">         
+
+<Stack direction="column" alignItems="center" gap={0.5}>
+  <Avatar
   src={profileImg}
   sx={{ width: 200, height: 200 }}></Avatar>
-<Stack direction="column" alignItems="center" gap={1}>
-  
-          <Typography variant="h1" display="inline" alignItems="center" alignContent="center">
+          <Typography variant="h1" display="inline" >
           Jane Doe
           </Typography>
           <Typography variant="h3" display="inline">Admin</Typography>
-         <Stack  direction="row" alignItems="bottom" gap={1} >
+          {/* <Stack  direction="row" alignItems="bottom" gap={1} >
             <MailIcon fontSize="small"  style={{color: RiskyColors.uiColors.secondaryText}}></MailIcon>
             <Typography variant="body3" alignItems="center" alignContent="center" gutterBottom>
             {member['email']}
             </Typography>
-          </Stack>
-  
-          <Stack direction="row" alignItems="bottom" gap={1}>
+          </Stack> 
+    */}
+          <Stack direction="row" alignItems="bottom" gap={0.5}>
             <CalendarMonthIcon fontSize="small" style={{color: RiskyColors.uiColors.secondaryText}}></CalendarMonthIcon>
             <Typography variant="body3">
-              [DateModified]
+              Jul 1, 1999
             </Typography>
           </Stack>
           <Button onClick={() => {
@@ -313,7 +313,6 @@ class OrgMembersPage extends React.Component<{
         {this.generateOrgUserList()}
         </Stack>
       </Grid>
-
 
 
           </Paper>
