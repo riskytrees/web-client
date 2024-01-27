@@ -3371,15 +3371,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mui-image@npm:^1":
-  version: 1.0.5
-  resolution: "@types/mui-image@npm:1.0.5"
-  dependencies:
-    "@types/react": "*"
-  checksum: a42d1bf3273c39783b26f852e5df5dacf0c049c1d9951ca49d3a663e8939470271fcd1f7fee7cdb50bd309c58f2590c7a0160cf7a8bc1a9b155b65ed6d7b767f
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:*":
   version: 18.15.11
   resolution: "@types/node@npm:18.15.11"
@@ -10115,19 +10106,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mui-image@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "mui-image@npm:1.0.7"
-  peerDependencies:
-    "@emotion/react": ^11.4.1
-    "@emotion/styled": ^11.3.0
-    "@mui/material": ^5.0.1
-    prop-types: ^15.7.2
-    react: ^17.0.2 || ^18.0.0
-  checksum: 7512777d0a83a108a9403f4175874f07d65a31282d33e4cb8334af8242ae5827c478b73cd7adce727a75a73c8ca76f236781881f74e6c303e81e1bfcca232512
-  languageName: node
-  linkType: hard
-
 "multicast-dns@npm:^7.2.5":
   version: 7.2.5
   resolution: "multicast-dns@npm:7.2.5"
@@ -14100,7 +14078,6 @@ __metadata:
     "@types/react-dom": ^18.2.18
     cypress: 13.6.3
     install: ^0.13.0
-    mui-image: ^1.0.7
     react: ^18.0.0
     react-dom: ^18.0.0
     react-router-dom: ^6.21.3
