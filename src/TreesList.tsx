@@ -33,11 +33,9 @@ class TreesList extends React.Component<{
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/trees", {});
 
     if (data['result']['trees']) {
-      for (const tree of data['result']['trees']) {
-        this.setState({
-          trees: this.state.trees.concat(tree)
-        })
-      }
+      this.setState({
+        trees: this.state.trees.concat(data['result']['trees'])
+      })
     }
   }
 

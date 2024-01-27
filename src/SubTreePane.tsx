@@ -50,8 +50,6 @@ class SubTreePane extends React.Component<{
   }
 
   lineItemClicked(lineItemId) {
-    console.log(lineItemId)
-
     const stateChangeObj = {};
 
     if (this.state[lineItemId]) {
@@ -62,8 +60,7 @@ class SubTreePane extends React.Component<{
 
 
     this.setState(stateChangeObj, () => {
-        console.log("State:")
-        console.log(this.state)
+
     })
   }
 

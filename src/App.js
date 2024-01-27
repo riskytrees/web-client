@@ -1,7 +1,7 @@
 import HomePage from './HomePage';
 import OrgHomePage from './OrgHomePage';
 import OrgMembersPage from './OrgMembersPage';
-
+import OrgSettingsPage from './OrgSettingsPage';
 
 import Projects from './Projects.tsx';
 import TreeViewPage from './TreeViewPage';
@@ -302,7 +302,6 @@ const baseComponents = {
 
     },
     variants: [
-
       {
         props: { variant: 'riskypane' },
         style: {
@@ -315,6 +314,35 @@ const baseComponents = {
           display: 'inline-block',
           overflowY: 'hidden',
           marginTop:'60px',
+        },
+      },
+      {
+        props: { variant: 'leftriskypane' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.paneBackground,
+          minHeight: 'calc(100vh - 90px)',
+          zIndex: '1',
+          position: 'absolute',
+          padding: '15px',
+          width: Variables.widthsList.paneWidth,
+          overflow: 'auto',
+          display: 'inline-block',
+          overflowY: 'hidden',
+        },
+      },
+      {
+        props: { variant: 'rightriskypane' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.paneBackground,
+          minHeight: 'calc(100vh - 90px)',
+          zIndex: '1',
+          position: 'absolute',
+          right: '0px',
+          padding: '15px',
+          width: Variables.widthsList.paneWidth,
+          overflow: 'auto',
+          display: 'inline-block',
+          overflowY: 'hidden',
         },
       },
       {
@@ -446,6 +474,8 @@ function App() {
             <Route path="/orgs/:orgId" element={<OrgHomePage />}>
             </Route>
             <Route path="/orgs/:orgId/members" element={<OrgMembersPage />}>
+            </Route>
+            <Route path="/orgs/:orgId/settings" element={<OrgSettingsPage />}>
             </Route>
             <Route path="/projects" element={<Projects />}>
             </Route>

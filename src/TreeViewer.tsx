@@ -40,7 +40,6 @@ class TreeViewer extends React.Component<{
   }
 
   loadAndRender() {
-    console.log("rendering...")
     const nodes: Record<string, any>[] = [];
     const edges: Record<string, any>[] = [];
 
@@ -100,11 +99,14 @@ class TreeViewer extends React.Component<{
             let nodeColor = "#1F1DA2";
             let labelBGColor = "#0D0C4B";
             let nodeBGColor = "#090920";
-            if (labelText === "And") { nodeColor = "#00FF38"; labelBGColor = "#154B0C"; nodeBGColor = "#0B1C09"; }
-            if (labelText === "Condition") { nodeColor = "#1F1DA2"; labelBGColor = "#0D0C4B"; nodeBGColor = "#090920" }
-            if (labelText === "Or") { nodeColor = "#4E0943"; labelBGColor = "#4B0C45"; nodeBGColor = "#1A0818" }
+            
+            if (labelText === "And") { nodeColor = "#00FF38"; labelBGColor = "#154B0C"; nodeBGColor = "#0B1C09";  }
+            if (labelText === "Condition") { nodeColor = "#1F1DA2"; labelBGColor = "#0D0C4B"; nodeBGColor = "#090920"; }
+            if (labelText === "Or") { nodeColor = "#4E0943"; labelBGColor = "#4B0C45"; nodeBGColor = "#1A0818"; }
 
-
+            if (selected) {
+              nodeBGColor = labelBGColor;
+            }
 
             const r = 5;
 
@@ -252,9 +254,6 @@ class TreeViewer extends React.Component<{
         network.setData(data);
         network.setOptions(options)
 
-        console.log(currentScale)
-        console.log(currentViewPos)
-
         if (currentScale !== 1 || currentViewPos['x'] !== 0 || currentViewPos['y'] !== 0) {
           network.moveTo({
             position: currentViewPos,
@@ -389,7 +388,6 @@ class TreeViewer extends React.Component<{
                     }
 
                     if (closetSiblingToLeft !== null) {
-                      console.log(closetSiblingToLeft)
                       let node = this.state.network.body.nodes[closetSiblingToLeft['id']].options;
                       this.nodeClicked(node);
                     }
@@ -420,7 +418,6 @@ class TreeViewer extends React.Component<{
                     }
 
                     if (closetSiblingToRight !== null) {
-                      console.log(closetSiblingToRight)
                       let node = this.state.network.body.nodes[closetSiblingToRight['id']].options;
                       this.nodeClicked(node);
                     }
