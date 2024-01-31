@@ -73,7 +73,7 @@ class OrgHomePage extends React.Component<{
       <>
         <SettingsAppBar></SettingsAppBar>
         <Stack direction="row">
-          <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
+          <Paper variant="riskypane">
 
             <Box sx={{}}>
               <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton">New Project</Button>
@@ -122,7 +122,7 @@ class OrgHomePage extends React.Component<{
             </Box>
 
           </Paper>
-          <Paper variant="treearea">
+          <Paper variant="projectarea">
             <Box px='60px'></Box>
 
             <ProjectsList org={this.getOrgId()} />

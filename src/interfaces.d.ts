@@ -5,6 +5,7 @@ declare module '@mui/material/Paper' {
         riskypane: true;
         loginpane: true;
         treearea: true;
+        projectarea:true;
         homepane:true;
         loginback:true;
         loginBox:true;

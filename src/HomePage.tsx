@@ -158,7 +158,7 @@ class HomePage extends React.Component<{
 
         </AppBar>
         <Stack direction="row">
-          <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
+          <Paper variant="riskypane">
 
             <Box sx={{}}>
               <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton">New Project</Button>
@@ -216,11 +216,11 @@ class HomePage extends React.Component<{
             </Box>
 
           </Paper>
-          <Paper variant="treearea">
+          <Paper variant="projectarea">
             <Box px='60px'></Box>
-            <OrgList />
-            <Button id="orgButton" onClick={this.handleOrgOpen} variant="primaryButton">New Org</Button>
             
+            <Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">Recent Orgs <Button id="orgButton" onClick={this.handleOrgOpen} variant="primaryButton">New Org</Button></Typography>
+            <OrgList />
             <ProjectsList />
           </Paper>
         </Stack>

@@ -164,7 +164,7 @@ class OrgMembersPage extends React.Component<{
         <SettingsAppBar></SettingsAppBar>
         <Stack direction="row">
           <OrgSidebar></OrgSidebar>
-          <Paper variant="treearea">
+          <Paper variant="projectarea">
             <Box px='60px'></Box>
             <Grid item xs={2}>        
             <Stack display="flex-row" direction="row" justifyContent="space-between" padding="15px 15px 15px 0px" margin="18px">

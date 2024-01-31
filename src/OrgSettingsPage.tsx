@@ -40,7 +40,7 @@ class OrgSettingsPage extends React.Component<{
       <SettingsAppBar></SettingsAppBar>
       <Stack direction="row">
           <OrgSidebar></OrgSidebar>
-          <Paper variant="treearea">
+          <Paper variant="projectarea">
             <Box px='60px'></Box>
             
             <Button onClick={this.handleDeleteOrg}> Delete Org</Button>
