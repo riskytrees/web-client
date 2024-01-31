@@ -64,7 +64,7 @@ class OrgSidebar extends React.Component<{
 
         return (
             <>
-                <Paper variant="riskypane" sx={{ backgroundColor: 'rgb(25, 25, 25)', }}>
+                <Paper variant="riskypane">
 
                     <Box sx={{}}>
                         <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton">New Project</Button>

@@ -305,8 +305,8 @@ const baseComponents = {
       {
         props: { variant: 'riskypane' },
         style: {
-          backgroundColor: RiskyColors.uiColors.paneBackground,
-          minHeight: 'calc(100vh - 60px)',
+          backgroundColor:RiskyColors.uiColors.mainBackground,
+          minHeight: 'calc(100vh - 90px)',
           height: 'inherit',
           padding: '15px',
           width: Variables.widthsList.paneWidth,
@@ -322,6 +322,7 @@ const baseComponents = {
           backgroundColor: RiskyColors.uiColors.paneBackground,
           minHeight: 'calc(100vh - 90px)',
           zIndex: '1',
+          marginTop: '60px',
           position: 'absolute',
           padding: '15px',
           width: Variables.widthsList.paneWidth,
@@ -335,8 +336,10 @@ const baseComponents = {
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
           minHeight: 'calc(100vh - 90px)',
+          height:'100%',
           zIndex: '1',
           position: 'absolute',
+          marginTop: '60px',
           right: '0px',
           padding: '15px',
           width: Variables.widthsList.paneWidth,
@@ -361,12 +364,21 @@ const baseComponents = {
         props: { variant: 'treearea' },
         style: {
           backgroundColor: RiskyColors.uiColors.mainBackground,
-          minHeight: 'calc(100vh)',
-          height:'100%',
+          height: 'calc(100vh - 60px)',
           width: '100%',
-          marginTop: '60px',
+          paddingTop: '60px',
         },
       },
+      {
+      props: { variant: 'projectarea' },
+      style: {
+        backgroundColor: RiskyColors.uiColors.mainBackground,
+        minHeight: 'calc(100vh - 60px)',
+        height:'100%',
+        width: '100%',
+        paddingTop: '60px',
+      },
+    },
       {
         props: { variant: 'loginback' },
         style: {
