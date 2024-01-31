@@ -321,6 +321,7 @@ const baseComponents = {
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
           minHeight: 'calc(100vh - 90px)',
+          
           zIndex: '1',
           marginTop: '60px',
           position: 'absolute',
@@ -336,7 +337,7 @@ const baseComponents = {
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
           minHeight: 'calc(100vh - 90px)',
-          height:'100%',
+
           zIndex: '1',
           position: 'absolute',
           marginTop: '60px',
