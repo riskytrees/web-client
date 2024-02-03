@@ -6,6 +6,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
+import AccountTree from '@mui/icons-material/AccountTree';
+import Button from '@mui/material/Button';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import TreeData from './interfaces/TreeData';
 import { RiskyApi } from './api';
@@ -104,6 +106,7 @@ class SubTreePane extends React.Component<{
 
     return (
       <>
+      <Button variant="subtreeButton"><AccountTree sx={{fontSize:20}}></AccountTree></Button>
         <List
             sx={{ width: '100%', maxWidth: 360 }}
             aria-labelledby="nested-list-subheader"

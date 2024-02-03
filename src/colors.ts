@@ -98,7 +98,10 @@ export const enum uiColors {
     buttonSecondary = 'rgb(72, 72, 72)',
     /*Button secondary pressed is for when a secondary button is pressed, color should swap out to indicate selection*/
     buttonSecondaryPressed = 'rgb(72, 72, 72, .4)',
-
+    /*Subtree icon is custom for the subtree icon*/ 
+    subtreeIcon = 'rgb(255, 122, 0)',
+    /*Pressed state for subtreeIcon}*/ 
+    subtreeIconPressed = 'rgb(255, 122, 0, .4)',
     /*====TEXT COLORS====*/
     /*Main text is for most text in the application. Especially while resting on a field input, pane, or a button*/
     mainText = 'rgb(238, 238, 238)',

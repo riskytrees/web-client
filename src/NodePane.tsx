@@ -446,8 +446,6 @@ class NodePane extends React.Component<{
 
       <div>{this.renderAttributes()}</div>
 
-      {this.renderAddDeleteFields()}
-
       <Box height={"5px"}></Box>
       <Typography variant="h3">Other</Typography>
       <Box height={"10px"}></Box>

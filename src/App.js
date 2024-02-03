@@ -219,6 +219,22 @@ const baseComponents = {
           },
         },
       },
+      {
+        props: { variant: 'subtreeButton' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.buttonSecondary,
+          border: 'none',
+          borderRadius:'100px',
+          justifyContent: 'flex-center',
+          padding: '20px',
+          height: 'auto',
+          width:'auto',
+          '&:hover': {
+            backgroundColor: RiskyColors.uiColors.buttonSecondaryPressed,
+          },
+
+        },
+      },
     ]
   },
   MuiTextField: {
@@ -324,7 +340,7 @@ const baseComponents = {
           
           zIndex: '1',
           marginTop: '60px',
-          position: 'absolute',
+          position: 'fixed',
           padding: '15px',
           width: Variables.widthsList.paneWidth,
           overflow: 'auto',
@@ -344,9 +360,10 @@ const baseComponents = {
           right: '0px',
           padding: '15px',
           width: Variables.widthsList.paneWidth,
-          overflow: 'auto',
+
           display: 'inline-block',
-          overflowY: 'hidden',
+          overflowY: 'auto',
+          
         },
       },
       {
@@ -368,6 +385,7 @@ const baseComponents = {
           height: 'calc(100vh - 60px)',
           width: '100%',
           paddingTop: '60px',
+          position:'fixed',
         },
       },
       {
