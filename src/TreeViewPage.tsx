@@ -247,7 +247,80 @@ class TreeViewPage extends React.Component<{
     this.localTreeNodeUpdate(treeIdToUpdate, data)
   }
 
-  onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
+  async getTreeIdFromNodeId(nodeId: string) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/" + nodeId, {});
+    return data['result']['treeId'];
+  }
+
+  async getNodeIdsOnPathToNode(nodeId: string, lookingAtId?: string, lookingAtTreeId?: string) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+    const treeId = urlParams.get('id');
+
+    let resultNodes = new Set();
+
+    if (!lookingAtId && treeId) {
+      lookingAtId = this.state.treeMap[treeId].rootNodeId;
+    }
+
+    if (!lookingAtTreeId && treeId) {
+      lookingAtTreeId = treeId;
+    }
+
+    if (lookingAtTreeId && lookingAtId) {
+      let currentNode: Record<string, any> | null = null;
+      for (const treeNode of this.state.treeMap[lookingAtTreeId].nodes) {
+        if (treeNode.id === lookingAtId) {
+          currentNode = treeNode;
+        }
+      }
+      
+      if (currentNode) {
+        if (currentNode.id === nodeId) {
+          return new Set([currentNode.id])
+        }
+        
+  
+        for (const child of currentNode.children) {
+          const subNodeIds = await this.getNodeIdsOnPathToNode(nodeId, child, await this.getTreeIdFromNodeId(nodeId));
+
+          if (subNodeIds.size > 0) {
+            // I must be part of the path too
+            resultNodes.add(currentNode.id)
+          }
+  
+          for (const nodeId in subNodeIds) {
+            resultNodes.add(nodeId)
+  
+          }
+        }
+      }
+    }
+
+    return resultNodes;
+
+  }
+
+  async validateSubtreeAddition(subtreeNodeId: string, nodeId: string) {
+    // Reject if subtreeNodeId is on the path to nodeId
+    const nodeIds = await this.getNodeIdsOnPathToNode(nodeId);
+
+    if (nodeIds.has(subtreeNodeId)) {
+      return false;
+    }
+
+    return true;
+
+  }
+
+  async onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -278,7 +351,9 @@ class TreeViewPage extends React.Component<{
         if (node.id === parentNodeId) {
           
           if (subtreeNodeId) {
-            treeData.nodes[idx]['children'].push(subtreeNodeId);
+            if (await this.validateSubtreeAddition(subtreeNodeId, node.id)) {
+              treeData.nodes[idx]['children'].push(subtreeNodeId);
+            }
           }
           else if (isAddAction) {
             treeData.nodes[idx]['children'].push(uuid);
