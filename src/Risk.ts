@@ -21,13 +21,13 @@ export class RiskyRisk {
         // For now, add empty attributes for the appropriate model.
         if (riskModel === 'b9ff54e0-37cf-41d4-80ea-f3a9b1e3af74') {
             // Attacker likelihood
-            return this.computeAttackerLikelihood(nodeId);
+            return this.computeAttackerLikelihood(nodeId, [nodeId]);
         } else if (riskModel === 'f1644cb9-b2a5-4abb-813f-98d0277e42f2') {
             // Risk of Attack
-            return this.computeAttackRisk(nodeId);
+            return this.computeAttackRisk(nodeId, [nodeId]);
         } else if (riskModel === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
             // EVITA
-            return this.computeEVITARisk(nodeId);
+            return this.computeEVITARisk(nodeId, [nodeId]);
         }
     }
 
@@ -83,7 +83,7 @@ export class RiskyRisk {
         return evitaTable[severity - 1][combinedAttackProbability - 1];
     }
 
-    computeEVITARisk(nodeId: string) {
+    computeEVITARisk(nodeId: string, seenNodeIds: string[]) {
         const node = this.getNode(nodeId);
 
         // Severity
@@ -105,7 +105,7 @@ export class RiskyRisk {
         let riskPrivacy = null;
         let riskSafety = null;
 
-        if (!this.isNodeComputable(nodeId)) {
+        if (!this.isNodeComputable(nodeId, seenNodeIds)) {
             return null;
         }
 
@@ -199,13 +199,13 @@ export class RiskyRisk {
         }
     }
 
-    computeAttackRisk(nodeId: string) {
+    computeAttackRisk(nodeId: string, seenNodeIds: string[]) {
         const node = this.getNode(nodeId);
         if (this.computeAttackerLikelihood(nodeId) !== null) {
             const likelihood = this.computeAttackerLikelihood(nodeId).computed.likelihoodOfSuccess;
             let impact = null;
     
-            if (!this.isNodeComputable(nodeId)) {
+            if (!this.isNodeComputable(nodeId, seenNodeIds)) {
                 return null;
             }
     
@@ -230,18 +230,22 @@ export class RiskyRisk {
         return null;
     }
 
-    isNodeComputable(nodeId: string) {
+    isNodeComputable(nodeId: string, seenNodeIds: string[]) {
+        if (seenNodeIds.includes(nodeId)) {
+            return false;
+        }
+
         const node = this.getNode(nodeId);
 
         return node && (!node.hasOwnProperty('conditionResolved') || node['conditionAttribute'] === "" || node.conditionResolved == true);
     }
 
-    computeAttackerLikelihood(nodeId: string) {
+    computeAttackerLikelihood(nodeId: string, seenNodeIds: string[]) {
         console.log("Computing risk for " + nodeId)
         const node = this.getNode(nodeId);
         let result = null;
 
-        if (!this.isNodeComputable(nodeId)) {
+        if (!this.isNodeComputable(nodeId, seenNodeIds)) {
             return null;
         }
 
