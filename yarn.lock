@@ -3114,9 +3114,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@textea/json-viewer@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "@textea/json-viewer@npm:3.3.1"
+"@textea/json-viewer@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "@textea/json-viewer@npm:3.3.2"
   dependencies:
     clsx: ^2.0.0
     copy-to-clipboard: ^3.3.3
@@ -3127,7 +3127,7 @@ __metadata:
     "@mui/material": ^5
     react: ^17 || ^18
     react-dom: ^17 || ^18
-  checksum: f9e07bfe88ec237e1613120f4c7b2e3aea534e77fefa6ff323c8cf27b57b19f4a8a46304de4000266fbbc3ac3d664661235de9f3eeaf8ca50acea6a2b9cdde76
+  checksum: a80b4b62288609cf0f2615b6c5d4f83335af47dbeadf5eaf00a174036956e94c18fdcc57fc1488363a1946cae4996c4098ca3d83619d2dfa923c6402540a577a
   languageName: node
   linkType: hard
 
@@ -14083,7 +14083,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.4.1
     "@testing-library/react": ^14.1.2
     "@testing-library/user-event": ^14.5.2
-    "@textea/json-viewer": ^3.3.1
+    "@textea/json-viewer": ^3.3.2
     "@types/jest": ^29.5.12
     "@types/node": ^20.11.10
     "@types/react": ^18.2.53
