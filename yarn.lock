@@ -13613,10 +13613,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-retry@npm:^4.2.4":
-  version: 4.2.4
-  resolution: "ts-retry@npm:4.2.4"
-  checksum: 7af6a9527ad52aaa48980c528e6f9f66dd58b6f2ac989c4b8d2653de96da28fd1c4f82290b0f17e04a2ab0385f77f3d571064dddafc78a7a107de1c821ad2d11
+"ts-retry@npm:^4.2.5":
+  version: 4.2.5
+  resolution: "ts-retry@npm:4.2.5"
+  checksum: 24893fd1a8d96f70a063d3afb2049185ba5ab11b864831ccdc40faf7b468bbd4a7b5ad05c564f42e44aa2988aef89350204902a5c29e2f0ac993556919d5488a
   languageName: node
   linkType: hard
 
@@ -14094,7 +14094,7 @@ __metadata:
     react-dom: ^18.0.0
     react-router-dom: ^6.22.0
     react-scripts: ^5.0.1
-    ts-retry: ^4.2.4
+    ts-retry: ^4.2.5
     typescript: ^4.9.5
     vis-data: ^7.1.9
     vis-network: ^9.1.9
