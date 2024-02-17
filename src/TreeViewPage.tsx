@@ -360,6 +360,7 @@ class TreeViewPage extends React.Component<{
           } else if (node.id !== treeData.rootNodeId) {
             // Delete
             if (treeData.nodes[idx]['children'].length === 0) {
+              console.log("Delete")
               nodeToDelete = idx;
             }
           }
@@ -374,9 +375,9 @@ class TreeViewPage extends React.Component<{
         }
   
         treeData.nodes.splice(nodeToDelete, 1);
-      } else if (!isAddAction) {
+      } else if (!isAddAction && nodeToDelete !== null) {
         // Right this second you can only have one copy of a subtree so simply find all the nodes that reference the subtree:
-
+        console.log("Parent: " + parentNodeId)
         for (const [idx, node] of treeData.nodes.entries()) {
           if (node.children.includes(parentNodeId)) {
             treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
