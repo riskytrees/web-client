@@ -342,6 +342,10 @@ class NodePane extends React.Component<{
 
     if (newAttributeNameField && newAttributeValueField) {
       this.handleAttributeChange({ target: { id: newAttributeNameField.value, value: newAttributeValueField.value } });
+      this.setState({
+        addAttributeName: '',
+        addAttributeValue: ''
+      })
     }
   }
 
