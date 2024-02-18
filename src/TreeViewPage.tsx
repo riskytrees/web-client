@@ -24,6 +24,7 @@ import { RiskyApi } from './api';
 import Item from '@mui/material/Grid';
 import AnalysisPane from './AnalysisPane';
 import LogoMark from './img/logomark.svg';
+import { saveAs } from 'file-saver';
 
 class TreeViewPage extends React.Component<{
 
@@ -61,6 +62,7 @@ class TreeViewPage extends React.Component<{
     this.handleUndo = this.handleUndo.bind(this);
     this.loadTree = this.loadTree.bind(this);
     this.handleZoomChange = this.handleZoomChange.bind(this);
+    this.exportTree = this.exportTree.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
   }
@@ -71,6 +73,16 @@ class TreeViewPage extends React.Component<{
     this.getCurrentModel();
 
     setInterval(this.loadTree, 10000)
+  }
+
+  exportTree() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const treeId = urlParams.get('id');
+
+    let blob = new Blob([JSON.stringify(this.state.treeMap[treeId])], { type: "text/json" });
+
+    saveAs(blob, this.getTreeName() + ".json")
   }
 
   async getCurrentModel() {
@@ -591,8 +603,8 @@ class TreeViewPage extends React.Component<{
                     </ListItem>
 
                     <ListItem>
-                      <ListItemButton disabled={true}>
-                        <ListItemText primary="Export Text Tree" />
+                      <ListItemButton>
+                        <ListItemText primary="Export Text Tree" onClick={this.exportTree} />
                       </ListItemButton>
                     </ListItem>
 
