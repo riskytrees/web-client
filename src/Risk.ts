@@ -236,8 +236,12 @@ export class RiskyRisk {
         }
 
         const node = this.getNode(nodeId);
-
-        return node && (!node.hasOwnProperty('conditionResolved') || node['conditionAttribute'] === "" || node.conditionResolved == true);
+        let nodeType = '';
+        if (node && node.modelAttributes['node_type']) {
+            nodeType = node.modelAttributes['node_type']['value_string'];
+        }
+    
+        return node && (!node.hasOwnProperty('conditionResolved') || node['conditionAttribute'] === "" || node.conditionResolved == true || nodeType !== 'condition');
     }
 
     computeAttackerLikelihood(nodeId: string, seenNodeIds: string[]) {
