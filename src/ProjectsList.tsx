@@ -18,8 +18,9 @@ class ProjectsList extends React.Component<{
   }> {
   constructor(props) {
     super(props);
-    this.state = { projects: [] };
+    this.state = { projects: [], treeCountMap: {} };
     this.loadProjects();
+
   }
 
   async loadProjects() {
@@ -28,11 +29,29 @@ class ProjectsList extends React.Component<{
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {});
 
     if (data['ok'] === true && data['result']['projects']) {
+      // We need counts of the trees in each project
+      const treeCountMap = {};
+      for (const project of data['result']['projects']) {
+        const numTrees = await this.getNumTreesInProject(project.projectId );
+        treeCountMap[project.projectId] = numTrees;
+      }
+
       this.setState({
-        projects: data['result']['projects']
+        projects: data['result']['projects'],
+        treeCountMap: treeCountMap
       })
 
     }
+  }
+
+  async getNumTreesInProject(projectId): Promise<number | null> {
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + '/trees', {});
+
+    if (data['ok'] === true && data['result']['trees']) {
+      return data['result']['trees'].length;
+    }
+
+    return null;
   }
 
   render() {
@@ -41,6 +60,8 @@ class ProjectsList extends React.Component<{
     const rows: JSX.Element[] = [];
 
     for (const project of projects) {
+      
+
       if ((!this.props.org && !project.orgId) || this.props.org === project.orgId) {
         const path = "/projects?id=" + project.projectId;
         rows.push(
@@ -56,7 +77,7 @@ class ProjectsList extends React.Component<{
               <CardContent><Stack direction="row" alignItems="center" gap={1}>
                 <Typography variant="h1" display="inline">
                   {project.name} •
-                </Typography> <Typography variant="body1" display="inline">[#]Trees</Typography></Stack>
+                </Typography> <Typography variant="body1" display="inline">{ this.state['treeCountMap'][project.projectId] } Tree { this.state['treeCountMap'][project.projectId] > 1 ? 's' : '' }</Typography></Stack>
 
                 <br></br><Stack direction="row" alignItems="bottom" gap={1}>
                   <PersonIcon fontSize="small"></PersonIcon>
