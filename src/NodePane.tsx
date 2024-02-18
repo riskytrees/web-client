@@ -293,19 +293,6 @@ class NodePane extends React.Component<{
     return attributes;
   }
 
-  shouldShowAddAttributeButton() {
-    let nameField = document.getElementById('newAttributeNameField') as HTMLInputElement;
-    let valueField = document.getElementById('newAttributeValueField') as HTMLInputElement;
-
-    let disableButton = true;
-
-    if (nameField && valueField && nameField.value !== '' && valueField.value !== '') {
-      disableButton = false;
-    }
-
-    return disableButton;
-  }
-
   renderAddDeleteFields() {
     return (
       <>
