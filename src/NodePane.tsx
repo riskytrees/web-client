@@ -33,10 +33,12 @@ class NodePane extends React.Component<{
   conditionAttribute: string;
   showSubtreeDialog: boolean;
   selectedTreeId: string | null;
+  addAttributeName: string;
+  addAttributeValue: string;
 }> {
   constructor(props) {
     super(props);
-    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false, selectedTreeId: null };
+    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false, selectedTreeId: null, addAttributeName: '', addAttributeValue: '' };
 
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
@@ -291,23 +293,44 @@ class NodePane extends React.Component<{
     return attributes;
   }
 
+  shouldShowAddAttributeButton() {
+    let nameField = document.getElementById('newAttributeNameField') as HTMLInputElement;
+    let valueField = document.getElementById('newAttributeValueField') as HTMLInputElement;
+
+    let disableButton = true;
+
+    if (nameField && valueField && nameField.value !== '' && valueField.value !== '') {
+      disableButton = false;
+    }
+
+    return disableButton;
+  }
+
   renderAddDeleteFields() {
     return (
       <>
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <TextField label="Name" variant="outlined" size="small" id='newAttributeNameField' />
+          <TextField label="Name" variant="outlined" size="small" id='newAttributeNameField' value={this.state.addAttributeName} onChange={(event) => {
+            this.setState({
+              addAttributeName: event.target.value
+            })
+          }} />
         </Grid>
         <Grid item xs={6}>
-          <TextField label="Value" variant="outlined" size="small" id='newAttributeValueField' />
+          <TextField label="Value" variant="outlined" size="small" id='newAttributeValueField' value={this.state.addAttributeValue} onChange={(event) => {
+            this.setState({
+              addAttributeValue: event.target.value
+            })
+          }} />
         </Grid>
         
         <Grid item xs={12}>
-          <Button fullWidth={true} variant="addButton" startIcon={<AddIcon />} onClick={this.createAttribute}>Add Attribute</Button>
+          <Button disabled={this.state.addAttributeName === '' || this.state.addAttributeValue === ''} fullWidth={true} variant="addButton" startIcon={<AddIcon />} onClick={this.createAttribute}>Add Attribute</Button>
         </Grid>
         <Grid item xs={2}> </Grid>
 
-      </Grid>      
+      </Grid>
 
       </>
     )
