@@ -2532,10 +2532,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/core-downloads-tracker@npm:^5.15.9":
-  version: 5.15.9
-  resolution: "@mui/core-downloads-tracker@npm:5.15.9"
-  checksum: f0f7af8e8f6f50df29a4e41ecb59c75869f760f22df0dc534476094089c74edcd7eacb4d17e636e0b7dd06ea1f3bb6564b21dbe072f89d1b9d87373760d69e2b
+"@mui/core-downloads-tracker@npm:^5.15.10":
+  version: 5.15.10
+  resolution: "@mui/core-downloads-tracker@npm:5.15.10"
+  checksum: aeb16b31f60c08cc03585fedadceadd54aa48dda394fb945ab885f884c1b1692efb72309465641b6ca2367bd53d5fdce15f189d4691f42b59206622ffb2d6f0f
   languageName: node
   linkType: hard
 
@@ -2555,13 +2555,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^5.15.9":
-  version: 5.15.9
-  resolution: "@mui/material@npm:5.15.9"
+"@mui/material@npm:^5.15.10":
+  version: 5.15.10
+  resolution: "@mui/material@npm:5.15.10"
   dependencies:
     "@babel/runtime": ^7.23.9
     "@mui/base": 5.0.0-beta.36
-    "@mui/core-downloads-tracker": ^5.15.9
+    "@mui/core-downloads-tracker": ^5.15.10
     "@mui/system": ^5.15.9
     "@mui/types": ^7.2.13
     "@mui/utils": ^5.15.9
@@ -2584,7 +2584,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: fd1a59ca8e2259bf1ddcc68faec6fef294cc07ef6f2d4059e2e467db114c679b82389afebdef7fcdb319bb6708ff0db2356ec88bdeb1d6e60d9edc5015e63cf6
+  checksum: 2c453877d8784ba6330c236888cac86f793ee914d27ccac426ec241c448b836a190017cb6402e9931d7a9d566f02ea2f317a14332e70c87ba136436d45ae18f2
   languageName: node
   linkType: hard
 
@@ -14084,7 +14084,7 @@ __metadata:
     "@emotion/styled": ^11.11.0
     "@jy95/material-ui-image": ^4.0.9
     "@mui/icons-material": ^5.15.10
-    "@mui/material": ^5.15.9
+    "@mui/material": ^5.15.10
     "@testing-library/jest-dom": ^6.4.1
     "@testing-library/react": ^14.2.1
     "@testing-library/user-event": ^14.5.2
