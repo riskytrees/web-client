@@ -13,7 +13,7 @@
     "@textea/json-viewer": "^3.3.2",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.10",
-    "@types/react": "^18.2.53",
+    "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.18",
     "file-saver": "^2.0.5",
     "install": "^0.13.0",

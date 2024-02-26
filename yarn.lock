@@ -3484,14 +3484,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.2.53":
-  version: 18.2.53
-  resolution: "@types/react@npm:18.2.53"
+"@types/react@npm:^18.2.58":
+  version: 18.2.58
+  resolution: "@types/react@npm:18.2.58"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 0dda3a7868c52a5c84287dbd12280c16cee7233571c24c00b14d2e9e3d30596ea96ea9f7808302a8d8bff81f9b49a8435d1814d2e63142376a1084b7e0d84f6a
+  checksum: 42551e30c8a54161a11b2ecd11406782ddba4472a4471d45034c551295263d56f06234f283526d0c0420352ce9ce9675b2a6c65db7a287d9613643d3ceaaf1f0
   languageName: node
   linkType: hard
 
@@ -14092,7 +14092,7 @@ __metadata:
     "@types/file-saver": ^2
     "@types/jest": ^29.5.12
     "@types/node": ^20.11.10
-    "@types/react": ^18.2.53
+    "@types/react": ^18.2.58
     "@types/react-dom": ^18.2.18
     cypress: 13.6.4
     file-saver: ^2.0.5
