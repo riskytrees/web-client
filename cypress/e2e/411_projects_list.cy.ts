@@ -22,7 +22,7 @@ describe('Adding projects', () => {
       cy.get('#primaryButton').click()
 
       cy.get('#treeNameField').type("Other Tree")
-      cy.get('.riskyModal > .MuiStack-root > .MuiButtonBase-root').click()
+      cy.get('.riskyModal > .MuiStack-root > .MuiButtonBase-root').first().click()
 
       cy.reload()
       cy.get('body').should('contain', 'Other Tree')
