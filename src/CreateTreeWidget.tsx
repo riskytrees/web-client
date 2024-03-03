@@ -78,7 +78,61 @@ class CreateTreeWidget extends React.Component<{
   }
 
   async createTreeFromJson(content: Record<string, any>) {
-    console.log(content)
+    const treeNameField = document.getElementById("treeNameField");
+    const title = (treeNameField as HTMLInputElement).value;
+    const projectId = this.props['projectId'];
+
+
+    let treeCreateResponse = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + '/trees', {
+      method: 'POST',
+      body: JSON.stringify({
+        title
+      })
+    })
+
+    // Update node ids
+    const replacementMap = {}
+
+    const originalRootId = content['rootNodeId'];
+    replacementMap[originalRootId] = uuidv4();
+
+    content['rootNodeId'] = replacementMap[originalRootId];
+    content['title'] = title;
+
+    // Find root node
+    await content['nodes'].forEach((node, idx) => {
+      console.log(node)
+      if (node.id === originalRootId) {
+        content['nodes'][idx]['id'] = replacementMap[originalRootId];
+      }
+    });
+
+    // Update children
+    await content['nodes'].forEach((node, idx) => {
+      if (replacementMap[node.id] === null) {
+        const newId = uuidv4();
+        replacementMap[idx] = newId;
+        content['nodes'][idx]['id'] = newId;
+      }
+    });
+
+    // Now update pointers
+    await content['nodes'].forEach((node, idx) => {
+      content['nodes'][idx]['children'].forEach((child, childIdx) => {
+        if (replacementMap[child] !== null) {
+          content['nodes'][idx]['children'][childIdx] = replacementMap[child];
+        }
+      })
+    });
+
+    let addNodeResponse = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + '/trees/' + treeCreateResponse['result']['id'], {
+      method: 'PUT',
+      body: JSON.stringify(content)
+    })
+
+    window.location.reload();
+
+
   }
 
   async importTree() {
