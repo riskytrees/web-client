@@ -89,6 +89,9 @@ it('Lets you compute attacker likelihood with conditional logic', () => {
             modelAttributes: {
                 'likelihoodOfSuccess': {
                     'value_float': 0.5
+                },
+                'node_type': {
+                    'value_string': 'condition'
                 }
             },
             conditionResolved: false
@@ -186,6 +189,9 @@ it('Lets you compute attack risk with conditions', () => {
             modelAttributes: {
                 'likelihoodOfSuccess': {
                     'value_float': 0.5
+                },
+                'node_type': {
+                    'value_string': 'condition'
                 }
             }, conditionResolved: false
         }]
@@ -326,6 +332,9 @@ it('Lets you compute evita risk with conditions', () => {
                     'value_int': 20
                 }, 'equipmentRequired': {
                     'value_int': 20
+                },
+                'node_type': {
+                    'value_string': 'condition'
                 }
             },
             conditionResolved: false

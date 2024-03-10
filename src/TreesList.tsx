@@ -20,23 +20,50 @@ class TreesList extends React.Component<{
   projectName: string;
 }, {
   trees: any[];
+  subtrees: any[];
 }> {
   constructor(props) {
     super(props);
-    this.state = { trees: [] };
+    this.state = { trees: [], subtrees: [] };
+
+  }
+
+  componentDidMount() {
+
     this.loadTrees();
   }
 
   async loadTrees() {
-    this.state = { trees: [] };
-
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/trees", {});
 
+
     if (data['result']['trees']) {
+      let newSubtrees: number[] = [];
+      let newTrees: Record<string, any>[] = [];
+  
+      for (const tree of data['result']['trees']) {
+        const subtrees = await this.getSubTrees(tree.id)
+
+        newTrees.push(tree)
+        newSubtrees.push(subtrees)
+      }
+      
+
       this.setState({
-        trees: this.state.trees.concat(data['result']['trees'])
+        trees: newTrees,
+        subtrees: newSubtrees
       })
     }
+  }
+
+  async getSubTrees(treeId) {
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/trees/" + treeId + '/dag/down', {});
+
+    if (data['result']) {
+      return Object.keys(data['result']).length
+    }
+
+    return 0;
   }
 
   handleBackClick() {
@@ -47,9 +74,12 @@ class TreesList extends React.Component<{
   render() {
 
     const trees = this.state.trees;
+    const subtrees = this.state.subtrees;
     const rows: JSX.Element[] = [];
 
-    for (const tree of trees) {
+    for (let idx = 0; idx < trees.length; idx++) {
+      let tree = trees[idx];
+      let subtree = subtrees[idx];
       const path = "../tree?id=" + tree.id + "&projectId=" + this.props.projectId;
 
       rows.push(
@@ -65,7 +95,7 @@ class TreesList extends React.Component<{
             <CardContent><Stack direction="row" alignItems="center" gap={1}>
               <Typography variant="h1" display="inline">
                 {tree.title} •
-              </Typography> <Typography variant="body1" display="inline">[#]subtrees</Typography></Stack>
+              </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
 
               <br></br><Stack direction="row" alignItems="bottom" gap={1}>
                 <PersonIcon fontSize="small"></PersonIcon>

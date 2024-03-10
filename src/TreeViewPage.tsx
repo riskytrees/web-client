@@ -25,6 +25,7 @@ import Item from '@mui/material/Grid';
 import AnalysisPane from './AnalysisPane';
 import LogoMark from './img/logomark.svg';
 import AccountTree from '@mui/icons-material/AccountTree';
+import { saveAs } from 'file-saver';
 
 class TreeViewPage extends React.Component<{
 
@@ -64,6 +65,7 @@ class TreeViewPage extends React.Component<{
     this.handleUndo = this.handleUndo.bind(this);
     this.loadTree = this.loadTree.bind(this);
     this.handleZoomChange = this.handleZoomChange.bind(this);
+    this.exportTree = this.exportTree.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
   }
@@ -74,6 +76,16 @@ class TreeViewPage extends React.Component<{
     this.getCurrentModel();
 
     setInterval(this.loadTree, 10000)
+  }
+
+  exportTree() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const treeId = urlParams.get('id');
+
+    let blob = new Blob([JSON.stringify(this.state.treeMap[treeId])], { type: "text/json" });
+
+    saveAs(blob, this.getTreeName() + ".json")
   }
 
   async getCurrentModel() {
@@ -250,7 +262,80 @@ class TreeViewPage extends React.Component<{
     this.localTreeNodeUpdate(treeIdToUpdate, data)
   }
 
-  onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
+  async getTreeIdFromNodeId(nodeId: string) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/" + nodeId, {});
+    return data['result']['treeId'];
+  }
+
+  async getNodeIdsOnPathToNode(nodeId: string, lookingAtId?: string, lookingAtTreeId?: string) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+    const treeId = urlParams.get('id');
+
+    let resultNodes = new Set();
+
+    if (!lookingAtId && treeId) {
+      lookingAtId = this.state.treeMap[treeId].rootNodeId;
+    }
+
+    if (!lookingAtTreeId && treeId) {
+      lookingAtTreeId = treeId;
+    }
+
+    if (lookingAtTreeId && lookingAtId) {
+      let currentNode: Record<string, any> | null = null;
+      for (const treeNode of this.state.treeMap[lookingAtTreeId].nodes) {
+        if (treeNode.id === lookingAtId) {
+          currentNode = treeNode;
+        }
+      }
+      
+      if (currentNode) {
+        if (currentNode.id === nodeId) {
+          return new Set([currentNode.id])
+        }
+        
+  
+        for (const child of currentNode.children) {
+          const subNodeIds = await this.getNodeIdsOnPathToNode(nodeId, child, await this.getTreeIdFromNodeId(nodeId));
+
+          if (subNodeIds.size > 0) {
+            // I must be part of the path too
+            resultNodes.add(currentNode.id)
+          }
+  
+          for (const nodeId in subNodeIds) {
+            resultNodes.add(nodeId)
+  
+          }
+        }
+      }
+    }
+
+    return resultNodes;
+
+  }
+
+  async validateSubtreeAddition(subtreeNodeId: string, nodeId: string) {
+    // Reject if subtreeNodeId is on the path to nodeId
+    const nodeIds = await this.getNodeIdsOnPathToNode(nodeId);
+
+    if (nodeIds.has(subtreeNodeId)) {
+      return false;
+    }
+
+    return true;
+
+  }
+
+  async onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -281,13 +366,16 @@ class TreeViewPage extends React.Component<{
         if (node.id === parentNodeId) {
           
           if (subtreeNodeId) {
-            treeData.nodes[idx]['children'].push(subtreeNodeId);
+            if (await this.validateSubtreeAddition(subtreeNodeId, node.id)) {
+              treeData.nodes[idx]['children'].push(subtreeNodeId);
+            }
           }
           else if (isAddAction) {
             treeData.nodes[idx]['children'].push(uuid);
           } else if (node.id !== treeData.rootNodeId) {
             // Delete
             if (treeData.nodes[idx]['children'].length === 0) {
+              console.log("Delete")
               nodeToDelete = idx;
             }
           }
@@ -302,9 +390,9 @@ class TreeViewPage extends React.Component<{
         }
   
         treeData.nodes.splice(nodeToDelete, 1);
-      } else if (!isAddAction) {
+      } else if (!isAddAction && nodeToDelete !== null) {
         // Right this second you can only have one copy of a subtree so simply find all the nodes that reference the subtree:
-
+        console.log("Parent: " + parentNodeId)
         for (const [idx, node] of treeData.nodes.entries()) {
           if (node.children.includes(parentNodeId)) {
             treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
@@ -539,8 +627,8 @@ class TreeViewPage extends React.Component<{
                     </ListItem>
 
                     <ListItem>
-                      <ListItemButton disabled={true}>
-                        <ListItemText primary="Export Text Tree" />
+                      <ListItemButton>
+                        <ListItemText primary="Export Text Tree" onClick={this.exportTree} />
                       </ListItemButton>
                     </ListItem>
 
@@ -653,7 +741,7 @@ class TreeViewPage extends React.Component<{
 
         {rightPane}
 
-        {<TreeViewer onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} />}
+        {<TreeViewer onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} />}
 
       </>
     )

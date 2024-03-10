@@ -12,6 +12,7 @@ class TreeViewer extends React.Component<{
   zoomLevel: number,
   onNodeClicked: Function;
   onZoomChanged: Function;
+  onAddOrDeleteNode: Function;
 }, {
   treeMap: Record<string, TreeData>,
   network: Network | null
@@ -424,6 +425,22 @@ class TreeViewer extends React.Component<{
                   }
 
                 }
+              } else if (event.code === "KeyN") {
+                if (this.state.currentNode) {
+                  const queryString = window.location.search;
+                  const urlParams = new URLSearchParams(queryString);
+                  const treeId = urlParams.get('id');
+                  this.props.onAddOrDeleteNode(treeId, this.state.currentNode['id'], true);
+  
+                }
+              } else if (event.code === "Backspace") {
+                if (this.state.currentNode) {
+                  const queryString = window.location.search;
+                  const urlParams = new URLSearchParams(queryString);
+                  const treeId = urlParams.get('id');
+                  this.props.onAddOrDeleteNode(treeId, this.state.currentNode['id'], false);
+  
+                }
               }
 
             })
@@ -463,6 +480,9 @@ class TreeViewer extends React.Component<{
     let nodeCopy: Record<string, unknown> | null = null;
 
     if (node) {
+      let network = this.state.network;
+      network?.selectNodes([node['id']])  
+
       // Now remove our title hack
       nodeCopy = { ...node } as Record<string, unknown>
       nodeCopy.label = node.label.split("---")[1]
@@ -471,6 +491,7 @@ class TreeViewer extends React.Component<{
     if (this.props.onNodeClicked) {
       this.props.onNodeClicked(nodeCopy);
     }
+
 
     this.setState({
       currentNode: nodeCopy
