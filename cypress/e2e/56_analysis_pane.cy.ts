@@ -12,6 +12,7 @@ describe('Analysis pane', () => {
       cy.intercept('http://localhost:8000/projects/*/trees/*').as('getProject')
       cy.intercept('http://localhost:8000/projects/*/trees/*/dag/down').as('dagDown')
 
+      cy.get('.MuiButton-subtreeButton').click()
       cy.contains("Tree Viewer", { timeout: 80000 }).click()
       cy.wait('@getProject', { timeout: 20000 })
       cy.wait('@dagDown', { timeout: 20000 })

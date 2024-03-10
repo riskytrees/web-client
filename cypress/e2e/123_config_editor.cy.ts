@@ -15,6 +15,7 @@ describe('Config Editor', () => {
     cy.intercept('GET', 'http://localhost:8000/projects/*/configs').as('getConfig')
     cy.intercept('PUT', 'http://localhost:8000/projects/*/config').as('putConfig')
 
+    cy.get('.MuiButton-subtreeButton').click()
     cy.contains("Tree Viewer", { timeout: 80000 }).click()
     cy.wait('@getProject', { timeout: 20000 })
 
