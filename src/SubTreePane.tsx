@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import TreeData from './interfaces/TreeData';
 import { RiskyApi } from './api';
+import { red } from '@mui/material/colors';
 
 
 class SubTreePane extends React.Component<{
@@ -106,7 +107,6 @@ class SubTreePane extends React.Component<{
 
     return (
       <>
-      <Button variant="subtreeButton"><AccountTree sx={{fontSize:20}}></AccountTree></Button>
         <List
             sx={{ width: '100%', maxWidth: 360 }}
             aria-labelledby="nested-list-subheader"

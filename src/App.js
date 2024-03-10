@@ -69,7 +69,7 @@ const baseComponents = {
   MuiModal: {
     styleOverrides: {
       root: {
-
+        
 
       }
     }
@@ -185,13 +185,14 @@ const baseComponents = {
           backgroundColor: RiskyColors.uiColors.primaryCTA,
           border: 'none',
           justifyContent: 'flex-center',
+        },
           '&:hover': {
             backgroundColor: RiskyColors.uiColors.primaryCTAhover,
           },
           '&:disabled': {
             backgroundColor: RiskyColors.uiColors.primaryCTAdisabled,
           }
-        },
+      
       },
       {
         props: { variant: 'inlineNavButton' },
@@ -223,16 +224,37 @@ const baseComponents = {
         props: { variant: 'subtreeButton' },
         style: {
           backgroundColor: RiskyColors.uiColors.buttonSecondary,
+          alignment:'left',
+          position:'relative',
+          margin:'25px 0px 0px 15px',
           border: 'none',
-          borderRadius:'100px',
+          borderRadius:'100%',
           justifyContent: 'flex-center',
-          padding: '20px',
+          padding: '16px',
           height: 'auto',
-          width:'auto',
+          width:'40px',
           '&:hover': {
             backgroundColor: RiskyColors.uiColors.buttonSecondaryPressed,
           },
-
+        },
+      },
+      {
+        props: { variant: 'subtreeButtonActive' },
+        style: {
+        
+          backgroundColor: RiskyColors.uiColors.subtreeIcon,
+          alignment:'left',
+          position:'relative',
+          margin:'25px 0px 0px 15px',
+          border: 'none',
+          borderRadius:'100%',
+          justifyContent: 'flex-center',
+          padding: '16px',
+          height: 'auto',
+          width:'40px',
+          '&:hover': {
+            backgroundColor: RiskyColors.uiColors.subtreeIconPressed,
+          },
         },
       },
     ]
@@ -336,16 +358,18 @@ const baseComponents = {
         props: { variant: 'leftriskypane' },
         style: {
           backgroundColor: RiskyColors.uiColors.paneBackground,
-          minHeight: 'calc(100vh - 90px)',
+          minHeight: 'calc(80vh - 90px)',
           
           zIndex: '1',
-          marginTop: '60px',
+          marginTop: '150px',
+          marginLeft:'15px',
           position: 'fixed',
-          padding: '15px',
+          padding: '10px',
           width: Variables.widthsList.paneWidth,
           overflow: 'auto',
           display: 'inline-block',
           overflowY: 'hidden',
+          borderRadius:'24px',
         },
       },
       {

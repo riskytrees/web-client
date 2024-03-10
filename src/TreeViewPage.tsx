@@ -24,6 +24,7 @@ import { RiskyApi } from './api';
 import Item from '@mui/material/Grid';
 import AnalysisPane from './AnalysisPane';
 import LogoMark from './img/logomark.svg';
+import AccountTree from '@mui/icons-material/AccountTree';
 
 class TreeViewPage extends React.Component<{
 
@@ -34,6 +35,7 @@ class TreeViewPage extends React.Component<{
     label: string;
   } | null;
   modalOpen: boolean;
+  paneOpen: boolean;
   actionModalOpen: boolean;
   models: any[];
   selectedModel: string;
@@ -44,13 +46,14 @@ class TreeViewPage extends React.Component<{
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0 };
+    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen:false, };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
     this.localTreeNodeUpdate = this.localTreeNodeUpdate.bind(this);
     this.updateTree = this.updateTree.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
+    this.handleSubtreeClicked = this.handleSubtreeClicked.bind(this);
     this.handleActionPanelOpen = this.handleActionPanelOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleActionPanelClose = this.handleActionPanelClose.bind(this);
@@ -433,6 +436,18 @@ class TreeViewPage extends React.Component<{
     }
   }
 
+  handleSubtreeClicked(event) {
+    if (this.state.paneOpen) {
+      this.setState({
+        paneOpen: false
+      });
+    } else {
+      this.setState({
+        paneOpen: true
+      });
+    }
+  }
+
   render() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -483,6 +498,15 @@ class TreeViewPage extends React.Component<{
     
       customZoomEntry = <MenuItem value={this.state.zoomLevel}>{Number(this.state.zoomLevel.toFixed(2)) * 100}%</MenuItem>
     }
+
+    let leftpane = null;
+    if (this.state.paneOpen){
+      leftpane = 
+      <Paper variant="leftriskypane"> 
+      <SubTreePane rootTreeId={treeId} projectId={projectId} />
+    </Paper>
+    }
+    
 
     return (
       <>
@@ -623,10 +647,10 @@ class TreeViewPage extends React.Component<{
             </Box>
 
           </Modal>
+          <Button variant={this.state.paneOpen ? "subtreeButtonActive" : "subtreeButton"} onClick={this.handleSubtreeClicked}><AccountTree sx={{fontSize:24,}}></AccountTree></Button>
         </AppBar>
-        <Paper variant="leftriskypane">
-          <SubTreePane rootTreeId={treeId} projectId={projectId} />
-        </Paper>
+       {leftpane}
+
         {rightPane}
 
         {<TreeViewer onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} />}
