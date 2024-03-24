@@ -10,7 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Divider, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
+import { Divider, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import NodePane from './NodePane';
@@ -26,6 +26,7 @@ import AnalysisPane from './AnalysisPane';
 import LogoMark from './img/logomark.svg';
 import AccountTree from '@mui/icons-material/AccountTree';
 import { saveAs } from 'file-saver';
+import { Share } from '@mui/icons-material';
 
 class TreeViewPage extends React.Component<{
 
@@ -695,6 +696,10 @@ class TreeViewPage extends React.Component<{
             </Grid>
             <Grid item xs={4}  marginTop="11.75px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
+              <IconButton onClick={this.handleShare} >
+                <Share></Share>
+              </IconButton>
+
               <FormControl size="small">
                   <Select
                     id="zoom-select"
