@@ -71,12 +71,14 @@ class TreeViewPage extends React.Component<{
     this.exportTree = this.exportTree.bind(this);
     this.handleShare = this.handleShare.bind(this);
     this.handleShareClose = this.handleShareClose.bind(this);
+    this.handlePublicityChange = this.handlePublicityChange.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
   }
 
   componentDidMount() {
     this.loadTree()
+    this.loadPublicity()
     this.getListOfModels();
     this.getCurrentModel();
 
@@ -114,6 +116,28 @@ class TreeViewPage extends React.Component<{
     this.setState({
       zoomLevel: desiredLevel
     })
+  }
+
+  async handlePublicityChange(event) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const treeId = urlParams.get('id');
+    const projectId = urlParams.get('projectId');
+
+
+    let newState = event.target.checked;
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeId + "/public", {
+      method: 'PUT',
+      body: JSON.stringify({
+        isPublic: newState
+      })
+    });
+
+    if (data.ok) {
+      await this.loadPublicity()
+    }
+
   }
 
   goBackToProjects() {
@@ -216,6 +240,23 @@ class TreeViewPage extends React.Component<{
         this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
       })
     }
+  }
+
+  async loadPublicity() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('projectId');
+    const treeId = urlParams.get('id');
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeId + '/public', {});
+
+    if (data.ok) {
+      this.setState({
+        isPublic: data['result']['isPublic']
+      })
+    }
+
   }
 
   // Called when any portion of the tree is updated and needs to be synced
@@ -766,7 +807,7 @@ class TreeViewPage extends React.Component<{
             <Box className="treeSelectCenter">
               <Stack>
               <FormGroup>
-                <FormControlLabel control={<Switch value={this.state.isPublic} />} label="Is Public" />
+                <FormControlLabel control={<Switch onChange={this.handlePublicityChange} checked={this.state.isPublic} />} label="Is Public" />
               </FormGroup>
 
               </Stack>
