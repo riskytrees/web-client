@@ -10,7 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Divider, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
+import { Divider, FormControlLabel, FormGroup, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, Switch, Typography } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import NodePane from './NodePane';
@@ -37,18 +37,20 @@ class TreeViewPage extends React.Component<{
     label: string;
   } | null;
   modalOpen: boolean;
+  shareModalOpen: boolean;
   paneOpen: boolean;
   actionModalOpen: boolean;
   models: any[];
   selectedModel: string;
   analysisModeEnabled: boolean;
   zoomLevel: number;
+  isPublic: boolean | null;
 }> {
   riskEngine: RiskyRisk;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, modalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen:false, };
+    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -67,6 +69,8 @@ class TreeViewPage extends React.Component<{
     this.loadTree = this.loadTree.bind(this);
     this.handleZoomChange = this.handleZoomChange.bind(this);
     this.exportTree = this.exportTree.bind(this);
+    this.handleShare = this.handleShare.bind(this);
+    this.handleShareClose = this.handleShareClose.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
   }
@@ -181,7 +185,7 @@ class TreeViewPage extends React.Component<{
 
       if (treeData.ok === true) {
         let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeData.result.treeId, {});
-  
+
         result[treeData.result.treeId] = data.result;
         result = { ...result, ...(await this.resolveImports(data.result, projectId)) };
       }
@@ -202,7 +206,7 @@ class TreeViewPage extends React.Component<{
     if (data.ok) {
       let treeMap = {};
       treeMap[treeId] = data.result;
-  
+
       // Recursively resolve tree imports
       const result = await this.resolveImports(data.result, projectId);
       treeMap = { ...treeMap, ...result };
@@ -297,13 +301,13 @@ class TreeViewPage extends React.Component<{
           currentNode = treeNode;
         }
       }
-      
+
       if (currentNode) {
         if (currentNode.id === nodeId) {
           return new Set([currentNode.id])
         }
-        
-  
+
+
         for (const child of currentNode.children) {
           const subNodeIds = await this.getNodeIdsOnPathToNode(nodeId, child, await this.getTreeIdFromNodeId(nodeId));
 
@@ -311,10 +315,10 @@ class TreeViewPage extends React.Component<{
             // I must be part of the path too
             resultNodes.add(currentNode.id)
           }
-  
+
           for (const nodeId in subNodeIds) {
             resultNodes.add(nodeId)
-  
+
           }
         }
       }
@@ -344,8 +348,8 @@ class TreeViewPage extends React.Component<{
     if (this.state.treeMap[treeIdToUpdate]) {
       const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
       let uuid = crypto.randomUUID();
-      
-     
+
+
       if (isAddAction && !subtreeNodeId && parentNodeId || isAddAction && treeData.nodes.length === 0) {
         treeData['nodes'].push({
           title: "New Node",
@@ -360,12 +364,12 @@ class TreeViewPage extends React.Component<{
           children: []
         });
       }
-  
+
       let nodeToDelete = null;
-  
+
       for (const [idx, node] of treeData.nodes.entries()) {
         if (node.id === parentNodeId) {
-          
+
           if (subtreeNodeId) {
             if (await this.validateSubtreeAddition(subtreeNodeId, node.id)) {
               treeData.nodes[idx]['children'].push(subtreeNodeId);
@@ -382,14 +386,14 @@ class TreeViewPage extends React.Component<{
           }
         }
       }
-  
+
       if (nodeToDelete !== null) {
         for (const [idx, node] of treeData.nodes.entries()) {
           if (node.children.includes(parentNodeId)) {
             treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
           }
         }
-  
+
         treeData.nodes.splice(nodeToDelete, 1);
       } else if (!isAddAction && nodeToDelete !== null) {
         // Right this second you can only have one copy of a subtree so simply find all the nodes that reference the subtree:
@@ -400,15 +404,15 @@ class TreeViewPage extends React.Component<{
           }
         }
       }
-  
+
       const treeMap = structuredClone(this.state.treeMap);
       treeMap[treeIdToUpdate] = treeData;
-  
+
       this.setState({
         treeMap: treeMap,
         selectedNode: this.state.selectedNode
       }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
-  
+
     } else {
     }
   }
@@ -434,8 +438,20 @@ class TreeViewPage extends React.Component<{
     this.setState({ modalOpen: true })
   }
 
+  handleShare() {
+    this.setState({
+      shareModalOpen: true
+    })
+  }
+
+  handleShareClose() {
+    this.setState({
+      shareModalOpen: false
+    })
+  }
+
   handleActionPanelOpen() {
-    this.setState({actionModalOpen: true})
+    this.setState({ actionModalOpen: true })
   }
 
   handleClose() {
@@ -554,20 +570,20 @@ class TreeViewPage extends React.Component<{
     let modelDropdown = null;
 
     if (this.state.treeMap) {
-      modelDropdown =                 <FormControl size="small">
-                <InputLabel id="node-type-dropdown-label">Model</InputLabel>
-                <Select
-                  labelId="model-dropdown-label"
-                  id="model-dropdown"
-                  value={this.state.selectedModel}
-                  label="Config"
-                  size="small"
-                  onChange={this.modelDropdownChanged}
-                >
-                  {modelDropdownItems}
+      modelDropdown = <FormControl size="small">
+        <InputLabel id="node-type-dropdown-label">Model</InputLabel>
+        <Select
+          labelId="model-dropdown-label"
+          id="model-dropdown"
+          value={this.state.selectedModel}
+          label="Config"
+          size="small"
+          onChange={this.modelDropdownChanged}
+        >
+          {modelDropdownItems}
 
-                </Select>
-              </FormControl>
+        </Select>
+      </FormControl>
     }
 
     let rightPane: JSX.Element = <NodePane selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />;
@@ -575,27 +591,27 @@ class TreeViewPage extends React.Component<{
     if (this.state.analysisModeEnabled) {
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-  
+
       const treeId = urlParams.get('id');
 
-      rightPane = <AnalysisPane  rootNodeId={this.state.treeMap[treeId].rootNodeId} riskEngine={this.riskEngine} selectedModel={this.state.selectedModel}></AnalysisPane>
+      rightPane = <AnalysisPane rootNodeId={this.state.treeMap[treeId].rootNodeId} riskEngine={this.riskEngine} selectedModel={this.state.selectedModel}></AnalysisPane>
     }
 
     let customZoomEntry = null;
-    
+
     if (![0.5, 0.75, 1.0, 2.0].includes(this.state.zoomLevel)) {
-    
+
       customZoomEntry = <MenuItem value={this.state.zoomLevel}>{Number(this.state.zoomLevel.toFixed(2)) * 100}%</MenuItem>
     }
 
     let leftpane = null;
-    if (this.state.paneOpen){
-      leftpane = 
-      <Paper variant="leftriskypane"> 
-      <SubTreePane rootTreeId={treeId} projectId={projectId} />
-    </Paper>
+    if (this.state.paneOpen) {
+      leftpane =
+        <Paper variant="leftriskypane">
+          <SubTreePane rootTreeId={treeId} projectId={projectId} />
+        </Paper>
     }
-    
+
 
     return (
       <>
@@ -620,69 +636,69 @@ class TreeViewPage extends React.Component<{
                   }}
                 >
                   <Stack>
-                  <List component="nav">
-                    <ListItem>
-                      <ListItemButton onClick={this.goBackToProjects}>
-                        <ListItemText primary="Back to Trees" />
-                      </ListItemButton>
-                    </ListItem>
+                    <List component="nav">
+                      <ListItem>
+                        <ListItemButton onClick={this.goBackToProjects}>
+                          <ListItemText primary="Back to Trees" />
+                        </ListItemButton>
+                      </ListItem>
 
-                    <ListItem>
-                      <ListItemButton>
-                        <ListItemText primary="Export Text Tree" onClick={this.exportTree} />
-                      </ListItemButton>
-                    </ListItem>
+                      <ListItem>
+                        <ListItemButton>
+                          <ListItemText primary="Export Text Tree" onClick={this.exportTree} />
+                        </ListItemButton>
+                      </ListItem>
 
-                    <ListItem>
-                      <ListItemButton disabled={true}>
-                        <ListItemText primary="Export Analysis" />
-                      </ListItemButton>
-                    </ListItem>
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Export Analysis" />
+                        </ListItemButton>
+                      </ListItem>
 
-                    <Divider light />
+                      <Divider light />
 
-                    <ListItem>
-                      <ListItemButton>
-                        <ListItemText primary="Undo" onClick={this.handleUndo} />
-                      </ListItemButton>
-                    </ListItem>
+                      <ListItem>
+                        <ListItemButton>
+                          <ListItemText primary="Undo" onClick={this.handleUndo} />
+                        </ListItemButton>
+                      </ListItem>
 
 
-                    <Divider light />
+                      <Divider light />
 
-                    <ListItem>
-                      <ListItemButton disabled={true}>
-                        <ListItemText primary="Add Child Node" />
-                      </ListItemButton>
-                    </ListItem>
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Add Child Node" />
+                        </ListItemButton>
+                      </ListItem>
 
-                    <ListItem>
-                      <ListItemButton disabled={true}>
-                        <ListItemText primary="Delete Selected" />
-                      </ListItemButton>
-                    </ListItem>
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Delete Selected" />
+                        </ListItemButton>
+                      </ListItem>
 
-                    <Divider light />
-                    <ListItem>
-                      <ListItemButton disabled={true}>
-                        <ListItemText primary="Config Settings" />
-                      </ListItemButton>
-                    </ListItem>
+                      <Divider light />
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Config Settings" />
+                        </ListItemButton>
+                      </ListItem>
 
-                    <ListItem>
-                      <ListItemButton disabled={true}>
-                        <ListItemText primary="Model Settings" />
-                      </ListItemButton>
-                    </ListItem>
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Model Settings" />
+                        </ListItemButton>
+                      </ListItem>
 
-                    <Divider light />
-                    <ListItem>
-                      <ListItemButton disabled={true}>
-                        <ListItemText primary="App Settings" />
-                      </ListItemButton>
-                    </ListItem>
+                      <Divider light />
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="App Settings" />
+                        </ListItemButton>
+                      </ListItem>
 
-                  </List>
+                    </List>
                   </Stack>
 
                 </Popover>
@@ -694,13 +710,13 @@ class TreeViewPage extends React.Component<{
                 <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
-            <Grid item xs={4}  marginTop="11.75px">
+            <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
-              <IconButton onClick={this.handleShare} >
-                <Share></Share>
-              </IconButton>
+                <IconButton onClick={this.handleShare} >
+                  <Share></Share>
+                </IconButton>
 
-              <FormControl size="small">
+                <FormControl size="small">
                   <Select
                     id="zoom-select"
                     value={this.state.zoomLevel}
@@ -719,11 +735,11 @@ class TreeViewPage extends React.Component<{
                 <Button onClick={this.handleAnalysisClicked}> {this.state.analysisModeEnabled ? "Close Analysis" : "Show Analysis"} </Button>
                 <Box></Box>
               </Stack>
-             
-              
+
+
             </Grid>
-         </Grid>
-            <Modal
+          </Grid>
+          <Modal
             open={this.state.modalOpen}
             onClose={this.handleClose}
             aria-labelledby="modal-modal-title"
@@ -740,9 +756,27 @@ class TreeViewPage extends React.Component<{
             </Box>
 
           </Modal>
-          <Button variant={this.state.paneOpen ? "subtreeButtonActive" : "subtreeButton"} onClick={this.handleSubtreeClicked}><AccountTree sx={{fontSize:24,}}></AccountTree></Button>
+
+          <Modal
+            open={this.state.shareModalOpen}
+            onClose={this.handleShareClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box className="treeSelectCenter">
+              <Stack>
+              <FormGroup>
+                <FormControlLabel control={<Switch value={this.state.isPublic} />} label="Is Public" />
+              </FormGroup>
+
+              </Stack>
+            </Box>
+
+          </Modal>
+
+          <Button variant={this.state.paneOpen ? "subtreeButtonActive" : "subtreeButton"} onClick={this.handleSubtreeClicked}><AccountTree sx={{ fontSize: 24, }}></AccountTree></Button>
         </AppBar>
-       {leftpane}
+        {leftpane}
 
         {rightPane}
 
