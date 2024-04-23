@@ -3118,20 +3118,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@textea/json-viewer@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "@textea/json-viewer@npm:3.4.0"
+"@textea/json-viewer@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "@textea/json-viewer@npm:3.4.1"
   dependencies:
-    clsx: ^2.0.0
+    clsx: ^2.1.0
     copy-to-clipboard: ^3.3.3
-    zustand: ^4.4.7
+    zustand: ^4.5.2
   peerDependencies:
     "@emotion/react": ^11
     "@emotion/styled": ^11
     "@mui/material": ^5
     react: ^17 || ^18
     react-dom: ^17 || ^18
-  checksum: 99301aaa56fbfdf1e33ab902067e411e30ef62d827786d68dc5a290b9528b2543352c88156199082c5ec9c6515d29ea7ed050568ae54a44ddf4bb2bf0087aaaf
+  checksum: e70f34e7fd139e0ddfc7977ad3f791b535965cd915f529e2438d9b29968a0875d63200bb3c1c3bb09d5af6388ccea375c90990691f484ef631160aea242f6756
   languageName: node
   linkType: hard
 
@@ -5135,13 +5135,6 @@ __metadata:
     strip-ansi: ^6.0.0
     wrap-ansi: ^7.0.0
   checksum: ce2e8f578a4813806788ac399b9e866297740eecd4ad1823c27fd344d78b22c5f8597d548adbcc46f0573e43e21e751f39446c5a5e804a12aace402b7a315d7f
-  languageName: node
-  linkType: hard
-
-"clsx@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "clsx@npm:2.0.0"
-  checksum: a2cfb2351b254611acf92faa0daf15220f4cd648bdf96ce369d729813b85336993871a4bf6978ddea2b81b5a130478339c20d9d0b5c6fc287e5147f0c059276e
   languageName: node
   linkType: hard
 
@@ -14116,7 +14109,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.4.2
     "@testing-library/react": ^15.0.2
     "@testing-library/user-event": ^14.5.2
-    "@textea/json-viewer": ^3.4.0
+    "@textea/json-viewer": ^3.4.1
     "@types/file-saver": ^2
     "@types/jest": ^29.5.12
     "@types/node": ^20.12.7
@@ -14800,9 +14793,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:^4.4.7":
-  version: 4.5.0
-  resolution: "zustand@npm:4.5.0"
+"zustand@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "zustand@npm:4.5.2"
   dependencies:
     use-sync-external-store: 1.2.0
   peerDependencies:
@@ -14816,6 +14809,6 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 91685492ab33bb656b98e07d8fff2be1794d8e68ac5dc546ec457f4ae3d709f0c19de9e93045b9ee5d6b704f64503d9e085ffe1f600f6ade0459e572d1cf5c0d
+  checksum: 160052a7faaefbaad1071e890a06e5d7a04f6ff6985def30a7b4471f4ddbdd1d30bb05b3688a2777cd0b717d1f0d98dad24883a5caa3deeb3afb4d83b6dabc55
   languageName: node
   linkType: hard
