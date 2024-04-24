@@ -122,43 +122,43 @@ class OrgMembersPage extends React.Component<{
     let result: JSX.Element[] = [];
 
     for (const member of this.state.orgUsers) {
-      result.push(<ListItem  sx={{display: "inline-block", maxWidth:"200px", margin:"0px 34px 24px 0px"}}  key={"member-" + member['email']}>
-<Box margin="0px 0px 0px 24px">         
+      result.push(<ListItem sx={{ display: "inline-block", maxWidth: "200px", margin: "0px 34px 24px 0px" }} key={"member-" + member['email']}>
+        <Box margin="0px 0px 0px 24px">
 
-<Stack direction="column" alignItems="center" gap={0.5}>
-  <Avatar
-  src={profileImg}
-  sx={{ width: 200, height: 200 }}></Avatar>
-          <Typography variant="h1" display="inline" >
-          Jane Doe
-          </Typography>
-          <Typography variant="h3" display="inline">Admin</Typography>
-          {/* <Stack  direction="row" alignItems="bottom" gap={1} >
+          <Stack direction="column" alignItems="center" gap={0.5}>
+            <Avatar
+              src={profileImg}
+              sx={{ width: 200, height: 200 }}></Avatar>
+            <Typography variant="h1" display="inline" >
+              {member.email}
+            </Typography>
+            <Typography variant="h3" display="inline">Admin</Typography>
+            {/* <Stack  direction="row" alignItems="bottom" gap={1} >
             <MailIcon fontSize="small"  style={{color: RiskyColors.uiColors.secondaryText}}></MailIcon>
             <Typography variant="body3" alignItems="center" alignContent="center" gutterBottom>
             {member['email']}
             </Typography>
           </Stack> 
     */}
-          <Stack direction="row" alignItems="bottom" gap={0.5}>
+            {/*<Stack direction="row" alignItems="bottom" gap={0.5}>
             <CalendarMonthIcon fontSize="small" style={{color: RiskyColors.uiColors.secondaryText}}></CalendarMonthIcon>
             <Typography variant="body3">
               Jul 1, 1999
             </Typography>
-          </Stack>
-          <Button onClick={() => {
-        this.removeMember(member)
-      }}>Remove</Button></Stack>
+  </Stack>*/}
+            <Button onClick={() => {
+              this.removeMember(member)
+            }}>Remove</Button></Stack>
 
- </Box></ListItem> )
+        </Box></ListItem>)
     }
 
     return <List>{result}</List>;
   }
-  
+
 
   render() {
-    
+
     return (
       <>
         <SettingsAppBar></SettingsAppBar>
@@ -166,16 +166,16 @@ class OrgMembersPage extends React.Component<{
           <OrgSidebar></OrgSidebar>
           <Paper variant="projectarea">
             <Box px='60px'></Box>
-            <Grid item xs={2}>        
-            <Stack display="flex-row" direction="row" justifyContent="space-between" padding="15px 15px 15px 0px" margin="18px">
-        <Typography variant="h1" display="block" >Team Members</Typography>
-        <Button onClick={this.handleOpen} max-height="15px">Invite User</Button>
-        </Stack>    
-        
-        <Stack display="flex-row" direction="row" justifyContent="start" flexWrap="wrap">
-        {this.generateOrgUserList()}
-        </Stack>
-      </Grid>
+            <Grid item xs={2}>
+              <Stack display="flex-row" direction="row" justifyContent="space-between" padding="15px 15px 15px 0px" margin="18px">
+                <Typography variant="h1" display="block" >Team Members</Typography>
+                <Button onClick={this.handleOpen} max-height="15px">Invite User</Button>
+              </Stack>
+
+              <Stack display="flex-row" direction="row" justifyContent="start" flexWrap="wrap">
+                {this.generateOrgUserList()}
+              </Stack>
+            </Grid>
 
 
           </Paper>
