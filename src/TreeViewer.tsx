@@ -224,7 +224,8 @@ class TreeViewer extends React.Component<{
           direction: 'UD',
           sortMethod: 'directed',
           nodeSpacing: 150,
-          levelSeparation: 100
+          levelSeparation: 100,
+          shakeTowards: 'roots'
         }
       },
       interaction: {
