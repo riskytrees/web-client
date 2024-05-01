@@ -4,6 +4,7 @@ import { DataSet } from "vis-data/peer";
 import Container, { ContainerProps } from "@mui/material/Container";
 import Paper from '@mui/material/Paper';
 import TreeData from './interfaces/TreeData';
+import { RiskyRisk } from './Risk';
 
 const MAX_NODE_TEXT_SIZE = 25
 
@@ -13,6 +14,8 @@ class TreeViewer extends React.Component<{
   onNodeClicked: Function;
   onZoomChanged: Function;
   onAddOrDeleteNode: Function;
+  riskEngine: RiskyRisk | null;
+  selectedModel: string | null;
 }, {
   treeMap: Record<string, TreeData>,
   network: Network | null
@@ -41,6 +44,8 @@ class TreeViewer extends React.Component<{
   }
 
   loadAndRender() {
+    console.log(this.props.selectedModel)
+    console.log(this.props.riskEngine)
     const nodes: Record<string, any>[] = [];
     const edges: Record<string, any>[] = [];
 
@@ -198,9 +203,23 @@ class TreeViewer extends React.Component<{
         })
 
         for (const child of node.children) {
+          let label = '';
+
+          if (this.props.selectedModel && this.props.riskEngine) {
+            const risk = this.props.riskEngine.computeRiskForNode(child, this.props.selectedModel);
+            if (risk) {
+              label = '' + risk.computed[risk.interface.primary];
+            }
+          }
+
           edges.push({
             from: node.id,
-            to: child
+            to: child,
+            label: label,
+            font: {
+              color: 'white',
+              strokeWidth: 0
+            }
           })
         }
       }
