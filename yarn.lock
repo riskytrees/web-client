@@ -3387,6 +3387,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.debounce@npm:^4":
+  version: 4.0.9
+  resolution: "@types/lodash.debounce@npm:4.0.9"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 8183a152e01928e3b97ca773f6ae6038b8695e76493ba8bf6b743ec143948a62294fbc9d49fa4a78b52265b3ba4892ef57534e0c13d04aa0f111671b5a944feb
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
+  version: 4.17.0
+  resolution: "@types/lodash@npm:4.17.0"
+  checksum: 3f98c0b67a93994cbc3403d4fa9dbaf52b0b6bb7f07a764d73875c2dcd5ef91222621bd5bcf8eee7b417a74d175c2f7191b9f595f8603956fd06f0674c0cba93
+  languageName: node
+  linkType: hard
+
 "@types/mime@npm:*":
   version: 3.0.1
   resolution: "@types/mime@npm:3.0.1"
@@ -14112,12 +14128,14 @@ __metadata:
     "@textea/json-viewer": ^3.4.1
     "@types/file-saver": ^2
     "@types/jest": ^29.5.12
+    "@types/lodash.debounce": ^4
     "@types/node": ^20.12.7
     "@types/react": ^18.3.1
     "@types/react-dom": ^18.2.25
     cypress: 13.8.1
     file-saver: ^2.0.5
     install: ^0.13.0
+    lodash.debounce: ^4.0.8
     react: ^18.3.1
     react-dom: ^18.0.0
     react-router-dom: ^6.22.3
