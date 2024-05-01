@@ -18,6 +18,7 @@ import { LibraryAdd } from '@mui/icons-material';
 import Paper from "@mui/material/Paper";
 import TreePicker from './TreePicker';
 import { RiskyApi } from './api';
+import debounce from 'lodash.debounce';
 
 class NodePane extends React.Component<{
   currentNode: Record<string, any>;
@@ -57,6 +58,8 @@ class NodePane extends React.Component<{
     this.addAttributesBasedOnSelectedModel = this.addAttributesBasedOnSelectedModel.bind(this);
     this.loadTreeIdForThisNode = this.loadTreeIdForThisNode.bind(this);
   }
+
+  debouncedTriggerOnNodeChanged = debounce(this.triggerOnNodeChanged, 500);
 
   async getTreeIdFromNodeId(nodeId: string) {
     const queryString = window.location.search;
@@ -120,7 +123,7 @@ class NodePane extends React.Component<{
       modelAttributes: this.state.modelAttributes
     });
 
-    this.triggerOnNodeChanged();
+    this.debouncedTriggerOnNodeChanged();
   }
 
   async handleNodeDescriptionChange(event) {
@@ -131,7 +134,7 @@ class NodePane extends React.Component<{
       modelAttributes: this.state.modelAttributes
     });
 
-    this.triggerOnNodeChanged();
+    this.debouncedTriggerOnNodeChanged();
   }
 
   async handleAttributeChange(event) {
@@ -153,7 +156,7 @@ class NodePane extends React.Component<{
       nodeId: this.state.nodeId,
       modelAttributes: newModelAttributes,
       conditionAttribute: this.state.conditionAttribute
-    }, () => this.triggerOnNodeChanged() );
+    }, () => this.debouncedTriggerOnNodeChanged() );
 
 
   }
@@ -346,7 +349,7 @@ class NodePane extends React.Component<{
       nodeDescription: this.state.nodeDescription,
       nodeId: this.state.nodeId,
       modelAttributes: newModelAttributes
-    }, () => this.triggerOnNodeChanged() );
+    }, () => this.debouncedTriggerOnNodeChanged() );
   }
 
   getNodeType() {

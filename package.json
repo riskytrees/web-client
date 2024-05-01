@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.2.25",
     "file-saver": "^2.0.5",
     "install": "^0.13.0",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.3.1",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.22.3",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@types/file-saver": "^2",
+    "@types/lodash.debounce": "^4",
     "cypress": "13.8.1",
     "react-scripts": "^5.0.1"
   },
