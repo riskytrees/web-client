@@ -821,7 +821,7 @@ class TreeViewPage extends React.Component<{
 
         {rightPane}
 
-        {<TreeViewer onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} />}
+        {<TreeViewer onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
 
       </>
     )
