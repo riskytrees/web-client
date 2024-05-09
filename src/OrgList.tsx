@@ -15,13 +15,17 @@ import CreateOrgButton from './CreateOrgButton';
 class OrgList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { orgs: [] };
+    this.state = { orgs: [], projectCountMap: {} };
+
+    this.getNumProjectsInOrg = this.getNumProjectsInOrg.bind(this);
+  }
+
+  componentDidMount() {
     this.loadOrgs();
+    this.loadProjects();
   }
 
   async loadOrgs() {
-    this.state = { orgs: [] };
-
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs", {});
 
     if (data['ok'] === true && data['result']['orgs']) {
@@ -30,6 +34,37 @@ class OrgList extends React.Component {
       })
 
     }
+  }
+
+  async loadProjects() {
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {});
+
+    if (data['ok'] === true && data['result']['projects']) {
+      for (const project of data['result']['projects']) {
+        const newProjectCountMap = this.state.projectCountMap;
+        if (project['orgId'] in newProjectCountMap) {
+          newProjectCountMap[project['orgId']] += 1;
+        } else {
+          newProjectCountMap[project['orgId']] = 0;
+        }
+        this.setState({
+          projectCountMap: newProjectCountMap
+        })
+      }
+    }
+  }
+
+  getNumProjectsInOrg(orgId: string) {
+    console.log(orgId)
+    let counter = 0;
+    for (const project in this.state['projects']) {
+      console.log(project)
+      if (project['orgId'] === orgId) {
+        counter += 1;
+      }
+    }
+
+    return counter;
   }
 
   render() {
@@ -58,7 +93,7 @@ class OrgList extends React.Component {
                 </Typography>
                 •
                 <Typography variant="body2" gutterBottom>
-                  [# Projects]
+                  {this.state.projectCountMap[org.id]} Projects
                 </Typography>
               </Stack>
 
