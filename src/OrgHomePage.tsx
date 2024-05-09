@@ -107,11 +107,7 @@ class OrgHomePage extends React.Component<{
                       <ListItemText primary="Team Members" onClick={this.teamMembersClicked} />
                     </ListItemButton>
                   </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemText primary="Trash" />
-                    </ListItemButton>
-                  </ListItem>
+
                   <ListItem disablePadding>
                     <ListItemButton>
                       <ListItemText primary="Settings" onClick={this.settingsClicked} />
