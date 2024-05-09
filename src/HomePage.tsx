@@ -201,16 +201,7 @@ class HomePage extends React.Component<{
               <Divider />
               <nav aria-label="secondary mailbox folders">
                 <List>
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemText primary="Trash" />
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton component="a" href="#simple-list">
-                      <ListItemText primary="Spam" />
-                    </ListItemButton>
-                  </ListItem>
+
                 </List>
               </nav>
             </Box>
