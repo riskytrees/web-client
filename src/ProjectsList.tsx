@@ -77,7 +77,7 @@ class ProjectsList extends React.Component<{
               <CardContent><Stack direction="row" alignItems="center" gap={1}>
                 <Typography variant="h1" display="inline">
                   {project.name} •
-                </Typography> <Typography variant="body1" display="inline">{ this.state['treeCountMap'][project.projectId] } Tree { this.state['treeCountMap'][project.projectId] > 1 ? 's' : '' }</Typography></Stack>
+                </Typography> <Typography variant="body1" display="inline">{ this.state['treeCountMap'][project.projectId] } Tree{ this.state['treeCountMap'][project.projectId] > 1 ? 's' : '' }</Typography></Stack>
 
                 <br></br><Stack direction="row" alignItems="bottom" gap={1}>
                   <PersonIcon fontSize="small"></PersonIcon>
