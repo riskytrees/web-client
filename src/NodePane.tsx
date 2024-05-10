@@ -83,7 +83,6 @@ class NodePane extends React.Component<{
 
     const projectId = urlParams.get('projectId');
     const treeId = urlParams.get('id');
-
     
     if (this.props.triggerAddDeleteNode) {
       let relevantTreeId = this.state['selectedTreeId'];
@@ -91,6 +90,7 @@ class NodePane extends React.Component<{
       if (treeId !== this.state.selectedTreeId) {
         // This is a subtree node
         relevantTreeId = treeId;
+
       }
       this.props.triggerAddDeleteNode(relevantTreeId, this.state.nodeId, false);
     }
