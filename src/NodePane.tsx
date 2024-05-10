@@ -481,7 +481,7 @@ class NodePane extends React.Component<{
       <Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleAddSubtree}>Add Subtree</Button>
       <TreePicker enabled={this.state.showSubtreeDialog} onSubmit={this.pickedSubtreeCallback} onCancel={this.canceledSubtreeCallback}></TreePicker>
       <Box height={"5px"}></Box>
-      <Button variant="deleteButton" disabled={!readOnly} startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
+      <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
       <Box height={"5px"}></Box>
       <Typography variant="caption">Node ID: {this.state.nodeId}</Typography>
 
