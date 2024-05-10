@@ -39,8 +39,8 @@ describe('Condition field', () => {
       })
 
       // should let you select the condition field
-      cy.get('#node-type-dropdown', { timeout: 20000 }).click()
-      cy.get('[data-value="condition"]').click()
+      cy.get('#node-type-dropdown:not([aria-disabled=true])', { timeout: 20000 }).click()
+      cy.get('[data-value="condition"]', {timeout: 10000 }).click()
       cy.get('#node-type-dropdown').should('contain', 'Condition')
     })
 

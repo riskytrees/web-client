@@ -384,6 +384,7 @@ class TreeViewPage extends React.Component<{
   async onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    const treeId = urlParams.get('id');
 
 
     if (this.state.treeMap[treeIdToUpdate]) {
@@ -412,6 +413,7 @@ class TreeViewPage extends React.Component<{
         if (node.id === parentNodeId) {
 
           if (subtreeNodeId) {
+            console.log("Subtree add!")
             if (await this.validateSubtreeAddition(subtreeNodeId, node.id)) {
               treeData.nodes[idx]['children'].push(subtreeNodeId);
             }
@@ -428,7 +430,7 @@ class TreeViewPage extends React.Component<{
         }
       }
 
-      if (nodeToDelete !== null) {
+      if (nodeToDelete !== null && nodeToDelete !== null) {
         for (const [idx, node] of treeData.nodes.entries()) {
           if (node.children.includes(parentNodeId)) {
             treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
@@ -436,7 +438,7 @@ class TreeViewPage extends React.Component<{
         }
 
         treeData.nodes.splice(nodeToDelete, 1);
-      } else if (!isAddAction && nodeToDelete !== null) {
+      } else if (!isAddAction) {
         // Right this second you can only have one copy of a subtree so simply find all the nodes that reference the subtree:
         console.log("Parent: " + parentNodeId)
         for (const [idx, node] of treeData.nodes.entries()) {
