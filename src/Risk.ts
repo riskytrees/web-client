@@ -31,6 +31,22 @@ export class RiskyRisk {
         }
     }
 
+    computeAveragePrimaryRiskValue(riskModel: string) {
+        let sumOfRisks = 0;
+        let counter = 0;
+
+        for (const tree of Object.values(this.treeMap)) {
+            for (const node of tree.nodes) {
+                const nodeRisk = this.computeRiskForNode(node.id, riskModel);
+                let primaryRisk = nodeRisk.computed[nodeRisk.interface.primary];
+                sumOfRisks += primaryRisk;
+                counter += 1;
+            }
+        }
+
+        return sumOfRisks / counter;
+    }
+
     getNode(nodeId: string) {
         for (const tree of Object.values(this.treeMap)) {
             for (const node of tree.nodes) {
