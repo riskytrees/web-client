@@ -19,6 +19,6 @@ jobs:
       with:
         submodules: 'true'
         token: ${{ secrets.REPO_PAT }}
-    - run: semgrep ci
+    - run: ./audit.sh
       env:
         SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
