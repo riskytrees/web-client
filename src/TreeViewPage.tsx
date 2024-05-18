@@ -602,11 +602,11 @@ class TreeViewPage extends React.Component<{
 
         <AppBar>
           <Grid container>
-            <Grid item xs={4} marginTop="11.75px">
+            <Grid item xs={4} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
 
-                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img></Button>
+                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img>Action Panel</Button>
                 <Popover
                   id="actionButton"
                   anchorReference="anchorPosition"
@@ -688,12 +688,12 @@ class TreeViewPage extends React.Component<{
               </Stack>
             </Grid>
 
-            <Grid item xs={4} marginTop="11.75px">
+            <Grid item xs={4} marginTop="5.75px">
               <Stack alignContent="center">
                 <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
-            <Grid item xs={4}  marginTop="11.75px">
+            <Grid item xs={4}  marginTop="10px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
               <FormControl size="small">
                   <Select

@@ -80,7 +80,7 @@ class LoginPage extends React.Component<{
             <Paper variant="loginlogo">
               <img src={LoginLogo}  width="50%"></img>
             </Paper>
-            <img src={LoginBackground} width="100%" height="100%"></img>
+            {/* <img src={LoginBackground} width="100%" height="100%"></img> */}
           </Paper>
           <Paper variant="loginpane" sx={{ backgroundColor: 'rgb(25, 25, 25)', paddingLeft:'60px', paddingRight:'60px'}}>
           <Stack justifyContent="center" direction="column" alignItems="left" spacing={0} height="100%">

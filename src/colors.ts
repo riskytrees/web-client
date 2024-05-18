@@ -74,16 +74,18 @@ export const enum subtreeColorList {
 export const enum uiColors {
     /*====PRIMARY COLORS====*/
     /*Primary color used for important buttons on a page, selected states, or special action indicators. Should be used sparingly*/
-    primaryCTA = 'rgb(17, 91, 251)',
+    primaryCTA = 'rgb(60, 181, 74)',
     /*14% darker than primary CTA*/
-    primaryCTAhover = 'rgb(3, 70, 216)',
+    primaryCTAhover = 'rgb(57, 161, 69)',
        /*14% darker than primary CTA*/
-    primaryCTAdisabled = 'rgb(35, 35, 35)',
+    primaryCTAdisabled = 'rgb(51, 155, 63)',
     /*====BACKGROUNDS====*/
     /*Pane background is for most containers*/
     paneBackground = 'rgb(27, 27, 27)',
     /*Header background is for secondary level containers. Primarly intended for the top header bar*/
     headerBackground = 'rgb(27, 27, 27)',
+    /*login background is for the login screen*/
+    loginBackground = 'rgb(6, 38, 24)',
     /*Main background is for the furthestmost background on the application for the body of the app*/
     mainBackground = 'rgb(07, 07, 07)',
     /*Main node background is the default node background color*/
