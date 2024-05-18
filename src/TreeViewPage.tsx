@@ -26,7 +26,8 @@ import AnalysisPane from './AnalysisPane';
 import LogoMark from './img/logomark.svg';
 import AccountTree from '@mui/icons-material/AccountTree';
 import { saveAs } from 'file-saver';
-import { Share } from '@mui/icons-material';
+import { ArrowBack, ArrowForward, BackHand, Search, Share } from '@mui/icons-material';
+import { TreeSearch } from './TreeSearch';
 
 class TreeViewPage extends React.Component<{
 
@@ -45,12 +46,15 @@ class TreeViewPage extends React.Component<{
   analysisModeEnabled: boolean;
   zoomLevel: number;
   isPublic: boolean | null;
+  searchQuery: string;
+  searchIndex: number;
 }> {
   riskEngine: RiskyRisk;
+  searchEngine: TreeSearch;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, };
+    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0 };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -72,8 +76,12 @@ class TreeViewPage extends React.Component<{
     this.handleShare = this.handleShare.bind(this);
     this.handleShareClose = this.handleShareClose.bind(this);
     this.handlePublicityChange = this.handlePublicityChange.bind(this);
+    this.handleSearchValueChanged = this.handleSearchValueChanged.bind(this);
+    this.handleSearchBack = this.handleSearchBack.bind(this);
+    this.handleSearchForward = this.handleSearchForward.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
+    this.searchEngine = new TreeSearch(this.state.treeMap, null);
   }
 
   componentDidMount() {
@@ -238,6 +246,7 @@ class TreeViewPage extends React.Component<{
         treeMap
       }, () => {
         this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+        this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
       })
     }
   }
@@ -268,6 +277,7 @@ class TreeViewPage extends React.Component<{
     const treeId = urlParams.get('id');
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+    this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
 
     let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeIdToUpdate, {
       method: 'PUT',
@@ -306,6 +316,57 @@ class TreeViewPage extends React.Component<{
 
   onNodeChanged(treeIdToUpdate: string, data) {
     this.localTreeNodeUpdate(treeIdToUpdate, data)
+  }
+
+  async handleSearchBack() {
+    const results = this.searchEngine.search(this.state.searchQuery);
+
+    if (results.length > 0) {
+      let newIdx = 0;
+      if (this.state.searchIndex === 0) {
+        // Wrap
+        newIdx = results.length - 1;
+      } else {
+        newIdx = this.state.searchIndex - 1;
+      }
+
+      this.setState({
+        searchIndex: newIdx
+      }, async () => {
+        const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
+        const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
+  
+        if (node) {
+          this.onNodeClicked(node, null);
+        }
+      })
+    }
+  }
+
+  async handleSearchForward() {
+    const results = this.searchEngine.search(this.state.searchQuery);
+
+    if (results.length > 0) {
+      let newIdx = 0;
+
+      if (this.state.searchIndex === results.length - 1) {
+        // Wrap
+        newIdx = 0;
+      } else {
+        newIdx += 1;
+      }
+
+      this.setState({
+        searchIndex: newIdx
+      }, async () => {
+        const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
+        const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
+  
+        if (node) {
+          this.onNodeClicked(node, null);
+        }
+      })
+    }
   }
 
   async getTreeIdFromNodeId(nodeId: string) {
@@ -539,6 +600,43 @@ class TreeViewPage extends React.Component<{
 
   }
 
+  async handleSearchValueChanged(event) {
+    const proposedVal = event.target.value;
+
+    this.setState({
+      searchQuery: proposedVal
+    });
+
+    const results = this.searchEngine.search(this.state.searchQuery);
+
+    if (results.length > 0) {
+      const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
+      const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
+
+      if (node) {
+        this.onNodeClicked(node, null);
+      }
+    }
+  }
+
+  // Returns a version of the node as if it was passed by TreeViewer.
+  // This is NOT what is stored in the TreeMap
+  getRawNodeFromTree(nodeId: string, treeId: string) {
+    for (const node of this.state.treeMap[treeId].nodes) {
+      if (node.id === nodeId) {
+        return {
+          id: node.id,
+          label: node.title,
+          description: node.description,
+          modelAttributes: node.modelAttributes,
+          conditionAttribute: node.conditionAttribute,
+        };
+      }
+    }
+
+    return null;
+  }
+
   handleTreeNameChanged(event) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -755,6 +853,13 @@ class TreeViewPage extends React.Component<{
             </Grid>
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
+                <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}></TextField>
+                <IconButton onClick={this.handleSearchBack}>
+                  <ArrowBack></ArrowBack>
+                </IconButton>
+                <IconButton onClick={this.handleSearchForward}>
+                  <ArrowForward></ArrowForward>
+                </IconButton>
                 <IconButton onClick={this.handleShare} >
                   <Share></Share>
                 </IconButton>
