@@ -26,7 +26,8 @@ import AnalysisPane from './AnalysisPane';
 import LogoMark from './img/logomark.svg';
 import AccountTree from '@mui/icons-material/AccountTree';
 import { saveAs } from 'file-saver';
-import { Share } from '@mui/icons-material';
+import { ArrowBack, ArrowForward, BackHand, Search, Share } from '@mui/icons-material';
+import { TreeSearch } from './TreeSearch';
 
 class TreeViewPage extends React.Component<{
 
@@ -45,12 +46,14 @@ class TreeViewPage extends React.Component<{
   analysisModeEnabled: boolean;
   zoomLevel: number;
   isPublic: boolean | null;
+  searchQuery: string;
 }> {
   riskEngine: RiskyRisk;
+  searchEngine: TreeSearch;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, };
+    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '' };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -72,8 +75,10 @@ class TreeViewPage extends React.Component<{
     this.handleShare = this.handleShare.bind(this);
     this.handleShareClose = this.handleShareClose.bind(this);
     this.handlePublicityChange = this.handlePublicityChange.bind(this);
+    this.handleSearchValueChanged = this.handleSearchValueChanged.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
+    this.searchEngine = new TreeSearch(this.state.treeMap, null);
   }
 
   componentDidMount() {
@@ -238,6 +243,7 @@ class TreeViewPage extends React.Component<{
         treeMap
       }, () => {
         this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+        this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
       })
     }
   }
@@ -268,6 +274,7 @@ class TreeViewPage extends React.Component<{
     const treeId = urlParams.get('id');
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+    this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
 
     let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeIdToUpdate, {
       method: 'PUT',
@@ -539,6 +546,46 @@ class TreeViewPage extends React.Component<{
 
   }
 
+  async handleSearchValueChanged(event) {
+    const proposedVal = event.target.value;
+
+    this.setState({
+      searchQuery: proposedVal
+    });
+
+    const results = this.searchEngine.search(this.state.searchQuery);
+    console.log(results)
+
+    if (results.length > 0) {
+      // Select first result.
+      const treeId = await this.getTreeIdFromNodeId(results[0]);
+      const node = this.getRawNodeFromTree(results[0], treeId );
+
+      if (node) {
+        console.log(node)
+        this.onNodeClicked(node, null);
+      }
+    }
+  }
+
+  // Returns a version of the node as if it was passed by TreeViewer.
+  // This is NOT what is stored in the TreeMap
+  getRawNodeFromTree(nodeId: string, treeId: string) {
+    for (const node of this.state.treeMap[treeId].nodes) {
+      if (node.id === nodeId) {
+        return {
+          id: node.id,
+          label: node.title,
+          description: node.description,
+          modelAttributes: node.modelAttributes,
+          conditionAttribute: node.conditionAttribute,
+        };
+      }
+    }
+
+    return null;
+  }
+
   handleTreeNameChanged(event) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -755,6 +802,13 @@ class TreeViewPage extends React.Component<{
             </Grid>
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
+                <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}></TextField>
+                <IconButton>
+                  <ArrowBack></ArrowBack>
+                </IconButton>
+                <IconButton>
+                  <ArrowForward></ArrowForward>
+                </IconButton>
                 <IconButton onClick={this.handleShare} >
                   <Share></Share>
                 </IconButton>
