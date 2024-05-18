@@ -47,13 +47,14 @@ class TreeViewPage extends React.Component<{
   zoomLevel: number;
   isPublic: boolean | null;
   searchQuery: string;
+  searchIndex: number;
 }> {
   riskEngine: RiskyRisk;
   searchEngine: TreeSearch;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '' };
+    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0 };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -76,6 +77,8 @@ class TreeViewPage extends React.Component<{
     this.handleShareClose = this.handleShareClose.bind(this);
     this.handlePublicityChange = this.handlePublicityChange.bind(this);
     this.handleSearchValueChanged = this.handleSearchValueChanged.bind(this);
+    this.handleSearchBack = this.handleSearchBack.bind(this);
+    this.handleSearchForward = this.handleSearchForward.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
     this.searchEngine = new TreeSearch(this.state.treeMap, null);
@@ -313,6 +316,57 @@ class TreeViewPage extends React.Component<{
 
   onNodeChanged(treeIdToUpdate: string, data) {
     this.localTreeNodeUpdate(treeIdToUpdate, data)
+  }
+
+  async handleSearchBack() {
+    const results = this.searchEngine.search(this.state.searchQuery);
+
+    if (results.length > 0) {
+      let newIdx = 0;
+      if (this.state.searchIndex === 0) {
+        // Wrap
+        newIdx = results.length - 1;
+      } else {
+        newIdx = this.state.searchIndex - 1;
+      }
+
+      this.setState({
+        searchIndex: newIdx
+      }, async () => {
+        const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
+        const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
+  
+        if (node) {
+          this.onNodeClicked(node, null);
+        }
+      })
+    }
+  }
+
+  async handleSearchForward() {
+    const results = this.searchEngine.search(this.state.searchQuery);
+
+    if (results.length > 0) {
+      let newIdx = 0;
+
+      if (this.state.searchIndex === results.length - 1) {
+        // Wrap
+        newIdx = 0;
+      } else {
+        newIdx += 1;
+      }
+
+      this.setState({
+        searchIndex: newIdx
+      }, async () => {
+        const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
+        const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
+  
+        if (node) {
+          this.onNodeClicked(node, null);
+        }
+      })
+    }
   }
 
   async getTreeIdFromNodeId(nodeId: string) {
@@ -554,15 +608,12 @@ class TreeViewPage extends React.Component<{
     });
 
     const results = this.searchEngine.search(this.state.searchQuery);
-    console.log(results)
 
     if (results.length > 0) {
-      // Select first result.
-      const treeId = await this.getTreeIdFromNodeId(results[0]);
-      const node = this.getRawNodeFromTree(results[0], treeId );
+      const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
+      const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
 
       if (node) {
-        console.log(node)
         this.onNodeClicked(node, null);
       }
     }
@@ -803,10 +854,10 @@ class TreeViewPage extends React.Component<{
             <Grid item xs={4} marginTop="11.75px">
               <Stack spacing={2} direction="row" justifyContent="flex-end">
                 <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}></TextField>
-                <IconButton>
+                <IconButton onClick={this.handleSearchBack}>
                   <ArrowBack></ArrowBack>
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={this.handleSearchForward}>
                   <ArrowForward></ArrowForward>
                 </IconButton>
                 <IconButton onClick={this.handleShare} >
