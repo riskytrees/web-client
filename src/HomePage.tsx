@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
 import Modal from '@mui/material/Modal';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -21,11 +23,14 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { RiskyRisk } from './Risk';
 import LogoMark from './img/logomark.svg';
+import personAvatar from './img/person-avatar.png';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Popover from '@mui/material/Popover';
 import { Grid } from '@mui/material';
 import OrgList from './OrgList';
 import CreateOrgButton from './CreateOrgButton';
-
+import bannerback from "./img/bannerback.png";
+import LoginLogo from './img/login_logo.png';
 class HomePage extends React.Component<{
 }, {
   modalOpen: boolean;
@@ -33,14 +38,22 @@ class HomePage extends React.Component<{
 }> {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, orgModalOpen: false };
+    this.state = { modalOpen: false, orgModalOpen: false, orgs: [] };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleOrgOpen = this.handleOrgOpen.bind(this);
     this.handleOrgClose = this.handleOrgClose.bind(this);
+    this.loadOrgs();
   }
   handleOpen() {
     this.setState({ modalOpen: true })
+  }
+
+  getOrgId() {
+    const path = window.location.href;
+    const orgId = path.split("/")[4];
+
+    return orgId;
   }
 
   handleClose() {
@@ -54,16 +67,29 @@ class HomePage extends React.Component<{
   handleOrgClose() {
     this.setState({orgModalOpen: false})
   }
+  async loadOrgs() {
+    this.state = { orgs: [] };
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs", {});
+
+    if (data['ok'] === true && data['result']['orgs']) {
+      this.setState({
+        orgs: data['result']['orgs']
+      })
+
+    }
+  }
+  
 
   render() {
     return (
       <>
         <AppBar>
           <Grid container>
-            <Grid item xs={4} marginTop="11.75px">
+            <Grid item xs={4} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
-                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img></Button>
+                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img>Action Panel</Button>
                 <Popover
                   id="actionButton"
                   anchorReference="anchorPosition"
@@ -145,7 +171,7 @@ class HomePage extends React.Component<{
               </Stack>
             </Grid>
 
-            <Grid item xs={4} marginTop="11.75px">
+            <Grid item xs={4} marginTop="5.75px">
               <Stack alignContent="center">
             <Box display="flex" justifyContent="center" alignItems="center" >
             <Button variant='inlineNavButton' endIcon={<Home />}>Home</Button>
@@ -209,10 +235,9 @@ class HomePage extends React.Component<{
           </Paper>
           <Paper variant="projectarea">
             <Box px='60px'></Box>
-            
-            <Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">Recent Orgs <Button id="orgButton" onClick={this.handleOrgOpen} variant="primaryButton">New Org</Button></Typography>
-            <OrgList />
-            <ProjectsList />
+
+                <ProjectsList org={this.getOrgId()} />
+                
           </Paper>
         </Stack>
       </>

@@ -200,6 +200,23 @@ const baseComponents = {
           backgroundColor: 'transparent',
           border: 'none',
           justifyContent: 'flex-center',
+          height:'50px',
+          '&:hover': {
+            backgroundColor: 'transparent',
+          },
+          '&:disabled': {
+            backgroundColor: 'transparent',
+          }
+        },
+      },
+      {
+        props: { variant: 'inlineFilterButton' },
+        style: {
+          backgroundColor: 'transparent',
+          border: 'none',
+          justifyContent: 'flex-center',
+          fontSize: '18px',
+          textTransform: 'capitalize',
           '&:hover': {
             backgroundColor: 'transparent',
           },
@@ -422,6 +439,15 @@ const baseComponents = {
         paddingTop: '60px',
       },
     },
+    {
+      props: { variant: 'promobanner' },
+      style: {
+        backgroundColor: RiskyColors.uiColors.paneBackground,
+        height:'80px',
+        marginTop:'40px',
+        width: 'calc(100% - 14px)',
+      },
+    },
       {
         props: { variant: 'loginback' },
         style: {
@@ -444,7 +470,7 @@ const baseComponents = {
           backgroundColor: 'transparent',
           margin: '0 auto',
           textAlign: 'center',
-          top: '50%',
+          top: '40%',
 
         },
       },
