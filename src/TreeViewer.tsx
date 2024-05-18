@@ -4,6 +4,7 @@ import { DataSet } from "vis-data/peer";
 import Container, { ContainerProps } from "@mui/material/Container";
 import Paper from '@mui/material/Paper';
 import TreeData from './interfaces/TreeData';
+import { RiskyRisk } from './Risk';
 
 const MAX_NODE_TEXT_SIZE = 25
 
@@ -13,6 +14,8 @@ class TreeViewer extends React.Component<{
   onNodeClicked: Function;
   onZoomChanged: Function;
   onAddOrDeleteNode: Function;
+  riskEngine: RiskyRisk | null;
+  selectedModel: string | null;
 }, {
   treeMap: Record<string, TreeData>,
   network: Network | null
@@ -41,6 +44,8 @@ class TreeViewer extends React.Component<{
   }
 
   loadAndRender() {
+    console.log(this.props.selectedModel)
+    console.log(this.props.riskEngine)
     const nodes: Record<string, any>[] = [];
     const edges: Record<string, any>[] = [];
 
@@ -198,9 +203,39 @@ class TreeViewer extends React.Component<{
         })
 
         for (const child of node.children) {
+          let label = '';
+          let edgeColor = 'white'
+          let edgeWidth = 1;
+
+          if (this.props.selectedModel && this.props.riskEngine) {
+            const risk = this.props.riskEngine.computeRiskForNode(child, this.props.selectedModel);
+            if (risk) {
+              const riskAsValue = risk.computed[risk.interface.primary];
+              label = '' + riskAsValue;
+              const averageRisk = this.props.riskEngine.computeAveragePrimaryRiskValue(this.props.selectedModel);
+              let diff = riskAsValue / averageRisk;
+              let colorVal = Math.min(255, Math.max(0, (125 * diff)));
+              if (colorVal < 125) {
+                edgeColor = 'rgb(' + (255 - colorVal) + ',0,0)';
+              } else {
+                edgeColor = 'rgb(0,' + colorVal + ',0)';
+                edgeWidth = (colorVal / 255) * 5
+
+              }
+              
+            }
+          }
+
           edges.push({
             from: node.id,
-            to: child
+            to: child,
+            label: label,
+            color: edgeColor,
+            width: edgeWidth,
+            font: {
+              color: 'white',
+              strokeWidth: 0
+            }
           })
         }
       }
@@ -224,7 +259,8 @@ class TreeViewer extends React.Component<{
           direction: 'UD',
           sortMethod: 'directed',
           nodeSpacing: 150,
-          levelSeparation: 100
+          levelSeparation: 100,
+          shakeTowards: 'roots'
         }
       },
       interaction: {

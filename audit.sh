@@ -1,1 +1,1 @@
-semgrep scan --config auto --config s/riskytrees:always-await-in-async
+semgrep scan --error --config auto --config r/BYU8nE/riskytrees.always-await-in-async 

@@ -18,6 +18,7 @@ import { LibraryAdd } from '@mui/icons-material';
 import Paper from "@mui/material/Paper";
 import TreePicker from './TreePicker';
 import { RiskyApi } from './api';
+import debounce from 'lodash.debounce';
 
 class NodePane extends React.Component<{
   currentNode: Record<string, any>;
@@ -58,6 +59,8 @@ class NodePane extends React.Component<{
     this.loadTreeIdForThisNode = this.loadTreeIdForThisNode.bind(this);
   }
 
+  debouncedTriggerOnNodeChanged = debounce(this.triggerOnNodeChanged, 500);
+
   async getTreeIdFromNodeId(nodeId: string) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -80,7 +83,6 @@ class NodePane extends React.Component<{
 
     const projectId = urlParams.get('projectId');
     const treeId = urlParams.get('id');
-
     
     if (this.props.triggerAddDeleteNode) {
       let relevantTreeId = this.state['selectedTreeId'];
@@ -88,6 +90,7 @@ class NodePane extends React.Component<{
       if (treeId !== this.state.selectedTreeId) {
         // This is a subtree node
         relevantTreeId = treeId;
+
       }
       this.props.triggerAddDeleteNode(relevantTreeId, this.state.nodeId, false);
     }
@@ -120,7 +123,7 @@ class NodePane extends React.Component<{
       modelAttributes: this.state.modelAttributes
     });
 
-    this.triggerOnNodeChanged();
+    this.debouncedTriggerOnNodeChanged();
   }
 
   async handleNodeDescriptionChange(event) {
@@ -131,7 +134,7 @@ class NodePane extends React.Component<{
       modelAttributes: this.state.modelAttributes
     });
 
-    this.triggerOnNodeChanged();
+    this.debouncedTriggerOnNodeChanged();
   }
 
   async handleAttributeChange(event) {
@@ -153,7 +156,7 @@ class NodePane extends React.Component<{
       nodeId: this.state.nodeId,
       modelAttributes: newModelAttributes,
       conditionAttribute: this.state.conditionAttribute
-    }, () => this.triggerOnNodeChanged() );
+    }, () => this.debouncedTriggerOnNodeChanged() );
 
 
   }
@@ -259,7 +262,7 @@ class NodePane extends React.Component<{
     }
   }
  
-  renderAttributes() {
+  renderAttributes(readOnly: boolean) {
     this.addAttributesBasedOnSelectedModel();
 
     const attributes: JSX.Element[] = [];
@@ -272,13 +275,13 @@ class NodePane extends React.Component<{
           attributes.push(
             <Grid key={"container_" + key} container spacing={1}>
               <Grid key={"item_" + key} item xs={9} >
-                <TextField id={key} key={key}  sx={{
+                <TextField disabled={!readOnly} id={key} key={key}  sx={{
           marginBottom: '10px',
         }} label={key} onChange={this.handleAttributeChange} variant="outlined" size="small" value={this.getAttributeValue(value)} /> 
   
               </Grid>      
               <Grid item xs={3}>
-                <IconButton onClick={() => {
+                <IconButton disabled={!readOnly} onClick={() => {
                   this.deleteAttribute(key);
                 }}><DeleteIcon /></IconButton>
   
@@ -346,7 +349,7 @@ class NodePane extends React.Component<{
       nodeDescription: this.state.nodeDescription,
       nodeId: this.state.nodeId,
       modelAttributes: newModelAttributes
-    }, () => this.triggerOnNodeChanged() );
+    }, () => this.debouncedTriggerOnNodeChanged() );
   }
 
   getNodeType() {
@@ -420,6 +423,12 @@ class NodePane extends React.Component<{
       return null;
     }
 
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const treeId = urlParams.get('id');
+    const readOnly = treeId === this.state.selectedTreeId;
+
     return (
       <>
       <Paper variant="rightriskypane">
@@ -427,7 +436,7 @@ class NodePane extends React.Component<{
       <Typography variant="h3">Details</Typography>
       <Box height={"10px"}></Box>
 
-      <TextField label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
+      <TextField disabled={!readOnly} label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
       <Box height={"20px"}></Box>
       <FormControl size="small">
         <InputLabel id="node-type-dropdown-label">Node Type</InputLabel>
@@ -438,6 +447,7 @@ class NodePane extends React.Component<{
             label="Node Type"
             variant="outlined" 
             size="small" 
+            disabled={!readOnly}
             onChange={this.nodeTypeDropdownChanged}
       >
             <MenuItem value={"and"}>And</MenuItem>
@@ -450,7 +460,7 @@ class NodePane extends React.Component<{
 
       <TextField InputProps={{
             readOnly: true,
-          }} label="Computed Risk"  variant="outlined" size="small" value={this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : ''}></TextField>
+          }} label="Computed Risk"  disabled={true} variant="outlined" size="small" value={this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : ''}></TextField>
 
       <Box height={"20px"}></Box>
       <Typography variant="h3">Node Attributes</Typography>
@@ -458,17 +468,17 @@ class NodePane extends React.Component<{
       <div>{this.renderConditionSettingsIfApplicable()}</div>
 
 
-      <div>{this.renderAttributes()}</div>
+      <div>{this.renderAttributes(readOnly)}</div>
 
       <Box height={"5px"}></Box>
       <Typography variant="h3">Other</Typography>
       <Box height={"10px"}></Box>
-      <TextField label="Description" onChange={this.handleNodeDescriptionChange} multiline variant="outlined" rows="3" size="small" value={this.state.nodeDescription} />
+      <TextField label="Description" disabled={!readOnly} onChange={this.handleNodeDescriptionChange} multiline variant="outlined" rows="3" size="small" value={this.state.nodeDescription} />
       <Box height={"20px"}></Box>
 
-      <Button variant="addButton" startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node</Button>
+      <Button variant="addButton" disabled={!readOnly} startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node</Button>
       <Box height={"5px"}></Box>
-      <Button variant="addButton" startIcon={<LibraryAdd />} onClick={this.handleAddSubtree}>Add Subtree</Button>
+      <Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleAddSubtree}>Add Subtree</Button>
       <TreePicker enabled={this.state.showSubtreeDialog} onSubmit={this.pickedSubtreeCallback} onCancel={this.canceledSubtreeCallback}></TreePicker>
       <Box height={"5px"}></Box>
       <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
