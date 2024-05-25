@@ -1,5 +1,5 @@
 import React from 'react';
-import ProjectsList from './ProjectsList';
+import ProjectTreeList from './ProjectTreeList';
 import CreateProjectButton from './CreateProjectButton';
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -31,29 +31,54 @@ import OrgList from './OrgList';
 import CreateOrgButton from './CreateOrgButton';
 import bannerback from "./img/bannerback.png";
 import LoginLogo from './img/login_logo.png';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import HistoryIcon from '@mui/icons-material/History';
+import { RiskyApi } from './api';
 class HomePage extends React.Component<{
 }, {
   modalOpen: boolean;
   orgModalOpen: boolean;
+  orgs: Record<string, unknown>[];
+  orgSelecterOpen: boolean;
+  selectedOrg: Record<string, unknown> | null;
 }> {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, orgModalOpen: false, orgs: [] };
+    this.state = { modalOpen: false, orgModalOpen: false, orgs: [], orgSelecterOpen: false, selectedOrg: null };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleOrgOpen = this.handleOrgOpen.bind(this);
     this.handleOrgClose = this.handleOrgClose.bind(this);
+    this.orgSelecterClicked = this.orgSelecterClicked.bind(this);
+
+  }
+
+  componentDidMount(): void {
     this.loadOrgs();
   }
+
   handleOpen() {
     this.setState({ modalOpen: true })
   }
 
-  getOrgId() {
-    const path = window.location.href;
-    const orgId = path.split("/")[4];
+  orgSelecterClicked() {
+    this.setState({
+      orgSelecterOpen: true
+    })
+  }
 
-    return orgId;
+  getOrgId() {
+    if (this.state.selectedOrg) {
+      return this.state.selectedOrg['id'];
+    }
+
+    return null;
+  }
+
+  orgSelected(org) {
+    this.setState({
+      selectedOrg: org
+    })
   }
 
   handleClose() {
@@ -61,15 +86,14 @@ class HomePage extends React.Component<{
   }
 
   handleOrgOpen() {
-    this.setState({orgModalOpen: true})
+    this.setState({ orgModalOpen: true })
   }
 
   handleOrgClose() {
-    this.setState({orgModalOpen: false})
+    this.setState({ orgModalOpen: false })
   }
-  async loadOrgs() {
-    this.state = { orgs: [] };
 
+  async loadOrgs() {
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs", {});
 
     if (data['ok'] === true && data['result']['orgs']) {
@@ -79,9 +103,35 @@ class HomePage extends React.Component<{
 
     }
   }
-  
+
 
   render() {
+    let orgListItems: React.JSX.Element[] = [
+      <ListItem>
+      <ListItemButton onClick={() => {
+        this.orgSelected(null);
+        this.setState({
+          orgSelecterOpen: false
+        })
+      }}>
+        <ListItemText primary={"Personal"} />
+      </ListItemButton>
+    </ListItem>
+    ];
+
+    for (const org of this.state.orgs) {
+      orgListItems.push(<ListItem>
+        <ListItemButton onClick={() => {
+          this.orgSelected(org);
+          this.setState({
+            orgSelecterOpen: false
+          })
+        }}>
+          <ListItemText primary={org['name']} />
+        </ListItemButton>
+      </ListItem>)
+    }
+
     return (
       <>
         <AppBar>
@@ -173,14 +223,14 @@ class HomePage extends React.Component<{
 
             <Grid item xs={4} marginTop="5.75px">
               <Stack alignContent="center">
-            <Box display="flex" justifyContent="center" alignItems="center" >
-            <Button variant='inlineNavButton' endIcon={<Home />}>Home</Button>
-          </Box>
-         
+                <Box display="flex" justifyContent="center" alignItems="center" >
+                  <Button variant='inlineNavButton' endIcon={<Home />}>Home</Button>
+                </Box>
+
               </Stack>
             </Grid>
           </Grid>
-      
+
 
         </AppBar>
         <Stack direction="row">
@@ -236,9 +286,42 @@ class HomePage extends React.Component<{
           </Paper>
           <Paper variant="projectarea">
             <Box px='60px'></Box>
+            <Grid container>
 
-                <ProjectsList org={this.getOrgId()} />
-                
+              <Grid item>
+                <Button aria-describedby="orgSelecter" onClick={this.orgSelecterClicked} variant='inlineFilterButton' startIcon={<PersonOutlineOutlinedIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">{this.state.selectedOrg ? this.state.selectedOrg.name : "Personal" }</Button>
+                <Popover
+                  id="orgSelecter"
+                  anchorReference="anchorPosition"
+                  anchorPosition={{ top: 100, left: 350 }}
+                  open={this.state.orgSelecterOpen}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                >
+
+                  <Stack>
+                    <List component="nav">
+                      {orgListItems}
+                    </List>
+                  </Stack>
+
+                </Popover>
+              </Grid>
+              <Stack alignContent="right" direction="row" marginLeft="auto">
+                <Box display="flex" justifyContent="right" alignItems="right" >
+                  <Grid item>
+                    <Button variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
+                  </Grid>
+                  <Grid item marginRight="14px">
+                    <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Projects</Button>
+                  </Grid>
+                </Box>
+              </Stack>
+            </Grid>
+            <ProjectTreeList org={this.getOrgId()} showTrees={false} />
+
           </Paper>
         </Stack>
       </>
