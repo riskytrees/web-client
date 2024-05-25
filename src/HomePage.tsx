@@ -315,7 +315,7 @@ class HomePage extends React.Component<{
                     <Button variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
                   </Grid>
                   <Grid item marginRight="14px">
-                    <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Trees</Button>
+                    <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Projects</Button>
                   </Grid>
                 </Box>
               </Stack>
