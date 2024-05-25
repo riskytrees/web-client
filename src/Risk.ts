@@ -227,7 +227,11 @@ export class RiskyRisk {
     
             if (node) {
                 if (node.modelAttributes['impactToDefender']) {
-                    impact = node.modelAttributes['impactToDefender']['value_float'];
+                    if (node.modelAttributes['impactToDefender']['value_float']) {
+                        impact = node.modelAttributes['impactToDefender']['value_float'];
+                    } else {
+                        impact = node.modelAttributes['impactToDefender']['value_int'];
+                    }
                 }
             }
     
