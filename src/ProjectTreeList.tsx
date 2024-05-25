@@ -29,15 +29,19 @@ import treeImg from './img/tree.png';
 
 class ProjectTreeList extends React.Component<{
     org: string | undefined;
+    showTrees: boolean;
 }, {
 
     }> {
     constructor(props) {
         super(props);
         this.state = { projects: [], trees: [], subtrees: [], treeCountMap: {} };
-        this.loadProjects();
-
     }
+
+    componentDidMount() {
+        this.loadProjects();
+    }
+
 
     async loadProjects() {
         let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {});
@@ -54,7 +58,9 @@ class ProjectTreeList extends React.Component<{
                 projects: data['result']['projects'],
                 treeCountMap: treeCountMap
             }, () => {
-                this.loadTrees();
+                if (this.props.showTrees) {
+                    this.loadTrees();
+                }
             })
 
         }
@@ -67,35 +73,35 @@ class ProjectTreeList extends React.Component<{
         for (const project of this.state['projects']) {
             console.log(project)
             let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + project['projectId'] + "/trees", {});
-    
+
             if (data['result']['trees']) {
-              let newSubtrees: number[] = [];
-              let newTrees: Record<string, any>[] = [];
-          
-              for (const tree of data['result']['trees']) {
-                const subtrees = await this.getSubTrees(tree.id, project['projectId'])
-        
-                allTrees.push({...tree, projectId: project['projectId'] })
-                allSubtrees.push(subtrees)
-              }
+                let newSubtrees: number[] = [];
+                let newTrees: Record<string, any>[] = [];
+
+                for (const tree of data['result']['trees']) {
+                    const subtrees = await this.getSubTrees(tree.id, project['projectId'])
+
+                    allTrees.push({ ...tree, projectId: project['projectId'] })
+                    allSubtrees.push(subtrees)
+                }
             }
         }
 
         this.setState({
             trees: allTrees,
             subtrees: allSubtrees
-          })
+        })
     }
 
     async getSubTrees(treeId, projectId) {
         let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeId + '/dag/down', {});
-    
+
         if (data['result']) {
-          return Object.keys(data['result']).length
+            return Object.keys(data['result']).length
         }
-    
+
         return 0;
-      }
+    }
 
     async getNumTreesInProject(projectId): Promise<number | null> {
         let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + '/trees', {});
@@ -160,42 +166,42 @@ class ProjectTreeList extends React.Component<{
             let subtree = subtrees[idx];
             console.log(tree)
             const path = "../tree?id=" + tree.id + "&projectId=" + tree['projectId'];
-      
+
             rows.push(
-      
-              <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={tree.id}>
-                <CardActionArea href={path}>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={treeImg}
-                    alt="picture of project map"
-                  />
-                  <CardContent><Stack direction="row" alignItems="center" gap={1}>
-                    <Typography variant="h1" display="inline">
-                      {tree.title} •
-                    </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
-      
-                    <br></br><Stack direction="row" alignItems="bottom" gap={1}>
-                      <PersonIcon fontSize="small"></PersonIcon>
-                      <Typography variant="body2" gutterBottom>
-                        [Personal]
-                      </Typography>
-                    </Stack>
-      
-                    <Stack direction="row" alignItems="bottom" gap={1}>
-                      <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
-                      <Typography variant="body2">
-                        [DateModified]
-                      </Typography>
-                    </Stack>
-      
-                  </CardContent>
-                </CardActionArea>
-              </Card>)
-      
-          }
-      
+
+                <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={tree.id}>
+                    <CardActionArea href={path}>
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            image={treeImg}
+                            alt="picture of project map"
+                        />
+                        <CardContent><Stack direction="row" alignItems="center" gap={1}>
+                            <Typography variant="h1" display="inline">
+                                {tree.title} •
+                            </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
+
+                            <br></br><Stack direction="row" alignItems="bottom" gap={1}>
+                                <PersonIcon fontSize="small"></PersonIcon>
+                                <Typography variant="body2" gutterBottom>
+                                    [Personal]
+                                </Typography>
+                            </Stack>
+
+                            <Stack direction="row" alignItems="bottom" gap={1}>
+                                <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
+                                <Typography variant="body2">
+                                    [DateModified]
+                                </Typography>
+                            </Stack>
+
+                        </CardContent>
+                    </CardActionArea>
+                </Card>)
+
+        }
+
 
         return (
             <Grid item xs={2}>
