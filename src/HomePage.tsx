@@ -33,29 +33,52 @@ import bannerback from "./img/bannerback.png";
 import LoginLogo from './img/login_logo.png';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import HistoryIcon from '@mui/icons-material/History';
+import { RiskyApi } from './api';
 class HomePage extends React.Component<{
 }, {
   modalOpen: boolean;
   orgModalOpen: boolean;
+  orgs: Record<string, unknown>[];
+  orgSelecterOpen: boolean;
+  selectedOrg: Record<string, unknown> | null;
 }> {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, orgModalOpen: false, orgs: [] };
+    this.state = { modalOpen: false, orgModalOpen: false, orgs: [], orgSelecterOpen: false, selectedOrg: null };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleOrgOpen = this.handleOrgOpen.bind(this);
     this.handleOrgClose = this.handleOrgClose.bind(this);
+    this.orgSelecterClicked = this.orgSelecterClicked.bind(this);
+
+  }
+
+  componentDidMount(): void {
     this.loadOrgs();
   }
+
   handleOpen() {
     this.setState({ modalOpen: true })
   }
 
-  getOrgId() {
-    const path = window.location.href;
-    const orgId = path.split("/")[4];
+  orgSelecterClicked() {
+    this.setState({
+      orgSelecterOpen: true
+    })
+  }
 
-    return orgId;
+  getOrgId() {
+    if (this.state.selectedOrg) {
+      return this.state.selectedOrg['id'];
+    }
+
+    return null;
+  }
+
+  orgSelected(org) {
+    this.setState({
+      selectedOrg: org
+    })
   }
 
   handleClose() {
@@ -69,9 +92,8 @@ class HomePage extends React.Component<{
   handleOrgClose() {
     this.setState({ orgModalOpen: false })
   }
-  async loadOrgs() {
-    this.state = { orgs: [] };
 
+  async loadOrgs() {
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs", {});
 
     if (data['ok'] === true && data['result']['orgs']) {
@@ -84,6 +106,32 @@ class HomePage extends React.Component<{
 
 
   render() {
+    let orgListItems: React.JSX.Element[] = [
+      <ListItem>
+      <ListItemButton onClick={() => {
+        this.orgSelected(null);
+        this.setState({
+          orgSelecterOpen: false
+        })
+      }}>
+        <ListItemText primary={"Personal"} />
+      </ListItemButton>
+    </ListItem>
+    ];
+
+    for (const org of this.state.orgs) {
+      orgListItems.push(<ListItem>
+        <ListItemButton onClick={() => {
+          this.orgSelected(org);
+          this.setState({
+            orgSelecterOpen: false
+          })
+        }}>
+          <ListItemText primary={org['name']} />
+        </ListItemButton>
+      </ListItem>)
+    }
+
     return (
       <>
         <AppBar>
@@ -241,13 +289,12 @@ class HomePage extends React.Component<{
             <Grid container>
 
               <Grid item>
-                <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<PersonOutlineOutlinedIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">My Organization</Button>
+                <Button aria-describedby="orgSelecter" onClick={this.orgSelecterClicked} variant='inlineFilterButton' startIcon={<PersonOutlineOutlinedIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">{this.state.selectedOrg ? this.state.selectedOrg.name : "Personal" }</Button>
                 <Popover
                   id="orgSelecter"
                   anchorReference="anchorPosition"
-                  anchorPosition={{ top: 50, left: 0 }}
+                  anchorPosition={{ top: 100, left: 350 }}
                   open={this.state.orgSelecterOpen}
-                  onClose={this.orgSelecterClose}
                   anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'center',
@@ -256,11 +303,7 @@ class HomePage extends React.Component<{
 
                   <Stack>
                     <List component="nav">
-                      <ListItem>
-                        <ListItemButton onClick={this.goBackToProjects}>
-                          <ListItemText primary="Back to Trees" />
-                        </ListItemButton>
-                      </ListItem>
+                      {orgListItems}
                     </List>
                   </Stack>
 
@@ -269,10 +312,10 @@ class HomePage extends React.Component<{
               <Stack alignContent="right" direction="row" marginLeft="auto">
                 <Box display="flex" justifyContent="right" alignItems="right" >
                   <Grid item>
-                    <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
+                    <Button variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
                   </Grid>
                   <Grid item marginRight="14px">
-                    <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Trees</Button>
+                    <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Trees</Button>
                   </Grid>
                 </Box>
               </Stack>
