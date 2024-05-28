@@ -41,20 +41,28 @@ class HomePage extends React.Component<{
   orgs: Record<string, unknown>[];
   orgSelecterOpen: boolean;
   selectedOrg: Record<string, unknown> | null;
+  filterToTrees: boolean;
 }> {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, orgModalOpen: false, orgs: [], orgSelecterOpen: false, selectedOrg: null };
+    this.state = { modalOpen: false, orgModalOpen: false, orgs: [], orgSelecterOpen: false, selectedOrg: null, filterToTrees: false };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleOrgOpen = this.handleOrgOpen.bind(this);
     this.handleOrgClose = this.handleOrgClose.bind(this);
     this.orgSelecterClicked = this.orgSelecterClicked.bind(this);
+    this.projectTreePickerClicked = this.projectTreePickerClicked.bind(this);
 
   }
 
   componentDidMount(): void {
     this.loadOrgs();
+  }
+
+  projectTreePickerClicked() {
+    this.setState({
+      filterToTrees: !this.state.filterToTrees
+    })
   }
 
   handleOpen() {
@@ -315,12 +323,13 @@ class HomePage extends React.Component<{
                     <Button variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
                   </Grid>
                   <Grid item marginRight="14px">
-                    <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Projects</Button>
+                    <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between" onClick={this.projectTreePickerClicked}> {this.state.filterToTrees ? "Trees" : "Projects" }</Button>
+
                   </Grid>
                 </Box>
               </Stack>
             </Grid>
-            <ProjectTreeList org={this.getOrgId()} showTrees={false} />
+            <ProjectTreeList org={this.getOrgId()} showTrees={this.state.filterToTrees} />
 
           </Paper>
         </Stack>

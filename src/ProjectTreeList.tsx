@@ -42,6 +42,12 @@ class ProjectTreeList extends React.Component<{
         this.loadProjects();
     }
 
+    componentDidUpdate(prevProps: Readonly<{ org: string | undefined; showTrees: boolean; }>, prevState: Readonly<{}>, snapshot?: any): void {
+        if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+            this.loadProjects();
+        }
+    }
+
 
     async loadProjects() {
         let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects", {});
@@ -125,81 +131,86 @@ class ProjectTreeList extends React.Component<{
 
 
             if ((!this.props.org && !project.orgId) || this.props.org === project.orgId) {
-                const path = "/projects?id=" + project.projectId;
-                rows.push(
+                if (!this.props.showTrees) {
+                    const path = "/projects?id=" + project.projectId;
+                    rows.push(
+    
+                        <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={project.projectId}>
+                            <CardActionArea href={path}>
+                                <CardMedia
+                                    component="img"
+                                    height="140"
+                                    image={projectImg}
+                                    alt="picture of project map"
+                                />
+                                <CardContent><Stack direction="row" alignItems="center" gap={1}>
+                                    <Typography variant="h1" display="inline">
+                                        {project.name} •
+                                    </Typography> <Typography variant="body1" display="inline">{this.state['treeCountMap'][project.projectId]} Tree{this.state['treeCountMap'][project.projectId] > 1 ? 's' : ''}</Typography></Stack>
+    
+                                    <br></br><Stack direction="row" alignItems="bottom" gap={1}>
+                                        <PersonIcon fontSize="small"></PersonIcon>
+                                        <Typography variant="body2" gutterBottom>
+                                            [Personal]
+                                        </Typography>
+                                    </Stack>
+    
+                                    <Stack direction="row" alignItems="bottom" gap={1}>
+                                        <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
+                                        <Typography variant="body2">
+                                            [DateModified]
+                                        </Typography>
+                                    </Stack>
+    
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>)
+                }
 
-                    <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={project.projectId}>
+            }
+        }
+
+        if (this.props.showTrees) {
+            for (let idx = 0; idx < trees.length; idx++) {
+                let tree = trees[idx];
+                let subtree = subtrees[idx];
+                console.log(tree)
+                const path = "../tree?id=" + tree.id + "&projectId=" + tree['projectId'];
+    
+                rows.push(
+    
+                    <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={tree.id}>
                         <CardActionArea href={path}>
                             <CardMedia
                                 component="img"
                                 height="140"
-                                image={projectImg}
+                                image={treeImg}
                                 alt="picture of project map"
                             />
                             <CardContent><Stack direction="row" alignItems="center" gap={1}>
                                 <Typography variant="h1" display="inline">
-                                    {project.name} •
-                                </Typography> <Typography variant="body1" display="inline">{this.state['treeCountMap'][project.projectId]} Tree{this.state['treeCountMap'][project.projectId] > 1 ? 's' : ''}</Typography></Stack>
-
+                                    {tree.title} •
+                                </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
+    
                                 <br></br><Stack direction="row" alignItems="bottom" gap={1}>
                                     <PersonIcon fontSize="small"></PersonIcon>
                                     <Typography variant="body2" gutterBottom>
                                         [Personal]
                                     </Typography>
                                 </Stack>
-
+    
                                 <Stack direction="row" alignItems="bottom" gap={1}>
                                     <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
                                     <Typography variant="body2">
                                         [DateModified]
                                     </Typography>
                                 </Stack>
-
+    
                             </CardContent>
                         </CardActionArea>
                     </Card>)
-            }
-        }
-
-        for (let idx = 0; idx < trees.length; idx++) {
-            let tree = trees[idx];
-            let subtree = subtrees[idx];
-            console.log(tree)
-            const path = "../tree?id=" + tree.id + "&projectId=" + tree['projectId'];
-
-            rows.push(
-
-                <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={tree.id}>
-                    <CardActionArea href={path}>
-                        <CardMedia
-                            component="img"
-                            height="140"
-                            image={treeImg}
-                            alt="picture of project map"
-                        />
-                        <CardContent><Stack direction="row" alignItems="center" gap={1}>
-                            <Typography variant="h1" display="inline">
-                                {tree.title} •
-                            </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
-
-                            <br></br><Stack direction="row" alignItems="bottom" gap={1}>
-                                <PersonIcon fontSize="small"></PersonIcon>
-                                <Typography variant="body2" gutterBottom>
-                                    [Personal]
-                                </Typography>
-                            </Stack>
-
-                            <Stack direction="row" alignItems="bottom" gap={1}>
-                                <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
-                                <Typography variant="body2">
-                                    [DateModified]
-                                </Typography>
-                            </Stack>
-
-                        </CardContent>
-                    </CardActionArea>
-                </Card>)
-
+    
+            }    
         }
 
 
