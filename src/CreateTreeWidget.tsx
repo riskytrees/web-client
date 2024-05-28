@@ -100,30 +100,38 @@ class CreateTreeWidget extends React.Component<{
     content['title'] = title;
 
     // Find root node
-    await content['nodes'].forEach((node, idx) => {
-      console.log(node)
+    for (let idx = 0; idx < content['nodes'].length; idx++) {
+      const node = content['nodes'][idx];
       if (node.id === originalRootId) {
         content['nodes'][idx]['id'] = replacementMap[originalRootId];
       }
-    });
+    }
+
 
     // Update children
-    await content['nodes'].forEach((node, idx) => {
+    for (let idx = 0; idx < content['nodes'].length; idx++) {
+      const node = content['nodes'][idx];
+
       if (replacementMap[node.id] === null) {
         const newId = uuidv4();
-        replacementMap[idx] = newId;
+        replacementMap[node.id] = newId;
         content['nodes'][idx]['id'] = newId;
       }
-    });
+    }
+
 
     // Now update pointers
-    await content['nodes'].forEach((node, idx) => {
-      content['nodes'][idx]['children'].forEach((child, childIdx) => {
-        if (replacementMap[child] !== null) {
+    for (let idx = 0; idx < content['nodes'].length; idx++) {
+      const node = content['nodes'][idx];
+
+      for (let childIdx = 0; childIdx < content['nodes'][idx]['children'].length; childIdx++) {
+        const child = content['nodes'][idx]['children'][childIdx];
+        if (replacementMap[child] !== null && replacementMap[child] !== undefined) {
+          console.log(replacementMap[child])
           content['nodes'][idx]['children'][childIdx] = replacementMap[child];
         }
-      })
-    });
+      }
+    }
 
     let addNodeResponse = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + '/trees/' + treeCreateResponse['result']['id'], {
       method: 'PUT',
