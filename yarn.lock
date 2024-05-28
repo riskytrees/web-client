@@ -14148,14 +14148,14 @@ __metadata:
     typescript: ^4.9.5
     vis-data: ^7.1.9
     vis-network: ^9.1.9
-    web-vitals: ^4.0.0
+    web-vitals: ^4.0.1
   languageName: unknown
   linkType: soft
 
-"web-vitals@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "web-vitals@npm:4.0.0"
-  checksum: 840a5d7d4ad48f51f275c828468bd1ae9a7a7dd9d207bb5e2628b589e366b8106cd69422235a18efa65ab6ee01b2c2f6f4d1f3781162278e5e272e8855a23811
+"web-vitals@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "web-vitals@npm:4.0.1"
+  checksum: 8e2b06f3f71812fc936880451cfe94e16b7fbd4e19ccde3b18c8b5cbcee1161f96b306d70838f02b6dd6c8bddd58df9a3b68640166cac43ffbf8b830dc645d05
   languageName: node
   linkType: hard
 
