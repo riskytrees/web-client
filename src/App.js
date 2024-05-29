@@ -140,6 +140,7 @@ const baseComponents = {
       root: {
         backgroundColor: RiskyColors.uiColors.buttonSecondary,
         color: RiskyColors.uiColors.mainText,
+        
       }
     },
     variants: [
@@ -170,8 +171,10 @@ const baseComponents = {
         style: {
           backgroundColor: RiskyColors.uiColors.primaryCTA,
           border: 'none',
+          color: RiskyColors.uiColors.primaryText,
           borderRadius: '16px',
           justifyContent: 'center',
+          width:'auto',
           paddingLeft: '15px',
           paddingRight: '15px',
           '&:hover': {
@@ -240,18 +243,19 @@ const baseComponents = {
       {
         props: { variant: 'subtreeButton' },
         style: {
-          backgroundColor: RiskyColors.uiColors.buttonSecondary,
+          backgroundColor: RiskyColors.uiColors.secondaryButton,
           alignment:'left',
           position:'relative',
-          margin:'25px 0px 0px 15px',
+          margin:'15px 0px 15px 15px',
+          padding:'14px 6px 14px 6px',
           border: 'none',
           borderRadius:'100%',
           justifyContent: 'flex-center',
-          padding: '16px',
           height: 'auto',
-          width:'40px',
+          minWidth:'48px',
+          width:'48px',
           '&:hover': {
-            backgroundColor: RiskyColors.uiColors.buttonSecondaryPressed,
+            backgroundColor: RiskyColors.uiColors.secondaryButtonHover,
           },
         },
       },
@@ -260,15 +264,15 @@ const baseComponents = {
         style: {
         
           backgroundColor: RiskyColors.uiColors.subtreeIcon,
-          alignment:'left',
-          position:'relative',
-          margin:'25px 0px 0px 15px',
+          alignment:'left',          position:'relative',
+          margin:'15px 0px 15px 15px',
+          padding:'14px 6px 14px 6px',
           border: 'none',
           borderRadius:'100%',
           justifyContent: 'flex-center',
-          padding: '16px',
           height: 'auto',
-          width:'40px',
+          minWidth:'48px',
+          width:'48px',
           '&:hover': {
             backgroundColor: RiskyColors.uiColors.subtreeIconPressed,
           },
@@ -279,7 +283,7 @@ const baseComponents = {
   MuiTextField: {
     styleOverrides: {
       root: {
-        backgroundColor: RiskyColors.uiColors.buttonSecondary,
+        backgroundColor: RiskyColors.uiColors.subtreebuttonSecondary,
         fontFamily: 'Open Sans',
         borderRadius: '4px',
         '& label': {
