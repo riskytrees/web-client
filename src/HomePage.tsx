@@ -245,8 +245,11 @@ class HomePage extends React.Component<{
           <Paper variant="riskypane">
 
             <Box sx={{}}>
-              <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton">New Project</Button>
-              <Button id="orgButton" onClick={this.handleOrgOpen} variant="primaryButton">New Org</Button>
+              
+              <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton" sx={{}}>New Project</Button>
+              <Box height='16px'></Box>
+              <Button id="orgButton" onClick={this.handleOrgOpen} variant="secondaryButton">New Org</Button>
+              
               <Modal
                 open={this.state.orgModalOpen}
                 onClose={this.handleOrgClose}

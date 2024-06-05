@@ -111,6 +111,8 @@ export const enum uiColors {
     secondaryText = 'rgb(238, 238, 238, .75)',
     /*Disabled text is for when text is disabled. Opacity will decrease*/
     disabledText = 'rgb(238, 238, 238, .4)',
+    /*Primary text is a dark text meant to increase contrast on primary components*/
+    primaryText = 'rgb(18, 18, 18)',
 
     /*====STANDARD NODE INDICATORS====*/
     /*Min max is used for min/max indicators*/

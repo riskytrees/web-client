@@ -17,6 +17,7 @@ import NodePane from './NodePane';
 import TreeData from './interfaces/TreeData';
 import { RiskyRisk } from './Risk';
 import FormControl from "@mui/material/FormControl";
+import AnalyticsIcon from '@mui/icons-material/Analytics';
 import InputLabel from "@mui/material/InputLabel";
 import SubTreePane from './SubTreePane';
 import ConfigPicker from './ConfigPicker';
@@ -760,7 +761,7 @@ class TreeViewPage extends React.Component<{
 
         <AppBar>
           <Grid container>
-            <Grid item xs={4} marginTop="5.75px">
+            <Grid item xs={5} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
 
@@ -846,14 +847,15 @@ class TreeViewPage extends React.Component<{
               </Stack>
             </Grid>
 
-            <Grid item xs={4} marginTop="5.75px">
-              <Stack alignContent="center">
+            <Grid item xs={2} marginTop="5.75px" sx={{maxWidth:"220px"}}>
+              <Stack alignContent="center" sx={{maxWidth:"220px"}}>
                 <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
-            <Grid item xs={4}  marginTop="10px">
-              <Stack spacing={2} direction="row" justifyContent="flex-end">
-                <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}></TextField>
+            <Grid item xs={5}  marginTop="10px">
+              <Stack spacing={2} direction="row" justifyContent="flex-end" >
+                <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}
+                sx={{overflow:'hide',}}></TextField>
                 <IconButton onClick={this.handleSearchBack}>
                   <ArrowBack></ArrowBack>
                 </IconButton>
@@ -880,7 +882,7 @@ class TreeViewPage extends React.Component<{
 
                   </Select>
                 </FormControl>
-                <Button onClick={this.handleAnalysisClicked}> {this.state.analysisModeEnabled ? "Close Analysis" : "Show Analysis"} </Button>
+                <Button variant="primaryButton" onClick={this.handleAnalysisClicked} startIcon={<AnalyticsIcon> </AnalyticsIcon>} sx={{display:'flex',overflow:'none',flex:'none',}}> {this.state.analysisModeEnabled ? "Close Analysis" : "Show Analysis"} </Button>
                 <Box></Box>
               </Stack>
 
@@ -922,7 +924,7 @@ class TreeViewPage extends React.Component<{
 
           </Modal>
 
-          <Button variant={this.state.paneOpen ? "subtreeButtonActive" : "subtreeButton"} onClick={this.handleSubtreeClicked}><AccountTree sx={{ fontSize: 24, }}></AccountTree></Button>
+          <Button variant={this.state.paneOpen ? "subtreeButtonActive" : "subtreeButton"} onClick={this.handleSubtreeClicked}><AccountTree sx={{ fontSize: 20, }}></AccountTree></Button>
         </AppBar>
         {leftpane}
 
