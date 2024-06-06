@@ -538,14 +538,14 @@ class TreeViewer extends React.Component<{
 
   componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
-      if (this.props.treeMap) {
+      if (JSON.stringify(this.props.treeMap) != JSON.stringify(prevProps.treeMap)) {
         this.setState({ treeMap: this.props.treeMap }, this.loadAndRender);
       }
 
-      if (this.props.selectedNode != prevProps.selectedNode && this.props.selectedNode) {
+      if ((this.props.selectedNode != prevProps.selectedNode) && this.props.selectedNode) {
         console.log(this.props.selectedNode)
         let network = this.state.network;
-        //network?.selectNodes([this.props.selectedNode['id']])
+        network?.selectNodes([this.props.selectedNode['id']])
       }
 
       if (this.props.zoomLevel) {
