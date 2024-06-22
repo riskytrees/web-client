@@ -10,7 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Divider, FormControlLabel, FormGroup, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, Switch, Typography } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControlLabel, FormGroup, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, Switch, Typography } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TreeViewer from './TreeViewer';
 import NodePane from './NodePane';
@@ -49,13 +49,14 @@ class TreeViewPage extends React.Component<{
   isPublic: boolean | null;
   searchQuery: string;
   searchIndex: number;
+  confirmDeleteOpen: boolean;
 }> {
   riskEngine: RiskyRisk;
   searchEngine: TreeSearch;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0 };
+    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false };
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -80,6 +81,7 @@ class TreeViewPage extends React.Component<{
     this.handleSearchValueChanged = this.handleSearchValueChanged.bind(this);
     this.handleSearchBack = this.handleSearchBack.bind(this);
     this.handleSearchForward = this.handleSearchForward.bind(this);
+    this.handleStartDeleteTree = this.handleStartDeleteTree.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
     this.searchEngine = new TreeSearch(this.state.treeMap, null);
@@ -125,6 +127,22 @@ class TreeViewPage extends React.Component<{
     this.setState({
       zoomLevel: desiredLevel
     })
+  }
+
+  async handleStartDeleteTree() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const treeId = urlParams.get('id');
+    const projectId = urlParams.get('projectId');
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeId, {
+      method: 'DELETE'
+    });
+
+    if (data.ok) {
+      this.goBackToProjects();
+    }
   }
 
   async handlePublicityChange(event) {
@@ -757,7 +775,28 @@ class TreeViewPage extends React.Component<{
 
     return (
       <>
-
+      <Dialog
+        open={this.state.confirmDeleteOpen}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are you sure you want to delete this tree?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This will delete the current tree with no way to recover it.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {
+            this.setState({confirmDeleteOpen: false})
+          }}>No, I want to keep this tree.</Button>
+          <Button onClick={this.handleStartDeleteTree} autoFocus>
+            Yes, Delete it.
+          </Button>
+        </DialogActions>
+      </Dialog>
 
         <AppBar>
           <Grid container>
@@ -815,11 +854,19 @@ class TreeViewPage extends React.Component<{
                       </ListItem>
 
                       <ListItem>
-                        <ListItemButton disabled={true}>
+                        <ListItemButton onClick={() => {
+                          this.setState({confirmDeleteOpen: true})
+                        }}>
                           <ListItemText primary="Delete Selected" />
                         </ListItemButton>
                       </ListItem>
 
+                      <ListItem>
+                        <ListItemButton disabled={true}>
+                          <ListItemText primary="Delete Tree" />
+                        </ListItemButton>
+                      </ListItem>
+              
                       <Divider light />
                       <ListItem>
                         <ListItemButton disabled={true}>
