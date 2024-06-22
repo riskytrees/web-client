@@ -9,16 +9,18 @@ import { RiskyRisk } from './Risk';
 const MAX_NODE_TEXT_SIZE = 25
 
 class TreeViewer extends React.Component<{
-  treeMap: Record<string, TreeData>
-  zoomLevel: number,
+  treeMap: Record<string, TreeData>;
+  zoomLevel: number;
   onNodeClicked: Function;
   onZoomChanged: Function;
   onAddOrDeleteNode: Function;
   riskEngine: RiskyRisk | null;
   selectedModel: string | null;
+  selectedNode: string | null;
+
 }, {
-  treeMap: Record<string, TreeData>,
-  network: Network | null
+  treeMap: Record<string, TreeData>;
+  network: Network | null;
   debouncing: boolean;
   currentNode: Record<string, unknown> | null
 }> {
@@ -517,7 +519,7 @@ class TreeViewer extends React.Component<{
 
     if (node) {
       let network = this.state.network;
-      network?.selectNodes([node['id']])  
+      network?.selectNodes([node['id']])
 
       // Now remove our title hack
       nodeCopy = { ...node } as Record<string, unknown>
@@ -536,8 +538,14 @@ class TreeViewer extends React.Component<{
 
   componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
-      if (this.props.treeMap) {
+      if (JSON.stringify(this.props.treeMap) != JSON.stringify(prevProps.treeMap)) {
         this.setState({ treeMap: this.props.treeMap }, this.loadAndRender);
+      }
+
+      if ((this.props.selectedNode != prevProps.selectedNode) && this.props.selectedNode) {
+        console.log(this.props.selectedNode)
+        let network = this.state.network;
+        network?.selectNodes([this.props.selectedNode['id']])
       }
 
       if (this.props.zoomLevel) {
@@ -549,8 +557,6 @@ class TreeViewer extends React.Component<{
   render() {
     return (
       <>
-
-        {/*<div id="mynetwor" className='RiskyTree'></div> */}
         <Paper variant="treearea" id="mynetwork"></Paper>
       </>
     )
