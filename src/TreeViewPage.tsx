@@ -353,8 +353,8 @@ class TreeViewPage extends React.Component<{
         searchIndex: newIdx
       }, async () => {
         const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
-        const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
-  
+        const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId);
+
         if (node) {
           this.onNodeClicked(node, null);
         }
@@ -379,8 +379,8 @@ class TreeViewPage extends React.Component<{
         searchIndex: newIdx
       }, async () => {
         const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
-        const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
-  
+        const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId);
+
         if (node) {
           this.onNodeClicked(node, null);
         }
@@ -630,7 +630,7 @@ class TreeViewPage extends React.Component<{
 
     if (results.length > 0) {
       const treeId = await this.getTreeIdFromNodeId(results[this.state.searchIndex]);
-      const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId );
+      const node = this.getRawNodeFromTree(results[this.state.searchIndex], treeId);
 
       if (node) {
         this.onNodeClicked(node, null);
@@ -775,28 +775,28 @@ class TreeViewPage extends React.Component<{
 
     return (
       <>
-      <Dialog
-        open={this.state.confirmDeleteOpen}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you sure you want to delete this tree?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            This will delete the current tree with no way to recover it.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => {
-            this.setState({confirmDeleteOpen: false})
-          }}>No, I want to keep this tree.</Button>
-          <Button onClick={this.handleStartDeleteTree} autoFocus>
-            Yes, Delete it.
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog
+          open={this.state.confirmDeleteOpen}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Are you sure you want to delete this tree?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              This will delete the current tree with no way to recover it.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => {
+              this.setState({ confirmDeleteOpen: false })
+            }}>No, I want to keep this tree.</Button>
+            <Button onClick={this.handleStartDeleteTree} autoFocus>
+              Yes, Delete it.
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         <AppBar>
           <Grid container>
@@ -854,19 +854,21 @@ class TreeViewPage extends React.Component<{
                       </ListItem>
 
                       <ListItem>
-                        <ListItemButton onClick={() => {
-                          this.setState({confirmDeleteOpen: true})
-                        }}>
+                        <ListItemButton disabled={true}>
                           <ListItemText primary="Delete Selected" />
                         </ListItemButton>
                       </ListItem>
 
                       <ListItem>
-                        <ListItemButton disabled={true}>
+                        <ListItemButton onClick={() => {
+                          this.setState({ confirmDeleteOpen: true })
+                        }}>
                           <ListItemText primary="Delete Tree" />
                         </ListItemButton>
                       </ListItem>
-              
+
+
+
                       <Divider light />
                       <ListItem>
                         <ListItemButton disabled={true}>
@@ -894,15 +896,15 @@ class TreeViewPage extends React.Component<{
               </Stack>
             </Grid>
 
-            <Grid item xs={2} marginTop="5.75px" sx={{maxWidth:"220px"}}>
-              <Stack alignContent="center" sx={{maxWidth:"220px"}}>
+            <Grid item xs={2} marginTop="5.75px" sx={{ maxWidth: "220px" }}>
+              <Stack alignContent="center" sx={{ maxWidth: "220px" }}>
                 <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
-            <Grid item xs={5}  marginTop="10px">
+            <Grid item xs={5} marginTop="10px">
               <Stack spacing={2} direction="row" justifyContent="flex-end" >
                 <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}
-                sx={{overflow:'hide',}}></TextField>
+                  sx={{ overflow: 'hide', }}></TextField>
                 <IconButton onClick={this.handleSearchBack}>
                   <ArrowBack></ArrowBack>
                 </IconButton>
@@ -929,7 +931,7 @@ class TreeViewPage extends React.Component<{
 
                   </Select>
                 </FormControl>
-                <Button variant="primaryButton" onClick={this.handleAnalysisClicked} startIcon={<AnalyticsIcon> </AnalyticsIcon>} sx={{display:'flex',overflow:'none',flex:'none',}}> {this.state.analysisModeEnabled ? "Close Analysis" : "Show Analysis"} </Button>
+                <Button variant="primaryButton" onClick={this.handleAnalysisClicked} startIcon={<AnalyticsIcon> </AnalyticsIcon>} sx={{ display: 'flex', overflow: 'none', flex: 'none', }}> {this.state.analysisModeEnabled ? "Close Analysis" : "Show Analysis"} </Button>
                 <Box></Box>
               </Stack>
 
@@ -962,9 +964,9 @@ class TreeViewPage extends React.Component<{
           >
             <Box className="treeSelectCenter">
               <Stack>
-              <FormGroup>
-                <FormControlLabel control={<Switch onChange={this.handlePublicityChange} checked={this.state.isPublic} />} label="Is Public" />
-              </FormGroup>
+                <FormGroup>
+                  <FormControlLabel control={<Switch onChange={this.handlePublicityChange} checked={this.state.isPublic} />} label="Is Public" />
+                </FormGroup>
 
               </Stack>
             </Box>
