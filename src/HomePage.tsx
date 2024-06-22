@@ -53,10 +53,27 @@ class HomePage extends React.Component<{
     this.orgSelecterClicked = this.orgSelecterClicked.bind(this);
     this.projectTreePickerClicked = this.projectTreePickerClicked.bind(this);
 
+    this.teamMembersClicked = this.teamMembersClicked.bind(this);
+    this.settingsClicked = this.settingsClicked.bind(this);
+
   }
 
   componentDidMount(): void {
     this.loadOrgs();
+  }
+
+  teamMembersClicked() {
+    const path = window.location.href;
+    const orgId = this.state.selectedOrg.id;
+
+    window.location.href = "/orgs/" + orgId + "/members"
+  }
+
+  settingsClicked() {
+    const path = window.location.href;
+    const orgId = this.state.selectedOrg.id;
+
+    window.location.href = "/orgs/" + orgId + "/settings"
   }
 
   projectTreePickerClicked() {
@@ -116,15 +133,15 @@ class HomePage extends React.Component<{
   render() {
     let orgListItems: React.JSX.Element[] = [
       <ListItem>
-      <ListItemButton onClick={() => {
-        this.orgSelected(null);
-        this.setState({
-          orgSelecterOpen: false
-        })
-      }}>
-        <ListItemText primary={"Personal"} />
-      </ListItemButton>
-    </ListItem>
+        <ListItemButton onClick={() => {
+          this.orgSelected(null);
+          this.setState({
+            orgSelecterOpen: false
+          })
+        }}>
+          <ListItemText primary={"Personal"} />
+        </ListItemButton>
+      </ListItem>
     ];
 
     for (const org of this.state.orgs) {
@@ -138,6 +155,24 @@ class HomePage extends React.Component<{
           <ListItemText primary={org['name']} />
         </ListItemButton>
       </ListItem>)
+    }
+
+    let orgSidebarList: React.JSX.Element = null;
+
+    if (this.state.selectedOrg) {
+      orgSidebarList = <List>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="Team Members" onClick={this.teamMembersClicked} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="Settings" onClick={this.settingsClicked} />
+          </ListItemButton>
+        </ListItem>
+      </List>
     }
 
     return (
@@ -245,11 +280,11 @@ class HomePage extends React.Component<{
           <Paper variant="riskypane">
 
             <Box sx={{}}>
-              
+
               <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton" sx={{}}>New Project</Button>
               <Box height='16px'></Box>
               <Button id="orgButton" onClick={this.handleOrgOpen} variant="secondaryButton">New Org</Button>
-              
+
               <Modal
                 open={this.state.orgModalOpen}
                 onClose={this.handleOrgClose}
@@ -288,9 +323,9 @@ class HomePage extends React.Component<{
               </nav>
               <Divider />
               <nav aria-label="secondary mailbox folders">
-                <List>
-
-                </List>
+                  {
+                    orgSidebarList
+                  }
               </nav>
             </Box>
 
@@ -300,7 +335,7 @@ class HomePage extends React.Component<{
             <Grid container>
 
               <Grid item>
-                <Button aria-describedby="orgSelecter" onClick={this.orgSelecterClicked} variant='inlineFilterButton' startIcon={<PersonOutlineOutlinedIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">{this.state.selectedOrg ? this.state.selectedOrg.name : "Personal" }</Button>
+                <Button aria-describedby="orgSelecter" onClick={this.orgSelecterClicked} variant='inlineFilterButton' startIcon={<PersonOutlineOutlinedIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">{this.state.selectedOrg ? this.state.selectedOrg.name : "Personal"}</Button>
                 <Popover
                   id="orgSelecter"
                   anchorReference="anchorPosition"
@@ -326,7 +361,7 @@ class HomePage extends React.Component<{
                     <Button variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
                   </Grid>
                   <Grid item marginRight="14px">
-                    <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between" onClick={this.projectTreePickerClicked}> {this.state.filterToTrees ? "Trees" : "Projects" }</Button>
+                    <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between" onClick={this.projectTreePickerClicked}> {this.state.filterToTrees ? "Trees" : "Projects"}</Button>
 
                   </Grid>
                 </Box>
