@@ -25,19 +25,28 @@ class AnalysisPane extends React.Component<{
   riskEngine: RiskyRisk,
   selectedModel: string;
 }, {
+  impactfulCounterMeasures: Record<string, number>
 }> {
   constructor(props) {
     super(props);
-    this.state = {  };
+    this.state = { impactfulCounterMeasures: {} };
 
     this.getSimpleRisk = this.getSimpleRisk.bind(this);
+    this.getImpactfulCountermeasures = this.getImpactfulCountermeasures.bind(this);
   }
 
-  componentDidLoad() {
-
+  componentDidMount() {
+    this.setState({
+      impactfulCounterMeasures: this.props.riskEngine.getMostImpactfulConditions(this.props.selectedModel, this.props.rootNodeId)
+    })
   }
 
   componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+      this.setState({
+        impactfulCounterMeasures: this.props.riskEngine.getMostImpactfulConditions(this.props.selectedModel, this.props.rootNodeId)
+      })
+    }
   }
 
   getSimpleRisk() {
@@ -51,15 +60,41 @@ class AnalysisPane extends React.Component<{
     return "Unknown"
   }
 
+  getImpactfulCountermeasures() {
+    const results: JSX.Element[] = [];
+
+    if (Object.keys(this.state.impactfulCounterMeasures).length > 0) {
+      for (const [condition, impact] of Object.entries(this.state.impactfulCounterMeasures)) {
+        results.push(<Typography >{condition} - {impact}</Typography>)
+      }
+
+      return results;
+    }
+
+
+    return "Unknown"
+  }
+
 
   render() {
+
 
     return (
       <>
         <Paper variant="rightriskypane">
           <Stack>
             <Typography variant="h1">Analysis</Typography>
-            Total Tree Risk: {this.getSimpleRisk()}
+
+            <Paper>
+              <Typography variant="h3">Total Tree Risk:</Typography>
+              {this.getSimpleRisk()}
+            </Paper>
+
+
+            <Paper>
+              <Typography variant="h3">Most Impactful Countermeasures:</Typography>
+              {this.getImpactfulCountermeasures()}
+            </Paper>
 
           </Stack>
         </Paper>

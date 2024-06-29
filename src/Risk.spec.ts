@@ -1,3 +1,4 @@
+import exp from 'constants';
 import { RiskyRisk } from './Risk';
 import {expect} from '@jest/globals';
 
@@ -483,3 +484,115 @@ it('works without children', () => {
     expect(riskyRisk.computeRiskForNode("000", evitaRiskModel)['computed']['singleValueDisplay']).toContain('R')
 
 });
+
+it('lets you find the most effective conditions', () => {
+    const likelihoodModel = 'b9ff54e0-37cf-41d4-80ea-f3a9b1e3af74';
+
+    const tree = {
+        "title": "Test",
+        "rootNodeId": "7a6d42b5-b905-42c6-8528-ca57dec4bb49",
+        "nodes": [
+            {
+                "id": "7a6d42b5-b905-42c6-8528-ca57dec4bb49",
+                "title": "Something real bad",
+                "description": "This is the root node",
+                "modelAttributes": {
+                    "likelihoodOfSuccess": {
+                        "value_string": "",
+                        "value_int": null,
+                        "value_float": null
+                    },
+                    "node_type": {
+                        "value_string": "or",
+                        "value_int": null,
+                        "value_float": null
+                    }
+                },
+                "conditionAttribute": "",
+                "children": [
+                    "1c770436-8e6d-4170-9601-9df944a8d329",
+                    "08206e1e-3ecf-4a51-b572-4a19e0d0c037"
+                ],
+                "conditionResolved": true
+            },
+            {
+                "id": "1c770436-8e6d-4170-9601-9df944a8d329",
+                "title": "Is Test?",
+                "description": "",
+                "modelAttributes": {
+                    "condition_value": {
+                        "value_string": "",
+                        "value_int": null,
+                        "value_float": null
+                    },
+                    "likelihoodOfSuccess": {
+                        "value_string": "",
+                        "value_int": null,
+                        "value_float": null
+                    },
+                    "node_type": {
+                        "value_string": "condition",
+                        "value_int": null,
+                        "value_float": null
+                    }
+                },
+                "conditionAttribute": "config['test'] == true",
+                "children": [
+                    "205d2282-8509-48f1-bde5-990a088e410f"
+                ],
+                "conditionResolved": true
+            },
+            {
+                "id": "08206e1e-3ecf-4a51-b572-4a19e0d0c037",
+                "title": "Not terribly likely",
+                "description": "",
+                "modelAttributes": {
+                    "likelihoodOfSuccess": {
+                        "value_string": null,
+                        "value_int": null,
+                        "value_float": 0.1
+                    },
+                    "node_type": {
+                        "value_string": "or",
+                        "value_int": null,
+                        "value_float": null
+                    }
+                },
+                "conditionAttribute": "",
+                "children": [],
+                "conditionResolved": true
+            },
+            {
+                "id": "205d2282-8509-48f1-bde5-990a088e410f",
+                "title": "Very likely",
+                "description": "",
+                "modelAttributes": {
+                    "likelihoodOfSuccess": {
+                        "value_string": null,
+                        "value_int": null,
+                        "value_float": 0.5
+                    },
+                    "node_type": {
+                        "value_string": "or",
+                        "value_int": null,
+                        "value_float": null
+                    }
+                },
+                "conditionAttribute": "",
+                "children": [],
+                "conditionResolved": true
+            }
+        ]
+    }
+
+    const riskyRisk = new RiskyRisk({
+        "root": tree
+    }, "root");
+
+    const conditionMap = riskyRisk.getMostImpactfulConditions(likelihoodModel, "7a6d42b5-b905-42c6-8528-ca57dec4bb49");
+
+    expect(Object.keys(conditionMap).length).toEqual(1)
+
+    expect(conditionMap[Object.keys(conditionMap)[0]]).toBeLessThan(-0.4)
+
+})
