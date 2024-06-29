@@ -99,6 +99,15 @@ class Projects extends React.Component<{
 
   }
 
+  settingsClicked() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const projectId = urlParams.get('id');
+
+    window.location.href = "/projects/" + projectId + "/settings"
+}
+
   render() {
     return (
       <>
@@ -250,6 +259,11 @@ class Projects extends React.Component<{
               <nav aria-label="secondary mailbox folders">
                 <List>
 
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <ListItemText primary="Settings" onClick={this.settingsClicked} />
+                    </ListItemButton>
+                  </ListItem>
                 </List>
               </nav>
             </Box>
