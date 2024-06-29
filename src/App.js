@@ -12,6 +12,7 @@ import { RiskyColors } from './colors.ts';
 import { Variables } from './variables.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@mui/material";
+import ProjectSettingsPage from './ProjectSettingsPage.tsx';
 
 
 const baseComponents = {
@@ -563,6 +564,8 @@ function App() {
             <Route path="/orgs/:orgId/settings" element={<OrgSettingsPage />}>
             </Route>
             <Route path="/projects" element={<Projects />}>
+            </Route>
+            <Route path="/projects/:projectId/settings" element={<ProjectSettingsPage />}>
             </Route>
             <Route path="/projects/:projectId/config/:configId" element={<ConfigEditorPage />}>
             </Route>
