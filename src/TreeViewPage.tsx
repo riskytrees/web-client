@@ -42,6 +42,7 @@ class TreeViewPage extends React.Component<{
   shareModalOpen: boolean;
   paneOpen: boolean;
   actionModalOpen: boolean;
+  searchModalOpen: boolean;
   models: any[];
   selectedModel: string;
   analysisModeEnabled: boolean;
@@ -56,7 +57,8 @@ class TreeViewPage extends React.Component<{
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false };
+    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, searchModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false };
+
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
@@ -65,6 +67,8 @@ class TreeViewPage extends React.Component<{
     this.handleOpen = this.handleOpen.bind(this);
     this.handleSubtreeClicked = this.handleSubtreeClicked.bind(this);
     this.handleActionPanelOpen = this.handleActionPanelOpen.bind(this);
+    this.handleSearchOpen = this.handleSearchOpen.bind(this);
+    this.handleSearchClose = this.handleSearchClose.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleActionPanelClose = this.handleActionPanelClose.bind(this);
     this.modelDropdownChanged = this.modelDropdownChanged.bind(this);
@@ -585,6 +589,14 @@ class TreeViewPage extends React.Component<{
     this.setState({ actionModalOpen: false })
   }
 
+  handleSearchOpen() {
+    this.setState({ searchModalOpen: true })
+  }
+
+  handleSearchClose() {
+    this.setState({ searchModalOpen: false })
+  }
+
   async getListOfModels() {
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/models", {});
 
@@ -901,7 +913,18 @@ class TreeViewPage extends React.Component<{
                 <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
-            <Grid item xs={5} marginTop="10px">
+            <Grid item xs={5}  marginTop="10px">
+
+            <Stack spacing={2} direction="row" justifyContent="flex-end" >
+
+            <Button aria-describedby="searchButton" onClick={this.handleSearchOpen}>Search</Button>
+              <Popover id="searchButton"
+                  open={this.state.searchModalOpen}
+                  onClose={this.handleSearchClose}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',}}>
+
               <Stack spacing={2} direction="row" justifyContent="flex-end" >
                 <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}
                   sx={{ overflow: 'hide', }}></TextField>
@@ -911,10 +934,14 @@ class TreeViewPage extends React.Component<{
                 <IconButton onClick={this.handleSearchForward}>
                   <ArrowForward></ArrowForward>
                 </IconButton>
+  
+                </Stack>
+                </Popover>
+
+
                 <IconButton onClick={this.handleShare} >
                   <Share></Share>
                 </IconButton>
-
                 <FormControl size="small">
                   <Select
                     id="zoom-select"

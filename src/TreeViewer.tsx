@@ -114,6 +114,7 @@ class TreeViewer extends React.Component<{
 
             if (selected) {
               nodeBGColor = labelBGColor;
+              nodeColor="#ffffff";
             }
 
             const r = 5;

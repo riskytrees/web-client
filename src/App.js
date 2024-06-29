@@ -78,6 +78,7 @@ const baseComponents = {
   MuiFormControl: {
     styleOverrides: {
       root: {
+        backgroundColor: RiskyColors.uiColors.secondaryButton,
         borderRadius: '4px',
         '& label': {
           color: RiskyColors.uiColors.mainHighlightBorder,
@@ -106,6 +107,7 @@ const baseComponents = {
   MuiListItemButton: {
     styleOverrides: {
       root: {
+        
         padding: 0,
 
         backgroundColor: 'none',
@@ -298,7 +300,7 @@ const baseComponents = {
         },
         '& .MuiOutlinedInput-root': {
           '& fieldset': {
-            borderColor: 'transparent',
+            borderColor: RiskyColors.uiColors.fieldInput,
           },
           '&:hover fieldset': {
             borderColor: RiskyColors.uiColors.mainHighlightBorder,
@@ -316,7 +318,7 @@ const baseComponents = {
       {
         props: { variant: 'outlined' },
         style: {
-
+          borderColor: 'RiskyColors.uiColors.mainHighlightBorder',
         },
       },]
   },
@@ -347,6 +349,14 @@ const baseComponents = {
       root: {
         backgroundColor: 'none',
 
+      },
+    },
+  },
+
+  MuiTextField: {
+    styleOverrides: {
+      root: {
+        backgroundColor: RiskyColors.uiColors.buttonSecondary,
       },
     },
   },
