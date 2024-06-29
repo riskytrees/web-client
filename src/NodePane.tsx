@@ -276,7 +276,7 @@ class NodePane extends React.Component<{
             <Grid key={"container_" + key} container spacing={1}>
               <Grid key={"item_" + key} item xs={9} >
                 <TextField disabled={!readOnly} id={key} key={key}  sx={{
-          marginBottom: '10px',
+          marginBottom: '24px',
         }} label={key} onChange={this.handleAttributeChange} variant="outlined" size="small" value={this.getAttributeValue(value)} /> 
   
               </Grid>      
@@ -404,7 +404,7 @@ class NodePane extends React.Component<{
 
   renderConditionSettingsIfApplicable() {
     if (this.isConditionNode()) {
-      return <TextField label="Condition" onChange={this.handleConditionFieldChanged}  variant="outlined" size="small" value={this.getConditionValue()} />
+      return <TextField label="Condition" onChange={this.handleConditionFieldChanged}  variant="outlined" size="small" value={this.getConditionValue()} sx={{marginBottom: '24px',}}/>
     }
 
     return null;
@@ -434,10 +434,10 @@ class NodePane extends React.Component<{
       <Paper variant="rightriskypane">
       <Stack>
       <Typography variant="h3">Details</Typography>
-      <Box height={"10px"}></Box>
+      <Box height={"24px"}></Box>
 
       <TextField disabled={!readOnly} label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
-      <Box height={"20px"}></Box>
+      <Box height={"24px"}></Box>
       <FormControl size="small">
         <InputLabel id="node-type-dropdown-label">Node Type</InputLabel>
       <Select
@@ -456,15 +456,15 @@ class NodePane extends React.Component<{
 
       </Select>
         </FormControl>
-      <Box height={"20px"}></Box>
+      <Box height={"24px"}></Box>
 
       <TextField InputProps={{
             readOnly: true,
           }} label="Computed Risk"  disabled={true} variant="outlined" size="small" value={this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : ''}></TextField>
 
-      <Box height={"20px"}></Box>
+      <Box height={"24px"}></Box>
       <Typography variant="h3">Node Attributes</Typography>
-      <Box height={"10px"}></Box>
+      <Box height={"24px"}></Box>
       <div>{this.renderConditionSettingsIfApplicable()}</div>
 
 
@@ -472,9 +472,9 @@ class NodePane extends React.Component<{
 
       <Box height={"5px"}></Box>
       <Typography variant="h3">Other</Typography>
-      <Box height={"10px"}></Box>
+      <Box height={"24px"}></Box>
       <TextField label="Description" disabled={!readOnly} onChange={this.handleNodeDescriptionChange} multiline variant="outlined" rows="3" size="small" value={this.state.nodeDescription} />
-      <Box height={"20px"}></Box>
+      <Box height={"24px"}></Box>
 
       <Button variant="addButton" disabled={!readOnly} startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node</Button>
       <Box height={"5px"}></Box>
@@ -482,7 +482,7 @@ class NodePane extends React.Component<{
       <TreePicker enabled={this.state.showSubtreeDialog} onSubmit={this.pickedSubtreeCallback} onCancel={this.canceledSubtreeCallback}></TreePicker>
       <Box height={"5px"}></Box>
       <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
-      <Box height={"5px"}></Box>
+      <Box height={"24px"}></Box>
       <Typography variant="caption">Node ID: {this.state.nodeId}</Typography>
 
       </Stack>
