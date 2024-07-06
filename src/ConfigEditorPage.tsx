@@ -1,4 +1,4 @@
-import { Button, Grid, IconButton, Stack, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
 import Item from '@mui/material/Grid';
 import { RiskyApi } from './api';
@@ -9,10 +9,15 @@ class ConfigEditorPage extends React.Component<{
     configJsonValue: string;
     projectId: string | null;
     configId: string | null;
-}>{
+    addDialogOpen: boolean;
+}> {
     constructor(props) {
         super(props);
-        this.state = { configJsonValue: "", projectId: null, configId: null };
+        this.state = { configJsonValue: "", projectId: null, configId: null, addDialogOpen: false };
+
+        this.configChanged = this.configChanged.bind(this);
+        this.configAdd = this.configAdd.bind(this);
+        this.configDelete = this.configDelete.bind(this);
     }
 
     async componentDidMount(): Promise<void> {
@@ -32,7 +37,7 @@ class ConfigEditorPage extends React.Component<{
 
     loadInitialConfig = async (projectId: string, configId: string) => {
         let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/configs/" + configId, {});
-        
+
         if (data.ok) {
             let attributes = data.result.attributes;
 
@@ -67,16 +72,48 @@ class ConfigEditorPage extends React.Component<{
         if (this.state.projectId && this.state.configId) {
             let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.state.projectId + "/configs/" + this.state.configId, {
                 method: 'PUT',
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     attributes: parsedJSONData
                 }),
             })
         }
     }
 
-    configChanged = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    configChanged = async (path, oldVal, newVal) => {
+        console.log(path)
+        console.log(newVal)
+
+        const newConfig = JSON.parse(this.state.configJsonValue);
+
+        newConfig[path] = newVal;
+
         this.setState({
-            "configJsonValue": event.target.value
+            "configJsonValue": JSON.stringify(newConfig)
+        }, () => {
+            this.updateConfig();
+        })
+    }
+
+    configAdd = async (path) => {
+        const newConfig = JSON.parse(this.state.configJsonValue);
+
+
+        newConfig[path] = ''
+
+        this.setState({
+            "configJsonValue": JSON.stringify(newConfig)
+        }, () => {
+            this.updateConfig();
+        })
+    }
+
+    configDelete = async (path) => {
+        const newConfig = JSON.parse(this.state.configJsonValue);
+
+        delete newConfig[path]
+
+        this.setState({
+            "configJsonValue": JSON.stringify(newConfig)
         }, () => {
             this.updateConfig();
         })
@@ -93,20 +130,80 @@ class ConfigEditorPage extends React.Component<{
 
         return (
             <>
+                <Dialog
+                    open={this.state.addDialogOpen}
+                    onClose={() => {
+                        this.setState({
+                            addDialogOpen: false
+                        })
+                    }}
+                    PaperProps={{
+                        component: 'form',
+                        onSubmit: (event) => {
+                            event.preventDefault();
+                            const formData = new FormData(event.currentTarget);
+                            const formJson = Object.fromEntries(formData.entries());
+                            const email = formJson.name;
+                            this.configAdd([email]);
+                            this.setState({
+                                addDialogOpen: false
+                            })
+                        },
+                    }}
+                >
+                    <DialogTitle>Name of field</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Key name of the field to add
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="name"
+                            name="name"
+                            label="Name"
+                            fullWidth
+                            variant="standard"
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => {
+                            this.setState({
+                                addDialogOpen: false
+                            })
+                        }}>Cancel</Button>
+                        <Button type="submit">Add</Button>
+                    </DialogActions>
+                </Dialog>
+
+
                 <Grid container>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                         <Item>
-                            Project Name Configuration
+                            <Typography overflow={"scroll"}>Configuration: {this.state.configId}</Typography>
                             
-                            <TextField multiline minRows={4} value={this.state.configJsonValue} onChange={this.configChanged} id="config-json-field" label="Outlined" variant="outlined" />
+
                         </Item>
 
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={7}>
                         <Item>
-                        <JsonViewer
-                            value={parsedJSONData}
-                        />
+                            <JsonViewer
+                                key={"jsonEditor"}
+                                editable={true}
+                                onChange={this.configChanged}
+                                enableDelete={true}
+                                onDelete={this.configDelete}
+                                enableAdd={true}
+                                onAdd={() => {
+                                    this.setState({
+                                        addDialogOpen: true
+                                    })
+                                }}
+                                //enableAdd={true}
+                                value={parsedJSONData}
+                            />
                         </Item>
                     </Grid>
 
