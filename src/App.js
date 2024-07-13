@@ -1,5 +1,4 @@
 import HomePage from './HomePage';
-import OrgHomePage from './OrgHomePage';
 import OrgSettingsPage from './OrgSettingsPage';
 
 import Projects from './Projects.tsx';
@@ -587,8 +586,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />}>
             </Route>
-            <Route path="/orgs/:orgId" element={<OrgHomePage />}>
-            </Route>
+
             <Route path="/orgs/:orgId/settings" element={<OrgSettingsPage />}>
             </Route>
             <Route path="/projects" element={<Projects />}>
