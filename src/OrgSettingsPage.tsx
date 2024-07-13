@@ -28,6 +28,7 @@ class OrgSettingsPage extends React.Component<{
     this.handleClose = this.handleClose.bind(this);
     this.teamMembersClicked = this.teamMembersClicked.bind(this);
     this.settingsClicked = this.settingsClicked.bind(this);
+    this.upgradeClicked = this.upgradeClicked.bind(this);
   }
 
   componentDidMount() {
@@ -148,6 +149,10 @@ class OrgSettingsPage extends React.Component<{
 
   }
 
+  async upgradeClicked() {
+    window.location.href = 'https://riskytrees.com/pricing'
+  }
+
   render() {
     const path = window.location.href;
     const orgId = path.split("/")[4];
@@ -195,7 +200,7 @@ class OrgSettingsPage extends React.Component<{
                   </Box>
 
                   <Box flex-direction="right">
-                    <Button variant="primaryButton"> Upgrade</Button>
+                    <Button variant="primaryButton" onClick={this.upgradeClicked}>Upgrade</Button>
                   </Box>
 
                 </Stack>
@@ -204,7 +209,7 @@ class OrgSettingsPage extends React.Component<{
 
                   <Box>
                     <Typography variant="body3">Users</Typography>
-                    <Typography variant="h2">1 included, upgrade for more</Typography>
+                    <Typography variant="h2">5 included, upgrade for more</Typography>
                     {/* When on free plan, set message to "1 included, upgrade for additional users". When on org plan, we will display the custom terms for that client, but something like "2 included, $25 per additional user"*/}
                   </Box>
 
@@ -221,9 +226,10 @@ class OrgSettingsPage extends React.Component<{
                 <Box>
                   <Typography variant="h1">Manage Users</Typography>
                 </Box>
-                <Box align="right">
+                {this.state.orgUsers.length >= 5 ? <Button variant="primaryButton" onClick={this.upgradeClicked}> Upgrade</Button> : <Box align="right">
                   <AddUserButton orgId={orgId} max-height="15px"></AddUserButton>
-                </Box>
+                </Box>}
+
               </Stack>
 
               <Grid item xs={2}>
