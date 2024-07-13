@@ -33,6 +33,7 @@ import bannerback from "./img/bannerback.png";
 import LoginLogo from './img/login_logo.png';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import HistoryIcon from '@mui/icons-material/History';
+import AddIcon from '@mui/icons-material/Add';
 import { RiskyApi } from './api';
 class HomePage extends React.Component<{
 }, {
@@ -281,9 +282,9 @@ class HomePage extends React.Component<{
 
             <Box sx={{}}>
 
-              <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton" sx={{}}>New Project</Button>
+              <Button id="primaryButton" onClick={this.handleOpen} startIcon={<AddIcon />} variant="primaryButton" sx={{}}>New Project</Button>
               <Box height='16px'></Box>
-              <Button id="orgButton" onClick={this.handleOrgOpen} variant="secondaryButton">New Org</Button>
+              <Button id="orgButton" onClick={this.handleOrgOpen} startIcon={<AddIcon />} variant="secondaryButton">New Org</Button>
 
               <Modal
                 open={this.state.orgModalOpen}
