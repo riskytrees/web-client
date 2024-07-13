@@ -51,6 +51,7 @@ class HomePage extends React.Component<{
     this.handleOrgOpen = this.handleOrgOpen.bind(this);
     this.handleOrgClose = this.handleOrgClose.bind(this);
     this.orgSelecterClicked = this.orgSelecterClicked.bind(this);
+    this.orgSelecterClosed = this.orgSelecterClosed.bind(this);
     this.projectTreePickerClicked = this.projectTreePickerClicked.bind(this);
 
     this.teamMembersClicked = this.teamMembersClicked.bind(this);
@@ -92,6 +93,12 @@ class HomePage extends React.Component<{
     })
   }
 
+  orgSelecterClosed() {
+    this.setState({
+      orgSelecterOpen: false
+    })
+  }
+
   getOrgId() {
     if (this.state.selectedOrg) {
       return this.state.selectedOrg['id'];
@@ -109,6 +116,7 @@ class HomePage extends React.Component<{
   handleClose() {
     this.setState({ modalOpen: false })
   }
+  
 
   handleOrgOpen() {
     this.setState({ orgModalOpen: true })
@@ -161,22 +169,18 @@ class HomePage extends React.Component<{
 
     if (this.state.selectedOrg) {
       orgSidebarList = <List>
-        <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemText primary="Team Members" onClick={this.teamMembersClicked} />
-          </ListItemButton>
-        </ListItem>
+
 
         <ListItem disablePadding>
           <ListItemButton>
-            <ListItemText primary="Settings" onClick={this.settingsClicked} />
+            <ListItemText primary="Organization Settings" onClick={this.settingsClicked} />
           </ListItemButton>
         </ListItem>
       </List>
     }
 
     return (
-      <>
+      <> 
         <AppBar>
           <Grid container>
             <Grid item xs={4} marginTop="5.75px">
@@ -188,7 +192,7 @@ class HomePage extends React.Component<{
                   anchorReference="anchorPosition"
                   anchorPosition={{ top: 50, left: 0 }}
                   open={this.state.actionModalOpen}
-                  onClose={this.handleActionPanelClose}
+                  onClose={this.state.orgSelecterClosed}
                   anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'center',
@@ -341,6 +345,7 @@ class HomePage extends React.Component<{
                   anchorReference="anchorPosition"
                   anchorPosition={{ top: 100, left: 350 }}
                   open={this.state.orgSelecterOpen}
+                  onClose={this.orgSelecterClosed}
                   anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'center',

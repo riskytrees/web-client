@@ -93,15 +93,11 @@ class OrgSidebar extends React.Component<{
                         <Divider />
                         <nav aria-label="secondary mailbox folders">
                             <List>
-                                <ListItem disablePadding>
-                                    <ListItemButton>
-                                        <ListItemText primary="Team Members" onClick={this.teamMembersClicked} />
-                                    </ListItemButton>
-                                </ListItem>
+
 
                                 <ListItem disablePadding>
                                     <ListItemButton>
-                                        <ListItemText primary="Settings" onClick={this.settingsClicked} />
+                                        <ListItemText primary="Organization Settings" onClick={this.settingsClicked} />
                                     </ListItemButton>
                                 </ListItem>
                             </List>
