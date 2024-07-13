@@ -190,9 +190,9 @@ class ConfigEditorPage extends React.Component<{
                                 padding={15}
                                 value={this.state.configJsonValue}
                                 style={{
-                                    paddingTop: baseComponents.MuiAppBar.styleOverrides.root.height,
+                                    marginTop: baseComponents.MuiAppBar.styleOverrides.root.height,
                                     fontSize: 16,
-                                    height: "100vh"
+                                    height: "calc(100vh" + " - " + baseComponents.MuiAppBar.styleOverrides.root.height + ")"
                                 }}
                             >
 
