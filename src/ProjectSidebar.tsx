@@ -68,6 +68,7 @@ class ProjectSidebar extends React.Component<{
                 <Paper variant="riskypane">
 
                     <Box sx={{}}>
+                    
                         <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton">New Project</Button>
 
 

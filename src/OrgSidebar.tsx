@@ -12,6 +12,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Modal from '@mui/material/Modal';
 import AddUserButton from './AddUserButton';
+import AddIcon from '@mui/icons-material/Add';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 
 class OrgSidebar extends React.Component<{
@@ -67,7 +69,8 @@ class OrgSidebar extends React.Component<{
                 <Paper variant="riskypane">
 
                     <Box sx={{}}>
-                        <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton">New Project</Button>
+                    <Box height={"12px"}></Box>
+                        <Button id="primaryButton" onClick={this.handleOpen} startIcon={<AddIcon />} variant="primaryButton">New Project</Button>
 
 
                         <Modal
@@ -96,8 +99,8 @@ class OrgSidebar extends React.Component<{
 
 
                                 <ListItem disablePadding>
-                                    <ListItemButton>
-                                        <ListItemText primary="Organization Settings" onClick={this.settingsClicked} />
+                                    <ListItemButton >
+                                    <SettingsIcon /><Box width={"5px"}></Box><ListItemText  primary="Org Settings" onClick={this.settingsClicked} />
                                     </ListItemButton>
                                 </ListItem>
                             </List>

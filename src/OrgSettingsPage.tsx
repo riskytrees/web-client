@@ -162,12 +162,10 @@ class OrgSettingsPage extends React.Component<{
         <SettingsAppBar></SettingsAppBar>
         <Stack direction="row">
           <OrgSidebar></OrgSidebar>
-          <Paper variant="projectarea">
+          <Paper variant="projectarea">            
+          <Box height={"24px"}></Box>
+              <Paper variant="settingscard">
 
-            <Box height={"60px"}></Box>
-
-
-            <Paper variant="settingscard">
               <Stack alignContent="right" direction="row" marginLeft="auto" display="flex" justifyContent="space-between">
                 <Box>
                   <Typography variant="h1">RiskyTrees LLC</Typography>

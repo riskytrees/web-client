@@ -32,6 +32,7 @@ import CreateOrgButton from './CreateOrgButton';
 import bannerback from "./img/bannerback.png";
 import LoginLogo from './img/login_logo.png';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import SettingsIcon from '@mui/icons-material/Settings';
 import HistoryIcon from '@mui/icons-material/History';
 import AddIcon from '@mui/icons-material/Add';
 import { RiskyApi } from './api';
@@ -174,7 +175,7 @@ class HomePage extends React.Component<{
 
         <ListItem disablePadding>
           <ListItemButton>
-            <ListItemText primary="Organization Settings" onClick={this.settingsClicked} />
+          <SettingsIcon /><Box width={"5px"}></Box><ListItemText primary="Org Settings" onClick={this.settingsClicked} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -187,85 +188,8 @@ class HomePage extends React.Component<{
             <Grid item xs={4} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
-                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img>Action Panel</Button>
-                <Popover
-                  id="actionButton"
-                  anchorReference="anchorPosition"
-                  anchorPosition={{ top: 50, left: 0 }}
-                  open={this.state.actionModalOpen}
-                  onClose={this.state.orgSelecterClosed}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                >
-                  <Stack>
-                    <List component="nav">
-                      <ListItem>
-                        <ListItemButton onClick={this.goBackToProjects}>
-                          <ListItemText primary="Back to Trees" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Export Text Tree" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Export Analysis" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-
-                      <ListItem>
-                        <ListItemButton>
-                          <ListItemText primary="Undo" onClick={this.handleUndo} />
-                        </ListItemButton>
-                      </ListItem>
-
-
-                      <Divider light />
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Add Child Node" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Delete Selected" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Config Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Model Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="App Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                    </List>
-                  </Stack>
-
-                </Popover>
+                <Button aria-describedby="actionButton" variant='inlineNavButton'><img src={LogoMark} width="25px"></img></Button>
+                
               </Stack>
             </Grid>
 
@@ -285,7 +209,7 @@ class HomePage extends React.Component<{
           <Paper variant="riskypane">
 
             <Box sx={{}}>
-
+            <Box height='12px'></Box>
               <Button id="primaryButton" onClick={this.handleOpen} startIcon={<AddIcon />} variant="primaryButton" sx={{}}>New Project</Button>
               <Box height='16px'></Box>
               <Button id="orgButton" onClick={this.handleOrgOpen} startIcon={<AddIcon />} variant="secondaryButton">New Org</Button>
@@ -336,7 +260,7 @@ class HomePage extends React.Component<{
 
           </Paper>
           <Paper variant="projectarea">
-            <Box px='60px'></Box>
+            <Box height={'24px'}></Box>
             <Grid container>
 
               <Grid item>

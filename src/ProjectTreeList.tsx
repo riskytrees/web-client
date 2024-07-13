@@ -216,7 +216,7 @@ class ProjectTreeList extends React.Component<{
 
         return (
             <Grid item xs={2}>
-                <Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">{this.props.org ? "Org Stuff" : "Your Stuff"}</Typography>
+                <Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">{this.props.org ? "Org" : "Personal"}{this.props.showTrees ? " trees" : " projects"}</Typography>
 
                 <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
 
