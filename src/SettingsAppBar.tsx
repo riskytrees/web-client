@@ -40,92 +40,16 @@ class SettingsAppBar extends React.Component<{
       <>
         <AppBar>
           <Grid container>
-            <Grid item xs={4} marginTop="11.75px">
+            <Grid item xs={4} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
-                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img></Button>
-                <Popover
-                  id="actionButton"
-                  anchorReference="anchorPosition"
-                  anchorPosition={{ top: 50, left: 0 }}
-                  open={this.state.actionModalOpen}
-                  onClose={this.handleActionPanelClose}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                >
-                  <Stack>
-                    <List component="nav">
-                      <ListItem>
-                        <ListItemButton onClick={this.goBackToProjects}>
-                          <ListItemText primary="Back to Trees" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Export Text Tree" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Export Analysis" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-
-                      <ListItem>
-                        <ListItemButton>
-                          <ListItemText primary="Undo" onClick={this.handleUndo} />
-                        </ListItemButton>
-                      </ListItem>
-
-
-                      <Divider light />
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Add Child Node" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Delete Selected" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Config Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="Model Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                      <Divider light />
-                      <ListItem>
-                        <ListItemButton disabled={true}>
-                          <ListItemText primary="App Settings" />
-                        </ListItemButton>
-                      </ListItem>
-
-                    </List>
-                  </Stack>
-
-                </Popover>
+                <Button aria-describedby="actionButton" onClick={() => {
+                    window.location.href = "/"}} variant='inlineNavButton'><img src={LogoMark} width="25px"></img></Button>
+                
               </Stack>
             </Grid>
 
-            <Grid item xs={4} marginTop="11.75px">
+            <Grid item xs={4} marginTop="5.75px">
               <Stack alignContent="center">
                 <Box display="flex" justifyContent="center" alignItems="center" >
                   <Button variant='inlineNavButton' endIcon={<Home />} onClick={() => {

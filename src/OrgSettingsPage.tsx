@@ -156,7 +156,7 @@ class OrgSettingsPage extends React.Component<{
           <OrgSidebar></OrgSidebar>
           <Paper variant="projectarea">
             
-          <Box height={"60px"}></Box>
+          <Box height={"24px"}></Box>
             
             
               <Paper variant="settingscard">
