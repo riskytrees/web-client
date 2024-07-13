@@ -455,12 +455,33 @@ export const baseComponents = {
       },
     },
     {
+      props: { variant: 'settingscard' },
+    style: {
+      backgroundColor: RiskyColors.uiColors.paneBackground,
+
+  
+      width: '70%',
+      padding: '36px',
+      borderRadius:'24px',
+    },
+  },
+  {
+  props: { variant: 'settingsblock' },
+  style: {
+    backgroundColor: RiskyColors.uiColors.mainBackground,
+
+    padding: '16px',
+    borderRadius:'12px',
+  },
+},
+    {
       props: { variant: 'promobanner' },
       style: {
         backgroundColor: RiskyColors.uiColors.paneBackground,
         height:'80px',
         marginTop:'40px',
         width: 'calc(100% - 14px)',
+
       },
     },
       {
