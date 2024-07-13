@@ -1,9 +1,10 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Stack, TextField, Typography } from '@mui/material';
+import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
 import Item from '@mui/material/Grid';
 import { RiskyApi } from './api';
 import { JsonViewer } from '@textea/json-viewer';
-
+import CodeEditor from '@uiw/react-textarea-code-editor';
+import {baseComponents} from './App';
 class ConfigEditorPage extends React.Component<{
 }, {
     configJsonValue: string;
@@ -16,8 +17,6 @@ class ConfigEditorPage extends React.Component<{
         this.state = { configJsonValue: "", projectId: null, configId: null, addDialogOpen: false };
 
         this.configChanged = this.configChanged.bind(this);
-        this.configAdd = this.configAdd.bind(this);
-        this.configDelete = this.configDelete.bind(this);
     }
 
     async componentDidMount(): Promise<void> {
@@ -42,7 +41,7 @@ class ConfigEditorPage extends React.Component<{
             let attributes = data.result.attributes;
 
             this.setState({
-                "configJsonValue": JSON.stringify(data.result.attributes)
+                "configJsonValue": JSON.stringify(data.result.attributes, null, "\t")
             })
         }
 
@@ -79,19 +78,20 @@ class ConfigEditorPage extends React.Component<{
         }
     }
 
-    configChanged = async (path, oldVal, newVal) => {
-        console.log(path)
-        console.log(newVal)
+    configChanged = async (event) => {
 
-        const newConfig = JSON.parse(this.state.configJsonValue);
+        try {
+            const newConfig = JSON.parse(event.target.value);
 
-        newConfig[path] = newVal;
+            this.setState({
+                "configJsonValue": event.target.value
+            }, () => {
+                this.updateConfig();
+            })
+        } catch (e) {
+            return;
+        }
 
-        this.setState({
-            "configJsonValue": JSON.stringify(newConfig)
-        }, () => {
-            this.updateConfig();
-        })
     }
 
     configAdd = async (path) => {
@@ -120,14 +120,6 @@ class ConfigEditorPage extends React.Component<{
     }
 
     render() {
-        let parsedJSONData = {};
-        try {
-            parsedJSONData = JSON.parse(this.state.configJsonValue);
-        } catch (e) {
-
-        }
-
-
         return (
             <>
                 <Dialog
@@ -177,35 +169,38 @@ class ConfigEditorPage extends React.Component<{
                     </DialogActions>
                 </Dialog>
 
+                <AppBar>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Item>
+                                <Typography overflow={"scroll"}>Configuration: {this.state.configId}</Typography>
+                            </Item>
+                        </Grid>
+                    </Grid>
+                </AppBar>
 
                 <Grid container>
-                    <Grid item xs={3}>
+                    <Grid item xs={12}>
                         <Item>
-                            <Typography overflow={"scroll"}>Configuration: {this.state.configId}</Typography>
-                            
-
-                        </Item>
-
-                    </Grid>
-                    <Grid item xs={7}>
-                        <Item>
-                            <JsonViewer
+                            <CodeEditor
+                                data-color-mode="dark"
                                 key={"jsonEditor"}
-                                editable={true}
+                                language="json"
                                 onChange={this.configChanged}
-                                enableDelete={true}
-                                onDelete={this.configDelete}
-                                enableAdd={true}
-                                onAdd={() => {
-                                    this.setState({
-                                        addDialogOpen: true
-                                    })
+                                padding={15}
+                                value={this.state.configJsonValue}
+                                style={{
+                                    paddingTop: baseComponents.MuiAppBar.styleOverrides.root.height,
+                                    fontSize: 16,
+                                    height: "100vh"
                                 }}
-                                //enableAdd={true}
-                                value={parsedJSONData}
-                            />
+                            >
+
+                            </CodeEditor>
                         </Item>
                     </Grid>
+
+
 
                 </Grid>
 
