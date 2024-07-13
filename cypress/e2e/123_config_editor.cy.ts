@@ -37,35 +37,17 @@ describe('Config Editor', () => {
     cy.get('body').should('contain', 'Configuration')
     cy.wait(1000)
 
-    // Let's you add items
-    cy.get('body').should('contain', 'root')
-    cy.contains('root').click()
-    cy.get('.MuiSvgIcon-root').last().click()
-    cy.get('#name').type("Hello")
-    cy.get('[type="submit"]').click()
-    cy.get('body').contains("1 Items")
-    cy.get('body').contains("string")
-    cy.wait('@putConfig', { timeout: 20000 }).its('response.body.result.attributes.attributes.Hello').should('equal', '')
-
-
-    cy.get('[data-testid="data-key-pairHello"]').click()
-    cy.get('[data-testid="data-key-pairHello"] > :nth-child(4)').click()
-    cy.get('.MuiInputBase-root').type("World{enter}")
-
-    // lets you provide json and will visualize types
+    // lets you provide json
+    cy.get('.w-tc-editor-text').type("{backspace}{backspace}{{}\"Hello\": \"World\"\}")
     cy.wait('@putConfig', { timeout: 20000 }).its('response.body.result.attributes.attributes.Hello').should('equal', 'World')
 
     // If refresh we should see the same data
-    cy.intercept({
-      method: 'GET',
-      'path': 'http://localhost:8000/projects/*/configs/*'
-    }).as('getConfig')
+    cy.intercept('GET', 'http://localhost:8000/projects/*/configs/*').as('getConfig')
 
     cy.reload(true)
     cy.wait('@getConfig', { timeout: 20000 })
 
-    cy.get('body').contains("1 Items")
-    cy.get('body').contains("string")
+    cy.get('.w-tc-editor-text').contains("Hello")
   })
 
 
