@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import ProjectSettingsPage from './ProjectSettingsPage.tsx';
 
 
-const baseComponents = {
+export const baseComponents = {
 
   MuiListSubheader: {
     styleOverrides: {
