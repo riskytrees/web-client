@@ -221,9 +221,10 @@ class OrgSettingsPage extends React.Component<{
                 <Box>
                   <Typography variant="h1">Manage Users</Typography>
                 </Box>
-                <Box align="right">
+                {this.state.orgUsers.length >= 5 ? <Button variant="primaryButton"> Upgrade</Button> : <Box align="right">
                   <AddUserButton orgId={orgId} max-height="15px"></AddUserButton>
-                </Box>
+                </Box>}
+
               </Stack>
 
               <Grid item xs={2}>
