@@ -168,6 +168,19 @@ export const baseComponents = {
           },
         },
       }, {
+        props: { variant: 'deletePrimaryButton' },
+        style: {
+          backgroundColor: RiskyColors.uiColors.negative,
+          border: 'none',
+          justifyContent: 'flex-start',
+          paddingLeft: '10px',
+          '&:hover': {
+            backgroundColor: RiskyColors.uiColors.negative,
+          },
+        },
+      }, 
+      
+      {
         props: { variant: 'primaryButton' },
         style: {
           backgroundColor: RiskyColors.uiColors.primaryCTA,

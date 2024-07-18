@@ -25,6 +25,8 @@ import { RiskyApi } from './api';
 import TextField from '@mui/material/TextField';
 import { Grid } from '@mui/material';
 import LogoMark from './img/logomark.svg';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import Popover from '@mui/material/Popover';
 
 
@@ -32,6 +34,7 @@ class Projects extends React.Component<{
 
 }, {
   modalOpen: boolean;
+  deleteModalOpen: boolean;
   renameModalOpen: boolean;
   projectName: any[];
   projectId: string;
@@ -48,6 +51,8 @@ class Projects extends React.Component<{
     this.handleClose = this.handleClose.bind(this);
     this.handleModalOpen = this.handleModalOpen.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
+    this.handleConfirmationOpen = this.handleConfirmationOpen.bind(this);
+    this.handleConfirmationClose = this.handleConfirmationClose.bind(this);
     this.handleProjectNameChanged = this.handleProjectNameChanged.bind(this);
   }
 
@@ -81,6 +86,14 @@ class Projects extends React.Component<{
     this.setState({ renameModalOpen: false })
   }
 
+  handleConfirmationOpen() {
+    this.setState({ deleteModalOpen: true })
+  }
+
+  handleConfirmationClose() {
+    this.setState({ deleteModalOpen: false })
+  }
+
   async handleProjectNameChanged(event) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -106,6 +119,24 @@ class Projects extends React.Component<{
     const projectId = urlParams.get('id');
 
     window.location.href = "/projects/" + projectId + "/settings"
+}
+
+async handleDeleteProject() {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+  const projectId = urlParams.get('id');
+
+
+  let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId, {
+      method: 'DELETE',
+  });
+
+  if (data['ok'] === true ) {
+    window.location.href = '/'
+
+  }
+
 }
 
   render() {
@@ -158,7 +189,7 @@ class Projects extends React.Component<{
 
             <Box sx={{}}>
             <Box height={'12px'}></Box>
-              <Button id="primaryButton" onClick={this.handleOpen} variant="primaryButton" >New Tree</Button>
+              <Button id="primaryButton" onClick={this.handleOpen} startIcon={<AddIcon />} variant="primaryButton" >New Tree</Button>
               <Modal
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
@@ -185,7 +216,24 @@ class Projects extends React.Component<{
 
                   <ListItem disablePadding>
                     <ListItemButton>
-                      <ListItemText primary="Settings" onClick={this.settingsClicked} />
+                    
+                    <DeleteIcon /><Box width={"5px"}></Box><ListItemText primary="Delete project" onClick={this.handleConfirmationOpen} />
+                    <Modal
+                    open={this.state.deleteModalOpen}
+                    onClose={this.handleConfirmationClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+
+                <Box className="riskyModal">
+                  <Typography variant="h1">Delete Project</Typography>
+                  <Box height={"20px"}></Box>
+                  <Stack direction="column" spacing={4} alignItems="right" justifyContent="right">
+                    <Typography variant="h2">Are you sure you want to delete this project? All of it's trees will be deleted.</Typography>
+                  <Button id="primaryButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteProject} variant="deletePrimaryButton">Yes, delete project</Button>
+                  </Stack>
+                </Box>
+              </Modal>
                     </ListItemButton>
                   </ListItem>
                 </List>
