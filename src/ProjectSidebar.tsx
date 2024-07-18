@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Modal from '@mui/material/Modal';
 import AddUserButton from './AddUserButton';
+import { RiskyApi } from './api';
 
 
 class ProjectSidebar extends React.Component<{
@@ -61,6 +62,22 @@ class ProjectSidebar extends React.Component<{
 
     }
 
+    async handleDeleteProject() {
+        const path = window.location.href;
+        const projectId = path.split("/")[4];
+    
+    
+        let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId, {
+            method: 'DELETE',
+        });
+    
+        if (data['ok'] === true ) {
+          window.location.href = '/'
+    
+        }
+    
+      }
+
     render() {
 
         return (
@@ -102,7 +119,7 @@ class ProjectSidebar extends React.Component<{
                                 </ListItem>
                                 <ListItem disablePadding>
                                     <ListItemButton>
-                                        <ListItemText primary="Settings" onClick={this.settingsClicked} />
+                                        <ListItemText primary="Settings" onClick={this.handleDeleteProject}> Delete Project </ListItemText>
                                     </ListItemButton>
                                 </ListItem>
                             </List>
