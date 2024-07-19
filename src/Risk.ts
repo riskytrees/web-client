@@ -63,6 +63,21 @@ export class RiskyRisk {
         return null;
     }
 
+    getParentNode(nodeId: string) {
+        for (const tree of Object.values(this.treeMap)) {
+            for (const node of tree.nodes) {
+                for (const child of node.children) {
+                    if (child == nodeId) {
+                        return node;
+                    }
+                }
+            }
+        }
+
+
+        return null;
+    }
+
     getMostImpactfulConditions(riskModel: string, rootNodeId: string): Record<string, number> {
         const results = {};
 
@@ -247,7 +262,7 @@ export class RiskyRisk {
         const node = this.getNode(nodeId);
         if (this.computeAttackerLikelihood(nodeId, seenNodeIds) !== null) {
             const likelihood = this.computeAttackerLikelihood(nodeId, seenNodeIds, forceConditions).computed.likelihoodOfSuccess;
-            let impact = null;
+            let impact: number | null = null;
     
             if (!this.isNodeComputable(nodeId, seenNodeIds, forceConditions)) {
                 return null;
@@ -259,6 +274,32 @@ export class RiskyRisk {
                         impact = node.modelAttributes['impactToDefender']['value_float'];
                     } else {
                         impact = node.modelAttributes['impactToDefender']['value_int'];
+                    }
+                }
+
+                if (!impact) {
+                    const childImpactValues = node.children.map(childId => this.computeAttackRisk(childId, [...seenNodeIds, nodeId], forceConditions, )).filter(subres => {
+                        if (subres?.computed.impactToDefender) {
+                            return subres;
+                        }
+
+                    })
+
+                    if (childImpactValues.length > 0) {
+                        impact = childImpactValues.reduce((acc, val) => acc + (val?.computed.impactToDefender ? val?.computed.impactToDefender : 0), 0)
+                    } else {
+                        const parentNode = this.getParentNode(nodeId);
+                        if (parentNode) {
+                            const parentImpact = this.computeAttackRisk(parentNode.id, seenNodeIds.filter(val => {
+                                if (val != nodeId) {
+                                    return val;
+                                }
+                            }), forceConditions);
+    
+                            if (parentImpact) {
+                                impact = parentImpact.computed.impactToDefender;
+                            }
+                        }
                     }
                 }
             }
