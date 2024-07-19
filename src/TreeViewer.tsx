@@ -541,6 +541,8 @@ class TreeViewer extends React.Component<{
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       if (JSON.stringify(this.props.treeMap) != JSON.stringify(prevProps.treeMap)) {
         this.setState({ treeMap: this.props.treeMap }, this.loadAndRender);
+      } else if ((this.props.riskEngine && !prevProps.riskEngine) || (!this.props.riskEngine && prevProps.riskEngine)) {
+        this.loadAndRender()
       }
 
       if ((this.props.selectedNode != prevProps.selectedNode) && this.props.selectedNode) {
