@@ -19,20 +19,24 @@ import AddUserButton from './AddUserButton';
 class OrgSettingsPage extends React.Component<{
 }, {
   modalOpen: boolean;
-  orgUsers: Record<string, any>[]
+  orgUsers: Record<string, any>[];
+  orgPlan: string;
 }> {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, orgUsers: [] };
+    this.state = { modalOpen: false, orgUsers: [], orgPlan: 'unknown' };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.teamMembersClicked = this.teamMembersClicked.bind(this);
     this.settingsClicked = this.settingsClicked.bind(this);
     this.upgradeClicked = this.upgradeClicked.bind(this);
+    this.getOrgPlan = this.getOrgPlan.bind(this);
+    this.getMaxUserLimit = this.getMaxUserLimit.bind(this);
   }
 
   componentDidMount() {
     this.getOrgUsers();
+    this.getOrgPlan();
   }
 
   async getOrgUsers() {
@@ -48,6 +52,19 @@ class OrgSettingsPage extends React.Component<{
 
     }
 
+  }
+
+  async getOrgPlan() {
+    const path = window.location.href;
+    const orgId = path.split("/")[4];
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs/" + orgId, {});
+
+    if (data['result']) {
+       this.setState({
+        orgPlan: data['result']['plan']
+       })
+    }
   }
 
   handleOpen() {
@@ -76,6 +93,16 @@ class OrgSettingsPage extends React.Component<{
     const path = window.location.href;
     const orgId = path.split("/")[4];
     return orgId;
+  }
+
+  getMaxUserLimit() {
+    if (this.state.orgPlan === 'organization') {
+      return 5;
+    } else if (this.state.orgPlan === 'public-good') {
+      return 1000;
+    }
+
+    return 1;
   }
 
   async removeMember(member: Record<string, any>) {
@@ -157,6 +184,8 @@ class OrgSettingsPage extends React.Component<{
     const path = window.location.href;
     const orgId = path.split("/")[4];
 
+    let userLimit = this.getMaxUserLimit();
+
     return (
       <>
         <SettingsAppBar></SettingsAppBar>
@@ -207,7 +236,7 @@ class OrgSettingsPage extends React.Component<{
 
                   <Box>
                     <Typography variant="body3">Users</Typography>
-                    <Typography variant="h2">5 included, upgrade for more</Typography>
+                    <Typography variant="h2">{userLimit} included, upgrade for more</Typography>
                     {/* When on free plan, set message to "1 included, upgrade for additional users". When on org plan, we will display the custom terms for that client, but something like "2 included, $25 per additional user"*/}
                   </Box>
 
@@ -224,7 +253,7 @@ class OrgSettingsPage extends React.Component<{
                 <Box>
                   <Typography variant="h1">Manage Users</Typography>
                 </Box>
-                {this.state.orgUsers.length >= 5 ? <Button variant="primaryButton" onClick={this.upgradeClicked}> Upgrade</Button> : <Box align="right">
+                {this.state.orgUsers.length >= userLimit ? <Button variant="primaryButton" onClick={this.upgradeClicked}> Upgrade</Button> : <Box align="right">
                   <AddUserButton orgId={orgId} max-height="15px"></AddUserButton>
                 </Box>}
 
