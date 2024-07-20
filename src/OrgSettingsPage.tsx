@@ -236,7 +236,7 @@ class OrgSettingsPage extends React.Component<{
 
                   <Box>
                     <Typography variant="body3">Users</Typography>
-                    <Typography variant="h2">{this.getMaxUserLimit()} included, upgrade for more</Typography>
+                    <Typography variant="h2">{userLimit} included, upgrade for more</Typography>
                     {/* When on free plan, set message to "1 included, upgrade for additional users". When on org plan, we will display the custom terms for that client, but something like "2 included, $25 per additional user"*/}
                   </Box>
 
