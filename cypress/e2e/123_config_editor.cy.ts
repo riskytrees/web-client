@@ -39,7 +39,7 @@ describe('Config Editor', () => {
 
     // lets you provide json
     cy.get('.w-tc-editor-text').type("{backspace}{backspace}{{}\"Hello\": \"World\"\}")
-    cy.wait('@putConfig', { timeout: 20000 }).its('response.body.result.attributes.attributes.Hello').should('equal', 'World')
+    cy.wait('@putConfig', { timeout: 20000 }).its('response.body.result.attributes.Hello').should('equal', 'World')
 
     // If refresh we should see the same data
     cy.intercept('GET', 'http://localhost:8000/projects/*/configs/*').as('getConfig')
