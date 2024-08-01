@@ -1,22 +1,54 @@
-import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Stack, TextField, Typography } from '@mui/material';
+import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Modal, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
 import Item from '@mui/material/Grid';
 import { RiskyApi } from './api';
 import { JsonViewer } from '@textea/json-viewer';
 import CodeEditor from '@uiw/react-textarea-code-editor';
-import {baseComponents} from './App';
+import { baseComponents } from './App';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 class ConfigEditorPage extends React.Component<{
 }, {
     configJsonValue: string;
     projectId: string | null;
     configId: string | null;
+    configName: string | null;
+    modalOpen: boolean;
     addDialogOpen: boolean;
 }> {
     constructor(props) {
         super(props);
-        this.state = { configJsonValue: "", projectId: null, configId: null, addDialogOpen: false };
+        this.state = { configJsonValue: "", projectId: null, configId: null, configName: null, modalOpen: false, addDialogOpen: false };
 
         this.configChanged = this.configChanged.bind(this);
+        this.handleConfigNameChanged = this.handleConfigNameChanged.bind(this);
+
+        this.handleClose = this.handleClose.bind(this);
+    }
+
+    getConfigName() {
+        if (this.state.configName) {
+            return this.state.configName;
+        }
+
+        return this.state.configId;
+    }
+
+    handleClose() {
+        this.setState({
+            modalOpen: false
+        })
+    }
+
+    async handleConfigNameChanged(event) {
+        const proposedName = event.target.value;
+
+        this.setState({
+            configName: proposedName
+        }, () => {
+            this.updateConfig()
+        })
+
     }
 
     async componentDidMount(): Promise<void> {
@@ -41,7 +73,8 @@ class ConfigEditorPage extends React.Component<{
             let attributes = data.result.attributes;
 
             this.setState({
-                "configJsonValue": JSON.stringify(data.result.attributes, null, "\t")
+                "configJsonValue": JSON.stringify(data.result.attributes, null, "\t"),
+                "configName": data.result.name
             })
         }
 
@@ -72,7 +105,8 @@ class ConfigEditorPage extends React.Component<{
             let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.state.projectId + "/configs/" + this.state.configId, {
                 method: 'PUT',
                 body: JSON.stringify({
-                    attributes: parsedJSONData
+                    attributes: parsedJSONData,
+                    name: this.state.configName
                 }),
             })
         }
@@ -171,13 +205,35 @@ class ConfigEditorPage extends React.Component<{
 
                 <AppBar>
                     <Grid container>
-                        <Grid item xs={12}>
-                            <Item>
-                                <Typography overflow={"scroll"}>Configuration: {this.state.configId}</Typography>
-                            </Item>
+                        <Grid item xs={5}></Grid>
+                        <Grid item xs={2} marginTop="5.75px" sx={{ maxWidth: "220px" }}>
+                            <Stack alignContent="center" sx={{ maxWidth: "220px" }}>
+                                <Button variant='inlineNavButton' onClick={() => {
+                                    this.setState({
+                                        modalOpen: true
+                                    })
+                                }} endIcon={<ArrowDropDownIcon />}>{this.getConfigName()}</Button>
+                            </Stack>
                         </Grid>
+                        <Grid item xs={5}></Grid>
                     </Grid>
                 </AppBar>
+
+                <Modal
+                    open={this.state.modalOpen}
+                    onClose={this.handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+
+                    <Box className="treeSelectCenter">
+                        <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
+                            <TextField label="Config Name" variant="outlined" size="small" onChange={this.handleConfigNameChanged} defaultValue={this.getConfigName()} />
+
+                        </Stack>
+                    </Box>
+
+                </Modal>
 
                 <Grid container>
                     <Grid item xs={12}>
@@ -199,9 +255,6 @@ class ConfigEditorPage extends React.Component<{
                             </CodeEditor>
                         </Item>
                     </Grid>
-
-
-
                 </Grid>
 
             </>

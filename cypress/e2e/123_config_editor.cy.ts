@@ -34,20 +34,25 @@ describe('Config Editor', () => {
     cy.get(':nth-child(2) > .MuiGrid-root > .MuiButtonBase-root').click()
 
     cy.url().should('include', '/config/')
-    cy.get('body').should('contain', 'Configuration')
-    cy.wait(1000)
 
-    // lets you provide json
-    cy.get('.w-tc-editor-text').type("{backspace}{backspace}{{}\"Hello\": \"World\"\}")
-    cy.wait('@putConfig', { timeout: 20000 }).its('response.body.result.attributes.Hello').should('equal', 'World')
+    cy.url().then((url) => {
+      let urlParts = url.split("/")
+      cy.get('body').should('contain', urlParts[urlParts.length - 1])
+      cy.wait(1000)
+      // lets you provide json
+      cy.get('.w-tc-editor-text').type("{backspace}{backspace}{{}\"Hello\": \"World\"\}")
+      cy.wait('@putConfig', { timeout: 20000 }).its('response.body.result.attributes.Hello').should('equal', 'World')
+  
+      // If refresh we should see the same data
+      cy.intercept('GET', 'http://localhost:8000/projects/*/configs/*').as('getConfig')
+  
+      cy.reload(true)
+      cy.wait('@getConfig', { timeout: 20000 })
+  
+      cy.get('.w-tc-editor-text').contains("Hello")
+    })
 
-    // If refresh we should see the same data
-    cy.intercept('GET', 'http://localhost:8000/projects/*/configs/*').as('getConfig')
 
-    cy.reload(true)
-    cy.wait('@getConfig', { timeout: 20000 })
-
-    cy.get('.w-tc-editor-text').contains("Hello")
   })
 
 
