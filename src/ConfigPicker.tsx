@@ -14,7 +14,7 @@ import { RiskyApi } from './api';
 class ConfigPicker extends React.Component<{
     projectId: string
 }, {
-    availableConfigs: string[],
+    availableConfigs: Record<string, unknown>[],
     selectedConfig: string | null
 }>{
     constructor(props) {
@@ -44,8 +44,19 @@ class ConfigPicker extends React.Component<{
                 availableConfigs: []
             });
         } else {
+            const fullConfigs: Record<string, unknown>[] = [];
+
+            for (const configId of data['result']['ids']) {
+                let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + this.props.projectId + "/configs/" + configId, {});
+
+                fullConfigs.push({
+                    id: configId,
+                    name: data['result']['name']
+                })
+            }
+
             this.setState({
-                availableConfigs: data['result']['ids']
+                availableConfigs: fullConfigs
             });
         }
     }
@@ -107,8 +118,8 @@ class ConfigPicker extends React.Component<{
     render() {
         let menuItemList: JSX.Element[] = [];
 
-        for (const optionId of this.state['availableConfigs']) {
-            menuItemList.push(<MenuItem value={optionId}> Config {optionId} </MenuItem>)
+        for (const option of this.state['availableConfigs']) {
+            menuItemList.push(<MenuItem value={option.id}> {option.name ? option.name : option.id} </MenuItem>)
         }
 
         return (
@@ -117,12 +128,11 @@ class ConfigPicker extends React.Component<{
                     <Grid item xs={10}>
                         <Item>
                         <FormControl fullWidth size='small'>
-                            <InputLabel id="node-type-dropdown-label">Config</InputLabel>
+                            <InputLabel id="config-dropdown-label">Config</InputLabel>
                             <Select
                                 labelId="config-dropdown-label"
                                 id="config-dropdown"
                                 value={this.state.selectedConfig}
-                                label="Config"
                                 size="small"
                                 onChange={this.configItemClicked}
                             >
