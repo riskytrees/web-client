@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Box from "@mui/material/Box";
 import React from 'react';
-import { Stack } from "@mui/material";
+import { Link, Stack } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { RiskyApi } from './api';
 import Image from '@jy95/material-ui-image';
@@ -74,26 +74,28 @@ class LoginPage extends React.Component<{
       <>
 
 
-<Paper variant="loginback">
+        <Paper variant="loginback">
           <Paper variant="loginBox">
 
             <Paper variant="loginlogo">
-              <img src={LoginLogo}  width="50%"></img>
+              <img src={LoginLogo} width="50%"></img>
             </Paper>
             {/* <img src={LoginBackground} width="100%" height="100%"></img> */}
           </Paper>
-          <Paper variant="loginpane" sx={{ backgroundColor: 'rgb(25, 25, 25)', paddingLeft:'60px', paddingRight:'60px'}}>
-          <Stack justifyContent="center" direction="column" alignItems="left" spacing={0} height="100%">
-          <Typography variant="h1">Login</Typography>
-          <Box height={"70px"}></Box>
-            <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" size="small" onChange={this.handleEmailChanged} />
-            <Box height={"30px"}></Box>
-            <Button variant="primaryButton" onClick={this.loginClicked}>Enter</Button>
-          </Stack>
+          <Paper variant="loginpane" sx={{ backgroundColor: 'rgb(25, 25, 25)', paddingLeft: '60px', paddingRight: '60px' }}>
+            <Stack justifyContent="center" direction="column" alignItems="left" spacing={0} height="100%">
+              <Typography variant="h1">Login</Typography>
+              <Box height={"40px"}></Box>
+              <TextField fullWidth id="outlined-basic" label="Email" variant="outlined" size="small" onChange={this.handleEmailChanged} />
+              <Box height={"20px"}></Box>
+              <Button variant="primaryButton" onClick={this.loginClicked}>Enter</Button>
+              <Box height={"20px"}></Box> 
+              <Typography variant="caption">By signing up you confirm that you have read and agree to our <Link href="https://riskytrees.com/privacy-policy">privacy policy</Link> and <Link href="https://riskytrees.com/terms-of-use">terms of service</Link>. </Typography>
+            </Stack>
 
-  
+
           </Paper>
-          </Paper>
+        </Paper>
 
 
 
