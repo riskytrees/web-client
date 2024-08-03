@@ -7,7 +7,9 @@ export interface NodeRiskResult {
 
 export class RiskyRisk {
     constructor(private treeMap: Record<string, TreeData>, private rootTreeId: string | null, private cache: Record<string, Record<string, any> | null> ) {
-        this.cache = {}
+        this.cache = {
+            "__lastTree": {"seen": JSON.stringify(this.treeMap)}
+        }
 
     }
 
@@ -19,6 +21,14 @@ export class RiskyRisk {
     //
     computeRiskForNode(nodeId: string, riskModel: string, forceConditions?: Record<string, boolean>) {
         const cacheKey = nodeId + riskModel + JSON.stringify(forceConditions);
+
+        if (this.cache.__lastTree?.seen !== JSON.stringify(this.treeMap)) {
+            // Tree was updated. Start cache over.
+            this.cache = {
+                "__lastTree": this.treeMap
+            }
+        }
+
         if (cacheKey in this.cache) {
             return this.cache[cacheKey];
         }
