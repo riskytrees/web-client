@@ -287,9 +287,11 @@ class HomePage extends React.Component<{
               </Grid>
               <Stack alignContent="right" direction="row" marginLeft="auto">
                 <Box display="flex" justifyContent="right" alignItems="right" >
-                  <Grid item>
-                    <Button variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
-                  </Grid>
+                  {/*
+                    <Grid item>
+                      <Button variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
+                    </Grid>
+                  */}
                   <Grid item marginRight="14px">
                     <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between" onClick={this.projectTreePickerClicked}> {this.state.filterToTrees ? "Trees" : "Projects"}</Button>
 

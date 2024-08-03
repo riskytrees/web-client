@@ -97,7 +97,10 @@ class TreesList extends React.Component<{
                 {tree.title} •
               </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
 
-              <br></br><Stack direction="row" alignItems="bottom" gap={1}>
+              {/*
+                <br></br>
+              
+              <Stack direction="row" alignItems="bottom" gap={1}>
                 <PersonIcon fontSize="small"></PersonIcon>
                 <Typography variant="body2" gutterBottom>
                   [Personal]
@@ -111,6 +114,7 @@ class TreesList extends React.Component<{
                 </Typography>
               </Stack>
 
+              */}
             </CardContent>
           </CardActionArea>
         </Card>)
