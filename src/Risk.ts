@@ -6,7 +6,9 @@ export interface NodeRiskResult {
 }
 
 export class RiskyRisk {
-    constructor(private treeMap: Record<string, TreeData>, private rootTreeId: string | null ) {
+    constructor(private treeMap: Record<string, TreeData>, private rootTreeId: string | null, private cache: Record<string, Record<string, any> | null> ) {
+        this.cache = {}
+
     }
 
     // Returns an object of computed values:
@@ -16,19 +18,28 @@ export class RiskyRisk {
     // }
     //
     computeRiskForNode(nodeId: string, riskModel: string, forceConditions?: Record<string, boolean>) {
-        let result = {};
+        const cacheKey = nodeId + riskModel + JSON.stringify(forceConditions);
+        if (cacheKey in this.cache) {
+            return this.cache[cacheKey];
+        }
+
+        let result: Record<string, any> | null  = null;
 
         // For now, add empty attributes for the appropriate model.
         if (riskModel === 'b9ff54e0-37cf-41d4-80ea-f3a9b1e3af74') {
             // Attacker likelihood
-            return this.computeAttackerLikelihood(nodeId, [], forceConditions);
+            result = this.computeAttackerLikelihood(nodeId, [], forceConditions);
         } else if (riskModel === 'f1644cb9-b2a5-4abb-813f-98d0277e42f2') {
             // Risk of Attack
-            return this.computeAttackRisk(nodeId, [], forceConditions);
+            result =  this.computeAttackRisk(nodeId, [], forceConditions);
         } else if (riskModel === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
             // EVITA
-            return this.computeEVITARisk(nodeId, [], forceConditions);
+            result = this.computeEVITARisk(nodeId, [], forceConditions);
         }
+
+        this.cache[cacheKey] = result;
+
+        return result;
     }
 
     computeAveragePrimaryRiskValue(riskModel: string) {
