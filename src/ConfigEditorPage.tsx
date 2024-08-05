@@ -6,6 +6,7 @@ import { JsonViewer } from '@textea/json-viewer';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { baseComponents } from './App';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 class ConfigEditorPage extends React.Component<{
 }, {
@@ -18,12 +19,13 @@ class ConfigEditorPage extends React.Component<{
 }> {
     constructor(props) {
         super(props);
-        this.state = { configJsonValue: "", projectId: null, configId: null, configName: null, modalOpen: false, addDialogOpen: false };
+        this.state = {configJsonValue: "", projectId: null, configId: null, configName: null, modalOpen: false, addDialogOpen: false };
 
         this.configChanged = this.configChanged.bind(this);
         this.handleConfigNameChanged = this.handleConfigNameChanged.bind(this);
 
         this.handleClose = this.handleClose.bind(this);
+        this.handleBackClick = this.handleBackClick.bind(this);
     }
 
     getConfigName() {
@@ -32,6 +34,10 @@ class ConfigEditorPage extends React.Component<{
         }
 
         return this.state.configId;
+    }
+
+    async handleBackClick() {
+        window.history.back();
     }
 
     handleClose() {
@@ -205,7 +211,7 @@ class ConfigEditorPage extends React.Component<{
 
                 <AppBar>
                     <Grid container>
-                        <Grid item xs={5}></Grid>
+                        <Grid item xs={5} marginTop="10px" sx={{ maxWidth: "220px" }}><IconButton onClick={this.handleBackClick} >{<ArrowBackIcon />}</IconButton></Grid>
                         <Grid item xs={2} marginTop="5.75px" sx={{ maxWidth: "220px" }}>
                             <Stack alignContent="center" sx={{ maxWidth: "220px" }}>
                                 <Button variant='inlineNavButton' onClick={() => {
