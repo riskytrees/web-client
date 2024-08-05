@@ -816,7 +816,7 @@ class TreeViewPage extends React.Component<{
               <Stack spacing={2} direction="row">
                 <Box></Box>
 
-                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img>Action Panel</Button>
+                <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' endIcon={<ArrowDropDownIcon />}><img src={LogoMark} width="25px"></img>Menu</Button>
                 <Popover
                   id="actionButton"
                   anchorReference="anchorPosition"
