@@ -51,17 +51,19 @@ class TreeViewPage extends React.Component<{
   searchQuery: string;
   searchIndex: number;
   confirmDeleteOpen: boolean;
+  copiedData: Record<string, any>;
 }> {
   riskEngine: RiskyRisk;
   searchEngine: TreeSearch;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, searchModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false };
+    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, searchModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false, copiedData: {} };
 
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
+    this.onCopyOrPasteNode = this.onCopyOrPasteNode.bind(this);
     this.localTreeNodeUpdate = this.localTreeNodeUpdate.bind(this);
     this.updateTree = this.updateTree.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
@@ -339,6 +341,35 @@ class TreeViewPage extends React.Component<{
 
   onNodeChanged(treeIdToUpdate: string, data) {
     this.localTreeNodeUpdate(treeIdToUpdate, data)
+  }
+
+  copyRepresentation(treeId: string, nodeId: string) {
+    const tree = this.state.treeMap[treeId];
+    let result = {}
+
+    for (const node of this.state.treeMap[treeId].nodes) {
+      if (node.id === nodeId) {
+        result = {...node}
+        result['children'] = []
+      }
+    }
+
+    return result;
+  }
+
+  async onCopyOrPasteNode(isCopy: boolean) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const primaryTreeId = urlParams.get('id');
+
+    if (this.state.selectedNode) {
+      const treeId = await this.getTreeIdFromNodeId(this.state.selectedNode.id);
+      if (treeId === primaryTreeId) {
+        this.setState({
+          "copiedData": this.copyRepresentation(treeId, this.state.selectedNode.id)
+        })
+      }
+    }
   }
 
   async handleSearchBack() {
@@ -1006,7 +1037,7 @@ class TreeViewPage extends React.Component<{
 
         {rightPane}
 
-        {<TreeViewer selectedNode={this.state.selectedNode} onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
+        {<TreeViewer selectedNode={this.state.selectedNode} onCopyOrPasteNode={this.onCopyOrPasteNode} onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
 
       </>
     )
