@@ -486,6 +486,7 @@ class TreeViewer extends React.Component<{
                 this.props.onCopyOrPasteNode(true);
               } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyV") {
                 console.log("Paste")
+                this.props.onCopyOrPasteNode(false);
               }
 
             })
