@@ -343,14 +343,23 @@ class TreeViewPage extends React.Component<{
     this.localTreeNodeUpdate(treeIdToUpdate, data)
   }
 
-  copyRepresentation(treeId: string, nodeId: string) {
-    const tree = this.state.treeMap[treeId];
+  async copyRepresentation(treeId: string, nodeId: string) {
+    const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeId]));
     let result = {}
 
-    for (const node of this.state.treeMap[treeId].nodes) {
+    for (const node of treeData.nodes) {
       if (node.id === nodeId) {
         result = {...node}
         result['children'] = []
+
+        for (const childId of node.children) {
+          const subNodeTreeId = await this.getTreeIdFromNodeId(childId);
+          if (subNodeTreeId === treeId) {
+            result['children'].push(await this.copyRepresentation(treeId, childId))
+          } else {
+            result['children'].push(childId)
+          }
+        }
       }
     }
 
@@ -366,7 +375,7 @@ class TreeViewPage extends React.Component<{
       const treeId = await this.getTreeIdFromNodeId(this.state.selectedNode.id);
       if (treeId === primaryTreeId) {
         this.setState({
-          "copiedData": this.copyRepresentation(treeId, this.state.selectedNode.id)
+          "copiedData": await this.copyRepresentation(treeId, this.state.selectedNode.id)
         })
       }
     }
