@@ -14,6 +14,7 @@ class TreeViewer extends React.Component<{
   onNodeClicked: Function;
   onZoomChanged: Function;
   onAddOrDeleteNode: Function;
+  onCopyOrPasteNode: Function;
   riskEngine: RiskyRisk | null;
   selectedModel: string | null;
   selectedNode: string | null;
@@ -480,6 +481,12 @@ class TreeViewer extends React.Component<{
                   this.props.onAddOrDeleteNode(treeId, this.state.currentNode['id'], false);
   
                 }
+              } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyC") {
+                console.log("Copy")
+                this.props.onCopyOrPasteNode(true);
+              } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyV") {
+                console.log("Paste")
+                this.props.onCopyOrPasteNode(false);
               }
 
             })
