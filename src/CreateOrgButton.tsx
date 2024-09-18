@@ -5,6 +5,7 @@ import { RiskyRisk } from './Risk';
 import { title } from 'process';
 import { v4 as uuidv4 } from 'uuid';
 import { RiskyApi } from './api';
+import HomePage from './HomePage';
 
 class CreateOrgButton extends React.Component<{
 
@@ -49,6 +50,8 @@ class CreateOrgButton extends React.Component<{
           name: title
         })
       })
+
+      localStorage.setItem(HomePage.SELECTED_ORG_KEY, JSON.stringify(data['result']));
 
       this.setState({ orgId: data['result']['id'] }, () => {})
 
