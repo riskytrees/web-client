@@ -36,6 +36,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HistoryIcon from '@mui/icons-material/History';
 import AddIcon from '@mui/icons-material/Add';
 import { RiskyApi } from './api';
+
 class HomePage extends React.Component<{
 }, {
   modalOpen: boolean;
@@ -45,9 +46,15 @@ class HomePage extends React.Component<{
   selectedOrg: Record<string, unknown> | null;
   filterToTrees: boolean;
 }> {
+  static SELECTED_ORG_KEY = "HomePage:selectedOrg"
+
+
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, orgModalOpen: false, orgs: [], orgSelecterOpen: false, selectedOrg: null, filterToTrees: false };
+    let savedSelectedOrg = localStorage.getItem(HomePage.SELECTED_ORG_KEY);
+    savedSelectedOrg = savedSelectedOrg ? JSON.parse(savedSelectedOrg) : null;
+  
+    this.state = { modalOpen: false, orgModalOpen: false, orgs: [], orgSelecterOpen: false, selectedOrg: savedSelectedOrg, filterToTrees: false };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleOrgOpen = this.handleOrgOpen.bind(this);
@@ -109,9 +116,11 @@ class HomePage extends React.Component<{
     return null;
   }
 
-  orgSelected(org) {
+  orgSelected(org) {  
     this.setState({
       selectedOrg: org
+    }, () => {
+      localStorage.setItem(HomePage.SELECTED_ORG_KEY, JSON.stringify(this.state.selectedOrg));
     })
   }
 
@@ -134,6 +143,14 @@ class HomePage extends React.Component<{
     if (data['ok'] === true && data['result']['orgs']) {
       this.setState({
         orgs: data['result']['orgs']
+      }, () => {
+
+        if (this.state.selectedOrg && !this.state.orgs.some((element) => element.id === this.state.selectedOrg.id) ) {
+          this.setState({
+            selectedOrg: null
+          });
+          localStorage.removeItem(HomePage.SELECTED_ORG_KEY)
+        }
       })
 
     }
