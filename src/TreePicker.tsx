@@ -1,17 +1,16 @@
-import { TextField } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid, IconButton, Paper, Stack, TextField, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import React from 'react';
 import { RiskyApi } from './api';
-import { JSXElement } from '@babel/types';
-
+import CancelIcon from '@mui/icons-material/Cancel';
 
 class TreePicker extends React.Component<{
-    enabled: boolean;
-    onSubmit: Function;
-    onCancel: Function;
+  enabled: boolean;
+  onSubmit: Function;
+  onCancel: Function;
 }, {
-    inputContent: string;
-    treeOptions: Record<string, string>[]
+  inputContent: string;
+  treeOptions: Record<string, string>[]
 }> {
   constructor(props) {
     super(props);
@@ -33,7 +32,7 @@ class TreePicker extends React.Component<{
 
     for (const tree of result.result.trees) {
       result = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + tree['id'], {});
-  
+
 
       treeOptions.push({
         "title": tree['title'],
@@ -59,13 +58,46 @@ class TreePicker extends React.Component<{
 
   render() {
     if (!this.props.enabled) {
-        return null;
+      return null;
     }
 
     return (
       <>
-        {this.generateOptions()}
-        <Button onClick={() => this.props.onCancel()}>Cancel</Button>
+        <Card variant="outlined">
+          <CardHeader title="Add a Subtree" action={
+            <IconButton onClick={() => this.props.onCancel()}>
+              <CancelIcon></CancelIcon>
+            </IconButton>
+          }>
+          </CardHeader>
+          <CardContent>
+            <Stack spacing={1}>
+              <Typography>From Project</Typography>
+              {this.generateOptions()}
+              <Typography>From Community</Typography>
+              <Grid container>
+                <Grid item xs={8}>
+                  <TextField id="customNodeId" label="Node ID" size="small"></TextField>
+                </Grid>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={3}>
+                  <Button onClick={() => {
+                    const nodeId = document.getElementById("customNodeId").value;
+                    if (nodeId && nodeId !== '') {
+                      this.props.onSubmit(nodeId)
+
+                    }
+                  }}>Add</Button>
+                </Grid>
+
+              </Grid>
+            </Stack>
+          </CardContent>
+        </Card>
+
+
+
+
 
       </>
     );
