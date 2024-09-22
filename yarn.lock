@@ -5869,9 +5869,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:13.13.3":
-  version: 13.13.3
-  resolution: "cypress@npm:13.13.3"
+"cypress@npm:13.14.2":
+  version: 13.14.2
+  resolution: "cypress@npm:13.14.2"
   dependencies:
     "@cypress/request": ^3.0.1
     "@cypress/xvfb": ^1.2.4
@@ -5917,7 +5917,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: fad0c9c10d0f2a440a6accce589ed0832364310ed2880e4679b0c3b4bb6a994b458c436e9bf0ba5ae08b629d4f7011e1dd818c820b1b593961499d64c49cfad5
+  checksum: ba7f7351ecb308b78c6ebad0ceda8bec05a472e3daeb5b7cde083737d59ec9dbc8bf7643c8b2c10c21afa07a65156d6b24bc1d072263a1f46442c683de8e875c
   languageName: node
   linkType: hard
 
@@ -15047,7 +15047,7 @@ __metadata:
     "@types/react": ^18.3.5
     "@types/react-dom": ^18.3.0
     "@uiw/react-textarea-code-editor": ^3.0.2
-    cypress: 13.13.3
+    cypress: 13.14.2
     file-saver: ^2.0.5
     install: ^0.13.0
     lodash.debounce: ^4.0.8
