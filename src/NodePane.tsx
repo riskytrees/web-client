@@ -420,6 +420,8 @@ class NodePane extends React.Component<{
   }
 
   render() {
+    const commandOrControlSymbol = window.navigator.userAgent.toLowerCase().includes("mac") ? "⌘" : "Ctrl"
+
     if (!this.state.nodeId) {
       return null;
     }
@@ -477,12 +479,12 @@ class NodePane extends React.Component<{
       <TextField label="Description" disabled={!readOnly} onChange={this.handleNodeDescriptionChange} multiline variant="outlined" rows="3" size="small" value={this.state.nodeDescription} />
       <Box height={"24px"}></Box>
 
-      <Button variant="addButton" disabled={!readOnly} startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node</Button>
+      <Button variant="addButton" disabled={!readOnly} startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node ({commandOrControlSymbol + "N"})</Button>
       <Box height={"5px"}></Box>
       <Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleAddSubtree}>Add Subtree</Button>
       <TreePicker enabled={this.state.showSubtreeDialog} onSubmit={this.pickedSubtreeCallback} onCancel={this.canceledSubtreeCallback}></TreePicker>
       <Box height={"5px"}></Box>
-      <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node</Button>
+      <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node ({commandOrControlSymbol + "⌫"})</Button>
       <Box height={"24px"}></Box>
       <Typography variant="caption">Node ID: {this.state.nodeId}</Typography>
 
