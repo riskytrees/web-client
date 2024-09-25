@@ -496,6 +496,11 @@ class TreeViewer extends React.Component<{
         }
       }
       container.addEventListener("keydown", keydownListener(nodes).bind(this));
+
+      if (this.props.selectedNode) {
+        network?.selectNodes([this.props.selectedNode['id']])
+
+      }
     }
   }
 
