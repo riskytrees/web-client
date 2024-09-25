@@ -179,8 +179,8 @@ class NodePane extends React.Component<{
     }
   }
 
-  componentDidLoad() {
-
+  componentDidMount() {
+    const element = document.getElementById("nodeNameField");
   }
 
   componentDidUpdate(prevProps) {
@@ -194,6 +194,7 @@ class NodePane extends React.Component<{
           conditionAttribute: this.props.currentNode.conditionAttribute,
         }, () => {
           this.loadTreeIdForThisNode();
+          const element = document.getElementById("nodeNameField");
         });
       } else {
         this.setState({
@@ -436,7 +437,7 @@ class NodePane extends React.Component<{
       <Typography variant="h3">Details</Typography>
       <Box height={"24px"}></Box>
 
-      <TextField disabled={!readOnly} label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
+      <TextField id="nodeNameField" disabled={!readOnly} label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
       <Box height={"24px"}></Box>
       <FormControl size="small">
         <InputLabel id="node-type-dropdown-label">Node Type</InputLabel>

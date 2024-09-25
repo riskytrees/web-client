@@ -465,15 +465,7 @@ class TreeViewer extends React.Component<{
                   }
 
                 }
-              } else if (event.code === "KeyN") {
-                if (this.state.currentNode) {
-                  const queryString = window.location.search;
-                  const urlParams = new URLSearchParams(queryString);
-                  const treeId = urlParams.get('id');
-                  this.props.onAddOrDeleteNode(treeId, this.state.currentNode['id'], true);
-  
-                }
-              } else if (event.code === "Backspace") {
+              } else if ((event.ctrlKey || event.metaKey) && event.code === "Backspace") {
                 if (this.state.currentNode) {
                   const queryString = window.location.search;
                   const urlParams = new URLSearchParams(queryString);
@@ -487,6 +479,17 @@ class TreeViewer extends React.Component<{
               } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyV") {
                 console.log("Paste")
                 this.props.onCopyOrPasteNode(false);
+              } else if (event.key === "+") {
+                if (this.state.currentNode) {
+                  const queryString = window.location.search;
+                  const urlParams = new URLSearchParams(queryString);
+                  const treeId = urlParams.get('id');
+                  this.props.onAddOrDeleteNode(treeId, this.state.currentNode['id'], true);
+  
+                }
+              } else if (!(event.ctrlKey || event.metaKey || event.code === "ShiftLeft")) {
+                const element = document.getElementById("nodeNameField");
+                element?.focus()
               }
 
             })
@@ -498,8 +501,13 @@ class TreeViewer extends React.Component<{
       container.addEventListener("keydown", keydownListener(nodes).bind(this));
 
       if (this.props.selectedNode) {
-        network?.selectNodes([this.props.selectedNode['id']])
-
+        try {
+          network?.selectNodes([this.props.selectedNode['id']])
+        } catch ({name, msg}) {
+          if (name !== "RangeError") {
+            throw {name, msg}
+          }
+        }
       }
     }
   }
