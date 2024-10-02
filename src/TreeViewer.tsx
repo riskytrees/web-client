@@ -15,19 +15,21 @@ class TreeViewer extends React.Component<{
   onZoomChanged: Function;
   onAddOrDeleteNode: Function;
   onCopyOrPasteNode: Function;
+  onNodeFoldToggle: Function;
   riskEngine: RiskyRisk | null;
   selectedModel: string | null;
   selectedNode: string | null;
+  collapsedDownNodeIds: string[];
 }, {
   treeMap: Record<string, TreeData>;
   network: Network | null;
   debouncing: boolean;
   currentNode: Record<string, unknown> | null
-  collapsedDownNodeIds: string[];
+  
 }> {
   constructor(props) {
     super(props);
-    this.state = { treeMap: this.props.treeMap, network: null, debouncing: false, currentNode: null, collapsedDownNodeIds: [] };
+    this.state = { treeMap: this.props.treeMap, network: null, debouncing: false, currentNode: null };
 
     this.loadAndRender = this.loadAndRender.bind(this);
     this.updateZoom = this.updateZoom.bind(this);
@@ -218,7 +220,7 @@ class TreeViewer extends React.Component<{
           }
         })
 
-        if (!this.state.collapsedDownNodeIds.includes(node.id)) {
+        if (!this.props.collapsedDownNodeIds.includes(node.id)) {
           for (const child of node.children) {
             for (const node of tree.nodes) {
               if (node.id === child) {
@@ -401,20 +403,7 @@ class TreeViewer extends React.Component<{
 
               // do something here
               if ((event.ctrlKey || event.metaKey) && event.code === "ArrowDown") {
-                console.log("Fold Down")
-                const nodeIds = this.state.collapsedDownNodeIds;
-                if (nodeIds.includes(this.state.currentNode.id)) {
-                  this.setState({
-                    collapsedDownNodeIds: nodeIds.filter((item) => {
-                      return item !== this.state.currentNode.id
-                    })
-                  }, () => this.loadAndRender())
-                } else {
-                  nodeIds.push(this.state.currentNode.id)
-                  this.setState({
-                    collapsedDownNodeIds: nodeIds
-                  }, () => this.loadAndRender())
-                }
+                this.props.onNodeFoldToggle();
               }
               else if (event.code === "ArrowUp") {
                 let network = this.state.network;

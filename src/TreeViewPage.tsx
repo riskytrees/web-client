@@ -53,13 +53,14 @@ class TreeViewPage extends React.Component<{
   searchIndex: number;
   confirmDeleteOpen: boolean;
   copiedData: Record<string, any>;
+  collapsedDownNodeIds: string[];
 }> {
   riskEngine: RiskyRisk;
   searchEngine: TreeSearch;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, searchModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false, copiedData: {} };
+    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, searchModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false, copiedData: {}, collapsedDownNodeIds: [] };
 
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
@@ -90,6 +91,7 @@ class TreeViewPage extends React.Component<{
     this.handleSearchForward = this.handleSearchForward.bind(this);
     this.handleStartDeleteTree = this.handleStartDeleteTree.bind(this);
     this.pastePartialTree = this.pastePartialTree.bind(this);
+    this.onNodeFoldToggle = this.onNodeFoldToggle.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
     this.searchEngine = new TreeSearch(this.state.treeMap, null);
@@ -173,6 +175,23 @@ class TreeViewPage extends React.Component<{
       await this.loadPublicity()
     }
 
+  }
+
+  onNodeFoldToggle() {
+    console.log("Fold Down")
+    const nodeIds = this.state.collapsedDownNodeIds;
+    if (nodeIds.includes(this.state.selectedNode.id)) {
+      this.setState({
+        collapsedDownNodeIds: nodeIds.filter((item) => {
+          return item !== this.state.selectedNode.id
+        })
+      })
+    } else {
+      nodeIds.push(this.state.selectedNode.id)
+      this.setState({
+        collapsedDownNodeIds: nodeIds
+      })
+    }
   }
 
   goBackToProjects() {
@@ -1096,7 +1115,7 @@ class TreeViewPage extends React.Component<{
 
         {rightPane}
 
-        {<TreeViewer selectedNode={this.state.selectedNode} onCopyOrPasteNode={this.onCopyOrPasteNode} onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
+        {<TreeViewer collapsedDownNodeIds={this.state.collapsedDownNodeIds} onNodeFoldToggle={this.onNodeFoldToggle} selectedNode={this.state.selectedNode} onCopyOrPasteNode={this.onCopyOrPasteNode} onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
 
       </>
     )
