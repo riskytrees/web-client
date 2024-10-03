@@ -178,7 +178,6 @@ class TreeViewPage extends React.Component<{
   }
 
   onNodeFoldToggle() {
-    console.log("Fold Down")
     const nodeIds = this.state.collapsedDownNodeIds;
     if (nodeIds.includes(this.state.selectedNode.id)) {
       this.setState({
@@ -374,7 +373,6 @@ class TreeViewPage extends React.Component<{
         result['children'] = []
 
         for (const childId of node.children) {
-          console.log(childId)
           const subNodeTreeId = await this.getTreeIdFromNodeId(childId);
           if (subNodeTreeId === treeId) {
             result['children'].push(await this.copyRepresentation(treeId, childId))
@@ -606,7 +604,6 @@ class TreeViewPage extends React.Component<{
         if (node.id === parentNodeId) {
 
           if (subtreeNodeId) {
-            console.log("Subtree add!")
             if (await this.validateSubtreeAddition(subtreeNodeId, node.id)) {
               treeData.nodes[idx]['children'].push(subtreeNodeId);
             }
@@ -616,7 +613,6 @@ class TreeViewPage extends React.Component<{
           } else if (node.id !== treeData.rootNodeId) {
             // Delete
             if (treeData.nodes[idx]['children'].length === 0) {
-              console.log("Delete")
               nodeToDelete = idx;
             }
           }
@@ -633,7 +629,6 @@ class TreeViewPage extends React.Component<{
         treeData.nodes.splice(nodeToDelete, 1);
       } else if (!isAddAction) {
         // Right this second you can only have one copy of a subtree so simply find all the nodes that reference the subtree:
-        console.log("Parent: " + parentNodeId)
         for (const [idx, node] of treeData.nodes.entries()) {
           if (node.children.includes(parentNodeId)) {
             treeData.nodes[idx]['children'] = treeData.nodes[idx]['children'].filter(item => item !== parentNodeId);
@@ -1115,7 +1110,7 @@ class TreeViewPage extends React.Component<{
 
         {rightPane}
 
-        {<TreeViewer collapsedDownNodeIds={this.state.collapsedDownNodeIds} onNodeFoldToggle={this.onNodeFoldToggle} selectedNode={this.state.selectedNode} onCopyOrPasteNode={this.onCopyOrPasteNode} onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
+        {<TreeViewer collapsedDownNodeIds={structuredClone(this.state.collapsedDownNodeIds)} onNodeFoldToggle={this.onNodeFoldToggle} selectedNode={this.state.selectedNode} onCopyOrPasteNode={this.onCopyOrPasteNode} onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
 
       </>
     )

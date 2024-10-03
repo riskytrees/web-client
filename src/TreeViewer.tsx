@@ -49,24 +49,21 @@ class TreeViewer extends React.Component<{
   }
 
   loadAndRender() {
-    console.log(this.props.selectedModel)
-    console.log(this.props.riskEngine)
     const nodes: Record<string, any>[] = [];
     const edges: Record<string, any>[] = [];
 
-    console.log(this.props.treeMap)
 
     for (const tree of Object.values(this.state.treeMap)) {
       const nodesToAdd: any[] = [];
       for (const node of tree.nodes) {
         if (node.id === tree.rootNodeId) {
           nodesToAdd.push(node);
-          console.log(nodesToAdd)
         }
       }
 
       while (nodesToAdd.length > 0) {
         const node = nodesToAdd.pop();
+        const notCollapsed = !this.props.collapsedDownNodeIds.includes(node.id);
 
         nodes.push({
           id: node.id,
@@ -112,7 +109,7 @@ class TreeViewer extends React.Component<{
             const splittedLabel = label.split("---");
             ctx.save();
             ctx.restore();
-            const labelText = splittedLabel[0];
+            let labelText = splittedLabel[0];
             let valueText = splittedLabel[1];
 
             if (valueText.length > MAX_NODE_TEXT_SIZE) {
@@ -130,6 +127,10 @@ class TreeViewer extends React.Component<{
             if (selected) {
               nodeBGColor = labelBGColor;
               nodeColor = "#ffffff";
+            }
+
+            if (!notCollapsed) {
+              labelText += '   ›'
             }
 
             const r = 5;
@@ -220,7 +221,7 @@ class TreeViewer extends React.Component<{
           }
         })
 
-        if (!this.props.collapsedDownNodeIds.includes(node.id)) {
+        if (notCollapsed) {
           for (const child of node.children) {
             for (const node of tree.nodes) {
               if (node.id === child) {
@@ -499,10 +500,8 @@ class TreeViewer extends React.Component<{
 
                 }
               } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyC") {
-                console.log("Copy")
                 this.props.onCopyOrPasteNode(true);
               } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyV") {
-                console.log("Paste")
                 this.props.onCopyOrPasteNode(false);
               } else if (event.key === "+") {
                 if (this.state.currentNode) {
@@ -591,9 +590,12 @@ class TreeViewer extends React.Component<{
       }
 
       if ((this.props.selectedNode != prevProps.selectedNode) && this.props.selectedNode) {
-        console.log(this.props.selectedNode)
         let network = this.state.network;
         network?.selectNodes([this.props.selectedNode['id']])
+      }
+
+      if (prevProps.collapsedDownNodeIds.length !== this.props.collapsedDownNodeIds.length) {
+        this.loadAndRender();
       }
 
       if (this.props.zoomLevel) {
