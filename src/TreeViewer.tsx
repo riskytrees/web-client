@@ -15,15 +15,17 @@ class TreeViewer extends React.Component<{
   onZoomChanged: Function;
   onAddOrDeleteNode: Function;
   onCopyOrPasteNode: Function;
+  onNodeFoldToggle: Function;
   riskEngine: RiskyRisk | null;
   selectedModel: string | null;
   selectedNode: string | null;
-
+  collapsedDownNodeIds: string[];
 }, {
   treeMap: Record<string, TreeData>;
   network: Network | null;
   debouncing: boolean;
   currentNode: Record<string, unknown> | null
+  
 }> {
   constructor(props) {
     super(props);
@@ -47,13 +49,22 @@ class TreeViewer extends React.Component<{
   }
 
   loadAndRender() {
-    console.log(this.props.selectedModel)
-    console.log(this.props.riskEngine)
     const nodes: Record<string, any>[] = [];
     const edges: Record<string, any>[] = [];
 
+
     for (const tree of Object.values(this.state.treeMap)) {
+      const nodesToAdd: any[] = [];
       for (const node of tree.nodes) {
+        if (node.id === tree.rootNodeId) {
+          nodesToAdd.push(node);
+        }
+      }
+
+      while (nodesToAdd.length > 0) {
+        const node = nodesToAdd.pop();
+        const notCollapsed = !this.props.collapsedDownNodeIds.includes(node.id);
+
         nodes.push({
           id: node.id,
           label: this.getShapeForNodeType(node.modelAttributes) + '---' + node.title,
@@ -98,7 +109,7 @@ class TreeViewer extends React.Component<{
             const splittedLabel = label.split("---");
             ctx.save();
             ctx.restore();
-            const labelText = splittedLabel[0];
+            let labelText = splittedLabel[0];
             let valueText = splittedLabel[1];
 
             if (valueText.length > MAX_NODE_TEXT_SIZE) {
@@ -108,14 +119,18 @@ class TreeViewer extends React.Component<{
             let nodeColor = "#1F1DA2";
             let labelBGColor = "#0D0C4B";
             let nodeBGColor = "#090920";
-            
-            if (labelText === "And") { nodeColor = "#00FF38"; labelBGColor = "#154B0C"; nodeBGColor = "#0B1C09";  }
+
+            if (labelText === "And") { nodeColor = "#00FF38"; labelBGColor = "#154B0C"; nodeBGColor = "#0B1C09"; }
             if (labelText === "Condition") { nodeColor = "#1F1DA2"; labelBGColor = "#0D0C4B"; nodeBGColor = "#090920"; }
             if (labelText === "Or") { nodeColor = "#4E0943"; labelBGColor = "#4B0C45"; nodeBGColor = "#1A0818"; }
 
             if (selected) {
               nodeBGColor = labelBGColor;
-              nodeColor="#ffffff";
+              nodeColor = "#ffffff";
+            }
+
+            if (!notCollapsed) {
+              labelText += '   ›'
             }
 
             const r = 5;
@@ -206,43 +221,51 @@ class TreeViewer extends React.Component<{
           }
         })
 
-        for (const child of node.children) {
-          let label = '';
-          let edgeColor = 'white'
-          let edgeWidth = 1;
+        if (notCollapsed) {
+          for (const child of node.children) {
+            for (const node of tree.nodes) {
+              if (node.id === child) {
+                nodesToAdd.push(node);
+              }
+            }
+            let label = '';
+            let edgeColor = 'white'
+            let edgeWidth = 1;
 
-          if (this.props.selectedModel && this.props.riskEngine) {
-            const risk = this.props.riskEngine.computeRiskForNode(child, this.props.selectedModel);
-            if (risk) {
-              const riskAsValue = risk.computed[risk.interface.primary];
-              label = '' + riskAsValue;
-              const averageRisk = this.props.riskEngine.computeAveragePrimaryRiskValue(this.props.selectedModel);
-              let diff = riskAsValue / averageRisk;
-              let colorVal = Math.min(255, Math.max(0, (125 * diff)));
-              if (colorVal < 125) {
-                edgeColor = 'rgb(' + (255 - colorVal) + ',0,0)';
-              } else {
-                edgeColor = 'rgb(0,' + colorVal + ',0)';
-                edgeWidth = (colorVal / 255) * 5
+            if (this.props.selectedModel && this.props.riskEngine) {
+              const risk = this.props.riskEngine.computeRiskForNode(child, this.props.selectedModel);
+              if (risk) {
+                const riskAsValue = risk.computed[risk.interface.primary];
+                label = '' + riskAsValue;
+                const averageRisk = this.props.riskEngine.computeAveragePrimaryRiskValue(this.props.selectedModel);
+                let diff = riskAsValue / averageRisk;
+                let colorVal = Math.min(255, Math.max(0, (125 * diff)));
+                if (colorVal < 125) {
+                  edgeColor = 'rgb(' + (255 - colorVal) + ',0,0)';
+                } else {
+                  edgeColor = 'rgb(0,' + colorVal + ',0)';
+                  edgeWidth = (colorVal / 255) * 5
+
+                }
 
               }
-              
             }
-          }
 
-          edges.push({
-            from: node.id,
-            to: child,
-            label: label,
-            color: edgeColor,
-            width: edgeWidth,
-            font: {
-              color: 'white',
-              strokeWidth: 0
-            }
-          })
+            edges.push({
+              from: node.id,
+              to: child,
+              label: label,
+              color: edgeColor,
+              width: edgeWidth,
+              font: {
+                color: 'white',
+                strokeWidth: 0
+              }
+            })
+          }
         }
       }
+
     }
 
     // create an array with nodes
@@ -380,7 +403,10 @@ class TreeViewer extends React.Component<{
               }, 10)
 
               // do something here
-              if (event.code === "ArrowUp") {
+              if ((event.ctrlKey || event.metaKey) && event.code === "ArrowDown") {
+                this.props.onNodeFoldToggle();
+              }
+              else if (event.code === "ArrowUp") {
                 let network = this.state.network;
 
                 if (this.state.currentNode !== null) {
@@ -471,13 +497,11 @@ class TreeViewer extends React.Component<{
                   const urlParams = new URLSearchParams(queryString);
                   const treeId = urlParams.get('id');
                   this.props.onAddOrDeleteNode(treeId, this.state.currentNode['id'], false);
-  
+
                 }
               } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyC") {
-                console.log("Copy")
                 this.props.onCopyOrPasteNode(true);
               } else if ((event.ctrlKey || event.metaKey) && event.code === "KeyV") {
-                console.log("Paste")
                 this.props.onCopyOrPasteNode(false);
               } else if (event.key === "+") {
                 if (this.state.currentNode) {
@@ -485,7 +509,7 @@ class TreeViewer extends React.Component<{
                   const urlParams = new URLSearchParams(queryString);
                   const treeId = urlParams.get('id');
                   this.props.onAddOrDeleteNode(treeId, this.state.currentNode['id'], true);
-  
+
                 }
               } else if (!(event.ctrlKey || event.metaKey || event.code === "ShiftLeft")) {
                 const element = document.getElementById("nodeNameField");
@@ -503,9 +527,9 @@ class TreeViewer extends React.Component<{
       if (this.props.selectedNode) {
         try {
           network?.selectNodes([this.props.selectedNode['id']])
-        } catch ({name, msg}) {
+        } catch ({ name, msg }) {
           if (name !== "RangeError") {
-            throw {name, msg}
+            throw { name, msg }
           }
         }
       }
@@ -566,9 +590,12 @@ class TreeViewer extends React.Component<{
       }
 
       if ((this.props.selectedNode != prevProps.selectedNode) && this.props.selectedNode) {
-        console.log(this.props.selectedNode)
         let network = this.state.network;
         network?.selectNodes([this.props.selectedNode['id']])
+      }
+
+      if (prevProps.collapsedDownNodeIds.length !== this.props.collapsedDownNodeIds.length) {
+        this.loadAndRender();
       }
 
       if (this.props.zoomLevel) {

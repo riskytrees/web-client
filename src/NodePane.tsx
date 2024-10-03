@@ -19,11 +19,12 @@ import Paper from "@mui/material/Paper";
 import TreePicker from './TreePicker';
 import { RiskyApi } from './api';
 import debounce from 'lodash.debounce';
-
+import DevicesFoldIcon from '@mui/icons-material/DevicesFold';
 class NodePane extends React.Component<{
   currentNode: Record<string, any>;
   triggerAddDeleteNode: Function;
   onNodeChanged: Function;
+  onNodeFoldToggle: Function;
   currentNodeRisk: NodeRiskResult;
   selectedModel: string;
 }, {
@@ -53,6 +54,7 @@ class NodePane extends React.Component<{
     this.getConditionValue = this.getConditionValue.bind(this);
     this.handleConditionFieldChanged = this.handleConditionFieldChanged.bind(this);
     this.handleAddSubtree = this.handleAddSubtree.bind(this);
+    this.handleFold = this.handleFold.bind(this);
     this.canceledSubtreeCallback = this.canceledSubtreeCallback.bind(this);
     this.pickedSubtreeCallback = this.pickedSubtreeCallback.bind(this);
     this.addAttributesBasedOnSelectedModel = this.addAttributesBasedOnSelectedModel.bind(this);
@@ -96,6 +98,10 @@ class NodePane extends React.Component<{
     }
   }
 
+  async handleFold(event) {
+    this.props.onNodeFoldToggle();
+  }
+ 
   async handleAddSubtree(event) {
     this.setState({
       showSubtreeDialog: true
@@ -479,12 +485,14 @@ class NodePane extends React.Component<{
       <TextField label="Description" disabled={!readOnly} onChange={this.handleNodeDescriptionChange} multiline variant="outlined" rows="3" size="small" value={this.state.nodeDescription} />
       <Box height={"24px"}></Box>
 
-      <Button variant="addButton" disabled={!readOnly} startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node ({"⇧N"})</Button>
+      <Button variant="addButton" disabled={!readOnly} startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node ({"+"})</Button>
       <Box height={"5px"}></Box>
       <Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleAddSubtree}>Add Subtree</Button>
       <TreePicker enabled={this.state.showSubtreeDialog} onSubmit={this.pickedSubtreeCallback} onCancel={this.canceledSubtreeCallback}></TreePicker>
       <Box height={"5px"}></Box>
       <Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteNode}>Delete Node ({commandOrControlSymbol + "⌫"})</Button>
+      <Box height={"5px"}></Box>
+      <Button variant="deleteButton" startIcon={<DevicesFoldIcon />} onClick={this.handleFold}>Collapse/Expand Node ({commandOrControlSymbol + "↓"})</Button>
       <Box height={"24px"}></Box>
       <Typography variant="caption">Node ID: {this.state.nodeId}</Typography>
 
