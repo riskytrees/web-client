@@ -862,7 +862,7 @@ class TreeViewPage extends React.Component<{
       </FormControl>
     }
 
-    let rightPane: JSX.Element = <NodePane selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />;
+    let rightPane: JSX.Element = <NodePane onNodeFoldToggle={this.onNodeFoldToggle} selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />;
 
     if (this.state.analysisModeEnabled) {
       const queryString = window.location.search;
