@@ -83,6 +83,7 @@ class TreeViewPage extends React.Component<{
     this.loadTree = this.loadTree.bind(this);
     this.handleZoomChange = this.handleZoomChange.bind(this);
     this.exportTree = this.exportTree.bind(this);
+    this.exportTreeAsImage = this.exportTreeAsImage.bind(this);
     this.handleShare = this.handleShare.bind(this);
     this.handleShareClose = this.handleShareClose.bind(this);
     this.handlePublicityChange = this.handlePublicityChange.bind(this);
@@ -114,6 +115,16 @@ class TreeViewPage extends React.Component<{
     let blob = new Blob([JSON.stringify(this.state.treeMap[treeId])], { type: "text/json" });
 
     saveAs(blob, this.getTreeName() + ".json")
+  }
+
+  exportTreeAsImage() {
+    const myNetwork = document.getElementById("mynetwork");
+    const internalNetwork = myNetwork?.getElementsByClassName("vis-network")[0]
+    const relevantCanvas = internalNetwork?.getElementsByTagName("canvas")[0]
+    relevantCanvas?.toBlob((res) => {
+      saveAs(res, this.getTreeName() + ".png")
+    }, "image/png",
+      )
   }
 
   async getCurrentModel() {
@@ -369,7 +380,7 @@ class TreeViewPage extends React.Component<{
 
     for (const node of treeData.nodes) {
       if (node.id === nodeId) {
-        result = {...node}
+        result = { ...node }
         result['children'] = []
 
         for (const childId of node.children) {
@@ -394,11 +405,11 @@ class TreeViewPage extends React.Component<{
       const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeId]));
 
       let nodesToAdd = [this.state.copiedData];
-  
+
       while (nodesToAdd.length > 0) {
         const node = nodesToAdd.pop();
         let properChildren = [];
-  
+
         for (const child of node.children) {
           if (typeof child === "string") {
             properChildren.push(child)
@@ -417,10 +428,10 @@ class TreeViewPage extends React.Component<{
           treeData.nodes[idx]['children'].push(this.state.copiedData['id'])
         }
       }
-  
+
       const treeMap = structuredClone(this.state.treeMap);
       treeMap[treeId] = treeData;
-  
+
       this.setState({
         treeMap: treeMap,
         selectedNode: this.state.selectedNode
@@ -947,6 +958,12 @@ class TreeViewPage extends React.Component<{
                       </ListItem>
 
                       <ListItem>
+                        <ListItemButton>
+                          <ListItemText primary="Export as Image" onClick={this.exportTreeAsImage} />
+                        </ListItemButton>
+                      </ListItem>
+
+                      <ListItem>
                         <ListItemButton disabled={true}>
                           <ListItemText primary="Export Analysis" />
                         </ListItemButton>
@@ -1017,29 +1034,30 @@ class TreeViewPage extends React.Component<{
                 <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
-            <Grid item xs={5}  marginTop="10px">
+            <Grid item xs={5} marginTop="10px">
 
-            <Stack spacing={2} direction="row" justifyContent="flex-end" >
+              <Stack spacing={2} direction="row" justifyContent="flex-end" >
 
-            <Button aria-describedby="searchButton" onClick={this.handleSearchOpen}>Search</Button>
-              <Popover id="searchButton"
+                <Button aria-describedby="searchButton" onClick={this.handleSearchOpen}>Search</Button>
+                <Popover id="searchButton"
                   open={this.state.searchModalOpen}
                   onClose={this.handleSearchClose}
                   anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'center',}}>
+                    horizontal: 'center',
+                  }}>
 
-              <Stack spacing={2} direction="row" justifyContent="flex-end" >
-                <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}
-                  sx={{ overflow: 'hide', }}></TextField>
-                <IconButton onClick={this.handleSearchBack}>
-                  <ArrowBack></ArrowBack>
-                </IconButton>
-                <IconButton onClick={this.handleSearchForward}>
-                  <ArrowForward></ArrowForward>
-                </IconButton>
-  
-                </Stack>
+                  <Stack spacing={2} direction="row" justifyContent="flex-end" >
+                    <TextField size='small' placeholder='Search' value={this.state.searchQuery} onChange={this.handleSearchValueChanged}
+                      sx={{ overflow: 'hide', }}></TextField>
+                    <IconButton onClick={this.handleSearchBack}>
+                      <ArrowBack></ArrowBack>
+                    </IconButton>
+                    <IconButton onClick={this.handleSearchForward}>
+                      <ArrowForward></ArrowForward>
+                    </IconButton>
+
+                  </Stack>
                 </Popover>
 
 
