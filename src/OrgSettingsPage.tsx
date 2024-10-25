@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { Grid } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Avatar from "@mui/material/Avatar";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -15,28 +15,31 @@ import AddIcon from '@mui/icons-material/Add';
 import profileImg from './img/profile.png';
 import { RiskyApi } from './api';
 import AddUserButton from './AddUserButton';
-
+import debounce from 'lodash.debounce';
 class OrgSettingsPage extends React.Component<{
 }, {
   modalOpen: boolean;
   orgUsers: Record<string, any>[];
   orgPlan: string;
+  orgName: string;
 }> {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, orgUsers: [], orgPlan: 'unknown' };
+    this.state = { modalOpen: false, orgUsers: [], orgPlan: 'unknown', orgName: 'unknown' };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.teamMembersClicked = this.teamMembersClicked.bind(this);
     this.settingsClicked = this.settingsClicked.bind(this);
     this.upgradeClicked = this.upgradeClicked.bind(this);
-    this.getOrgPlan = this.getOrgPlan.bind(this);
+    this.getOrgDetails = this.getOrgDetails.bind(this);
     this.getMaxUserLimit = this.getMaxUserLimit.bind(this);
+    this.orgNameChanged = this.orgNameChanged.bind(this);
+    this.syncOrgDetails = this.syncOrgDetails.bind(this);
   }
 
   componentDidMount() {
     this.getOrgUsers();
-    this.getOrgPlan();
+    this.getOrgDetails();
   }
 
   async getOrgUsers() {
@@ -54,16 +57,23 @@ class OrgSettingsPage extends React.Component<{
 
   }
 
-  async getOrgPlan() {
+  async getOrgDetails() {
     const path = window.location.href;
     const orgId = path.split("/")[4];
 
-    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs/" + orgId, {});
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs", {});
 
     if (data['result']) {
-       this.setState({
-        orgPlan: data['result']['plan']
-       })
+
+      for (const org of data['result']['orgs']) {
+        if (org['id'] === orgId) {
+          this.setState({
+            orgPlan: org['plan'],
+            orgName: org['name']
+          })
+        }
+      }
+
     }
   }
 
@@ -180,6 +190,33 @@ class OrgSettingsPage extends React.Component<{
     window.location.href = 'https://riskytrees.com/pricing'
   }
 
+  async syncOrgDetails() {
+    const path = window.location.href;
+    const orgId = path.split("/")[4];
+
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs/" + orgId, {
+      method: 'PUT',
+      body: JSON.stringify({
+        name: this.state.orgName,
+        plan: this.state.orgPlan
+      })
+    });
+
+    if (data['ok']) {
+      await this.getOrgDetails()
+    }
+  }
+
+  debouncedSyncOrgDetails = debounce(this.syncOrgDetails, 500);
+  
+  async orgNameChanged(evt) {
+    await this.setState({
+      orgName: evt.target.value
+    })
+
+    this.debouncedSyncOrgDetails();
+  }
+
   render() {
     const path = window.location.href;
     const orgId = path.split("/")[4];
@@ -191,14 +228,14 @@ class OrgSettingsPage extends React.Component<{
         <SettingsAppBar></SettingsAppBar>
         <Stack direction="row">
           <OrgSidebar></OrgSidebar>
-          <Paper variant="projectarea">            
-          <Box height={"24px"}></Box>
-              <Paper variant="settingscard">
+          <Paper variant="projectarea">
+            <Box height={"24px"}></Box>
+            <Paper variant="settingscard">
 
               <Stack alignContent="right" direction="row" marginLeft="auto" display="flex" justifyContent="space-between">
                 <Box>
-                  <Typography variant="h1">RiskyTrees LLC</Typography>
-                  <Typography variant="h2">Created Jul 12, 2024</Typography>
+                  <Typography variant="h1">{this.state.orgName}</Typography>
+                  {/*<Typography variant="h2">Created Jul 12, 2024</Typography>*/}
                 </Box>
                 <Box align="right"><Button variant="deleteButton" startIcon={<DeleteIcon />} onClick={this.handleDeleteOrg}> Delete Org</Button></Box>
               </Stack>
@@ -211,12 +248,14 @@ class OrgSettingsPage extends React.Component<{
                 <Stack alignContent="right" direction="row" marginLeft="auto" display="flex" justifyContent="space-between">
 
                   <Box>
-                    <Typography variant="body3">ORGNAME</Typography>
-                    <Typography variant="h2">Name</Typography>
+                    <Stack>
+                    <Typography variant="body3">Organization Name</Typography>
+                    <TextField variant="outlined" size="small" value={this.state.orgName} onChange={this.orgNameChanged}></TextField>
+                    </Stack>
+                    
+                    
                   </Box>
-                  <Box flex-direction="right">
-                    <Button > Edit Name</Button>
-                  </Box>
+
                 </Stack>
                 <Box height={"24px"}></Box>
                 <Stack alignContent="right" direction="row" marginLeft="auto" display="flex" justifyContent="space-between">
