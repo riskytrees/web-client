@@ -3,7 +3,7 @@ import React from 'react';
 import TextField from "@mui/material/TextField";
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
-import { Button } from '@mui/material';
+import { Button, Link } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from "@mui/material/Stack";
@@ -436,12 +436,18 @@ class NodePane extends React.Component<{
     const urlParams = new URLSearchParams(queryString);
 
     const treeId = urlParams.get('id');
+    const projectId = urlParams.get('projectId');
     const readOnly = treeId === this.state.selectedTreeId;
+
+    const urlLink = "/tree?id=" + this.state.selectedTreeId + "&projectId=" + projectId;
+
+    const jumpToSubtree = !readOnly ? <Link href={urlLink}>Go to subtree</Link> : null;
 
     return (
       <>
       <Paper variant="rightriskypane">
       <Stack>
+      {jumpToSubtree}
       <Typography variant="h3">Details</Typography>
       <Box height={"24px"}></Box>
 
