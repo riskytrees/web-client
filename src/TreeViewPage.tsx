@@ -1128,7 +1128,7 @@ class TreeViewPage extends React.Component<{
 
         {rightPane}
 
-        {<TreeViewer collapsedDownNodeIds={structuredClone(this.state.collapsedDownNodeIds)} onNodeFoldToggle={this.onNodeFoldToggle} selectedNode={this.state.selectedNode} onCopyOrPasteNode={this.onCopyOrPasteNode} onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
+        {<TreeViewer rootTreeId={treeId} collapsedDownNodeIds={structuredClone(this.state.collapsedDownNodeIds)} onNodeFoldToggle={this.onNodeFoldToggle} selectedNode={this.state.selectedNode} onCopyOrPasteNode={this.onCopyOrPasteNode} onAddOrDeleteNode={this.onAddOrDeleteNode} onZoomChanged={this.handleZoomChange} onNodeClicked={this.onNodeClicked} treeMap={this.state.treeMap} zoomLevel={this.state.zoomLevel} riskEngine={this.state.analysisModeEnabled ? this.riskEngine : null} selectedModel={this.state.selectedModel} />}
 
       </>
     )

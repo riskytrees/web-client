@@ -20,6 +20,7 @@ class TreeViewer extends React.Component<{
   selectedModel: string | null;
   selectedNode: string | null;
   collapsedDownNodeIds: string[];
+  rootTreeId: string;
 }, {
   treeMap: Record<string, TreeData>;
   network: Network | null;
@@ -53,11 +54,14 @@ class TreeViewer extends React.Component<{
     const edges: Record<string, any>[] = [];
 
 
-    for (const tree of Object.values(this.state.treeMap)) {
+    for (const [treeId, tree] of Object.entries(this.state.treeMap)) {
       const nodesToAdd: any[] = [];
       for (const node of tree.nodes) {
         if (node.id === tree.rootNodeId) {
-          nodesToAdd.push(node);
+          nodesToAdd.push({
+            ...node,
+            alwaysCollapse: treeId === this.props.rootTreeId ? false : true
+          });
         }
       }
 
@@ -221,7 +225,7 @@ class TreeViewer extends React.Component<{
           }
         })
 
-        if (notCollapsed) {
+        if (notCollapsed && !node.alwaysCollapse) {
           for (const child of node.children) {
             for (const node of tree.nodes) {
               if (node.id === child) {
@@ -265,8 +269,8 @@ class TreeViewer extends React.Component<{
           }
         }
       }
-
     }
+
 
     // create an array with nodes
     const visNodes = new DataSet(nodes);
