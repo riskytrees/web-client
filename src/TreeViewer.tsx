@@ -57,7 +57,7 @@ class TreeViewer extends React.Component<{
     for (const [treeId, tree] of Object.entries(this.state.treeMap)) {
       const nodesToAdd: any[] = [];
       for (const node of tree.nodes) {
-        if (node.id === tree.rootNodeId) {
+        if (node.id === tree.rootNodeId && treeId === this.props.rootTreeId) {
           nodesToAdd.push({
             ...node,
             alwaysCollapse: treeId === this.props.rootTreeId ? false : true
@@ -227,11 +227,14 @@ class TreeViewer extends React.Component<{
 
         if (notCollapsed && !node.alwaysCollapse) {
           for (const child of node.children) {
-            for (const node of tree.nodes) {
-              if (node.id === child) {
-                nodesToAdd.push(node);
+            for (const [subTreeId, subtree] of Object.entries(this.state.treeMap)) {
+              for (const node of subtree.nodes) {
+                if (node.id === child) {
+                  nodesToAdd.push(node);
+                }
               }
             }
+            
             let label = '';
             let edgeColor = 'white'
             let edgeWidth = 1;
