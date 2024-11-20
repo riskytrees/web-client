@@ -248,8 +248,11 @@ class NodePane extends React.Component<{
     } else if (this.props.selectedModel === 'bf4397f7-93ae-4502-a4a2-397f40f5cc49') {
       // EVITA
       relevantAttributes = ['safetyImpact', 'financialImpact', 'privacyImpact', 'operationalImpact'];
-      relevantAttributes.concat(['time', 'expertise', 'knowledge', 'windowOfOpportunity', 'equipmentRequired']);
+      relevantAttributes = relevantAttributes.concat(['time', 'expertise', 'knowledge', 'windowOfOpportunity', 'equipmentRequired']);
     }
+
+    // TODO - Only on condition nodes
+    relevantAttributes = ["configId"].concat(relevantAttributes)
 
     return relevantAttributes;
   }

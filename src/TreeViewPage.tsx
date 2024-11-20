@@ -30,6 +30,7 @@ import { saveAs } from 'file-saver';
 import { ArrowBack, ArrowForward, BackHand, Search, Share } from '@mui/icons-material';
 import { TreeSearch } from './TreeSearch';
 import { v4 as uuidv4 } from 'uuid';
+import { config } from 'process';
 
 class TreeViewPage extends React.Component<{
 
@@ -93,6 +94,7 @@ class TreeViewPage extends React.Component<{
     this.handleStartDeleteTree = this.handleStartDeleteTree.bind(this);
     this.pastePartialTree = this.pastePartialTree.bind(this);
     this.onNodeFoldToggle = this.onNodeFoldToggle.bind(this);
+    this.findParentOfNode = this.findParentOfNode.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
     this.searchEngine = new TreeSearch(this.state.treeMap, null);
@@ -259,7 +261,11 @@ class TreeViewPage extends React.Component<{
     }, () => this.updateTree(treeId));
   }
 
-  async resolveImports(treeData: TreeData, projectId: string) {
+  findParentOfNode(nodeId: string, treeData: TreeData) {
+    return treeData.nodes.find(node => node.children.includes(nodeId));
+  }
+
+  async resolveImports(treeData: TreeData, projectId: string, configId?: string) {
     const nodesOfConcern = treeData.nodes.map(node => node.id);
     let children = treeData.nodes.reduce((prev, curr) => prev.concat(curr.children), [])
     children = [...new Set(children)];
@@ -269,13 +275,26 @@ class TreeViewPage extends React.Component<{
     let result = {}
 
     for (const childId of childrenToResolve) {
-      let treeData = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/" + childId, {});
+      let newTreeData = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/" + childId, {});
 
-      if (treeData.ok === true) {
-        let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeData.result.treeId, {});
+      if (newTreeData.ok === true) {
+        const parentNode = this.findParentOfNode(childId, treeData);
+        if (parentNode) {
+          if (parentNode.modelAttributes['configId']) {
+            configId = parentNode.modelAttributes['configId']["value_string"];
+          }
+        }
 
-        result[treeData.result.treeId] = data.result;
-        result = { ...result, ...(await this.resolveImports(data.result, projectId)) };
+        let desiredUrl = process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + newTreeData.result.treeId;
+
+        if (configId) {
+          desiredUrl += "?config_id=" + configId
+        }
+
+        let data = await RiskyApi.call(desiredUrl, {});
+
+        result[newTreeData.result.treeId] = data.result;
+        result = { ...result, ...(await this.resolveImports(data.result, projectId, configId)) };
       }
     }
 
