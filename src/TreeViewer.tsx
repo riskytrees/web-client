@@ -248,17 +248,20 @@ class TreeViewer extends React.Component<{
               const risk = this.props.riskEngine.computeRiskForNode(child, this.props.selectedModel);
               if (risk) {
                 const riskAsValue = risk.computed[risk.interface.primary];
-                label = '' + riskAsValue;
-                const averageRisk = this.props.riskEngine.computeAveragePrimaryRiskValue(this.props.selectedModel);
-                let diff = riskAsValue / averageRisk;
-                let colorVal = Math.min(255, Math.max(0, (125 * diff)));
-                if (colorVal < 125) {
-                  edgeColor = 'rgb(' + (255 - colorVal) + ',0,0)';
-                } else {
-                  edgeColor = 'rgb(0,' + colorVal + ',0)';
-                  edgeWidth = (colorVal / 255) * 5
-
+                if (riskAsValue) {
+                  label = '' + riskAsValue.toFixed(2);
+                  const averageRisk = this.props.riskEngine.computeAveragePrimaryRiskValue(this.props.selectedModel);
+                  let diff = riskAsValue / averageRisk;
+                  let colorVal = Math.min(255, Math.max(0, (125 * diff)));
+                  if (colorVal < 125) {
+                    edgeColor = 'rgb(' + (255 - colorVal) + ',0,0)';
+                  } else {
+                    edgeColor = 'rgb(0,' + colorVal + ',0)';
+                    edgeWidth = (colorVal / 255) * 5
+  
+                  }
                 }
+
 
               }
             }
