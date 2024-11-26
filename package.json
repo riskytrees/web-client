@@ -2,7 +2,7 @@
   "name": "web-client",
   "packageManager": "yarn@3.1.1",
   "dependencies": {
-    "@emotion/react": "^11.13.3",
+    "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.0",
     "@jy95/material-ui-image": "^4.0.9",
     "@mui/icons-material": "^6.1.8",
