@@ -5,7 +5,7 @@
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.0",
     "@jy95/material-ui-image": "^4.0.9",
-    "@mui/icons-material": "^6.1.8",
+    "@mui/icons-material": "^6.1.9",
     "@mui/material": "^6.1.7",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
