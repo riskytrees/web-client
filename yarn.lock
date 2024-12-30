@@ -3078,9 +3078,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@textea/json-viewer@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@textea/json-viewer@npm:4.0.0"
+"@textea/json-viewer@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@textea/json-viewer@npm:4.0.1"
   dependencies:
     clsx: ^2.1.1
     copy-to-clipboard: ^3.3.3
@@ -3091,7 +3091,7 @@ __metadata:
     "@mui/material": ^6
     react: ^17 || ^18
     react-dom: ^17 || ^18
-  checksum: 361ab87ba96d49e108e93b0a8f0a2417975362cc2d9936df897525bdf186e2e16f7b68aacad22a17e7d7e2de946abcd8fcd56400202e3314db2e97af3f90328f
+  checksum: bc3eb69758476f13091c676efe8ddd979e7d3f3872cd906051ead7ddc2812f87b52a48d625833ebb1309931e85ba40ba20db3899ed5295d7348ddc6c836e3a39
   languageName: node
   linkType: hard
 
@@ -14965,7 +14965,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.6.3
     "@testing-library/react": ^16.1.0
     "@testing-library/user-event": ^14.5.2
-    "@textea/json-viewer": ^4.0.0
+    "@textea/json-viewer": ^4.0.1
     "@types/file-saver": ^2
     "@types/jest": ^29.5.14
     "@types/lodash.debounce": ^4
