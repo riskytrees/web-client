@@ -12470,21 +12470,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "react-router-dom@npm:7.0.2"
+"react-router-dom@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "react-router-dom@npm:7.1.1"
   dependencies:
-    react-router: 7.0.2
+    react-router: 7.1.1
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: 2e8d07701017f73e1edfb3e48718bd9490167320e9213aebc6ce7a1bb6961a201b8413b0374c526ce0086926283ff1e7b4edc78ff0194784b16e4549dcf544ba
+  checksum: 19a0ee4beebf9848b1dc5ae31a962cf84e8e3d12fda1f69b4bd6b5b681383877983815b963a64bb1de59371cbaba3903bda4512dd22a0181b3bc313eccf69150
   languageName: node
   linkType: hard
 
-"react-router@npm:7.0.2":
-  version: 7.0.2
-  resolution: "react-router@npm:7.0.2"
+"react-router@npm:7.1.1":
+  version: 7.1.1
+  resolution: "react-router@npm:7.1.1"
   dependencies:
     "@types/cookie": ^0.6.0
     cookie: ^1.0.1
@@ -12496,7 +12496,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: a3b42f25fa345bfc51abf608f14ded463f5a32345de8519b7beb35e713f09032e0a2af265e40c51ba9cde5d75c534697cded6f1c7988a1197b1392f2e32225ef
+  checksum: 5c8015e73274ca12336325a3b2d8b5fbda2f4eb879ac5acf0f73bdb2b67bee706df2adda5f2354e970d0b9f08e34e36da10830f1a5be53893690638c852ccf06
   languageName: node
   linkType: hard
 
@@ -14979,7 +14979,7 @@ __metadata:
     lodash.debounce: ^4.0.8
     react: ^18.3.1
     react-dom: ^18.3.1
-    react-router-dom: ^7.0.2
+    react-router-dom: ^7.1.1
     react-scripts: ^5.0.1
     ts-retry: ^5.0.1
     typescript: ^5.7.2
