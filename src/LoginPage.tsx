@@ -78,6 +78,22 @@ class LoginPage extends React.Component<{
     window.location.href = loginRequest;
   }
 
+  async signinWithGithubClicked() {
+    let response = await fetch(process.env.REACT_APP_API_ROOT_URL + "/auth/login?provider=github", {
+      method: 'POST',
+      body: JSON.stringify({
+
+      })
+    });
+
+
+    let authTriggerResp = await response.json();
+
+    let loginRequest = authTriggerResp['result']['loginRequest'];
+
+    window.location.href = loginRequest;
+  }
+
   async handleEmailChanged(event) {
     const proposedName = event.target.value;
 
@@ -117,6 +133,15 @@ class LoginPage extends React.Component<{
                   </div>
                   <span class="gsi-material-button-contents">Continue with Google</span>
                   <span style={{ display: "none" }}>Continue with Google</span>
+                </div>
+              </button>
+              <Box height={"20px"}></Box>
+
+              <button class="gsi-material-button" onClick={this.signinWithGithubClicked}>
+                <div class="gsi-material-button-state"></div>
+                <div class="gsi-material-button-content-wrapper">
+                  <span class="gsi-material-button-contents">Continue with GitHub</span>
+                  <span style={{ display: "none" }}>Continue with GitHub</span>
                 </div>
               </button>
               {/*<TextField fullWidth id="outlined-basic" label="Email" variant="outlined" size="small" onChange={this.handleEmailChanged} />
