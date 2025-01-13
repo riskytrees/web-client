@@ -3470,12 +3470,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19.0.3":
-  version: 19.0.3
-  resolution: "@types/react@npm:19.0.3"
+"@types/react@npm:^19.0.6":
+  version: 19.0.6
+  resolution: "@types/react@npm:19.0.6"
   dependencies:
     csstype: ^3.0.2
-  checksum: a6c2bcd032522f5c041601a0df1c56288ad66c7973fa672b6c375334dd93295a4d1bfebf9c3498bafb86525f1fd8f4d58175267ed41ef5534b64ba28bd274bb6
+  checksum: 462a736ce0e6162e0e4002afe4157ae1f56c3ae9ce1eccc2ddabe137970cd84e689199197e0705ff646152e8408dd6201a703ead7f2aa01e4c48c7a47447fe6b
   languageName: node
   linkType: hard
 
@@ -14939,7 +14939,7 @@ __metadata:
     "@types/jest": ^29.5.14
     "@types/lodash.debounce": ^4
     "@types/node": ^22.10.5
-    "@types/react": ^19.0.3
+    "@types/react": ^19.0.6
     "@types/react-dom": ^19.0.2
     "@uiw/react-textarea-code-editor": ^3.1.0
     cypress: 13.17.0
