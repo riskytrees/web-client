@@ -31,7 +31,7 @@
   "devDependencies": {
     "@types/file-saver": "^2",
     "@types/lodash.debounce": "^4",
-    "cypress": "13.17.0",
+    "cypress": "14.0.1",
     "react-scripts": "^5.0.1"
   },
   "scripts": {
