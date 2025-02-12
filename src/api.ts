@@ -22,6 +22,12 @@ export class RiskyApi {
                     let attempt;
                     try {
                         let response = await fetch(location, params);
+
+                        // If response is a 400 or 401, redirect to login.
+                        if ([400, 401].includes(response.status)) {
+                            window.location.href = "/login";
+                        }
+
                         attempt = await response.json();
     
                     } catch (e) {
