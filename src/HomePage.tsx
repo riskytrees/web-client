@@ -316,7 +316,7 @@ class HomePage extends React.Component<{
                 </Box>
               </Stack>
             </Grid>
-            <ProjectTreeList org={this.getOrgId()} showTrees={this.state.filterToTrees} />
+            <ProjectTreeList org={this.state.selectedOrg} showTrees={this.state.filterToTrees} />
 
           </Paper>
         </Stack>

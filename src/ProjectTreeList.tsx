@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Card from '@mui/material/Card';
 import projectImg from './img/projects_temp.png';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import { Button, CardActionArea, CardActions, Paper } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import List from '@mui/material/List';
@@ -26,9 +26,10 @@ import OrgList from './OrgList';
 import Divider from '@mui/material/Divider';
 import Box from "@mui/material/Box";
 import treeImg from './img/tree.png';
+import tooSoonImg from './img/toosoon.png'
 
 class ProjectTreeList extends React.Component<{
-    org: string | undefined;
+    org: Record<string, unknown> | null;
     showTrees: boolean;
 }, {
 
@@ -42,7 +43,7 @@ class ProjectTreeList extends React.Component<{
         this.loadProjects();
     }
 
-    componentDidUpdate(prevProps: Readonly<{ org: string | undefined; showTrees: boolean; }>, prevState: Readonly<{}>, snapshot?: any): void {
+    componentDidUpdate(prevProps: Readonly<{ org: Record<string, unknown> | null; showTrees: boolean; }>, prevState: Readonly<{}>, snapshot?: any): void {
         if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
             this.loadProjects();
         }
@@ -119,6 +120,20 @@ class ProjectTreeList extends React.Component<{
         return null;
     }
 
+    validateProjectInOrg(projectId: string): boolean {
+        for (const project of this.state['projects']) {
+            if (project['projectId'] === projectId) {
+                if (this.props.org && project.orgId === this.props.org.id) {
+                    return true;
+                } else if (!project.orgId) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     render() {
 
         const projects = this.state['projects'];
@@ -130,7 +145,7 @@ class ProjectTreeList extends React.Component<{
         for (const project of projects) {
 
 
-            if ((!this.props.org && !project.orgId) || this.props.org === project.orgId) {
+            if ((!this.props.org && !project.orgId) || (this.props.org && this.props.org.id === project.orgId)) {
                 if (!this.props.showTrees) {
                     const path = "/projects?id=" + project.projectId;
                     rows.push(
@@ -179,51 +194,67 @@ class ProjectTreeList extends React.Component<{
                 let tree = trees[idx];
                 let subtree = subtrees[idx];
                 console.log(tree)
-                const path = "../tree?id=" + tree.id + "&projectId=" + tree['projectId'];
-    
-                rows.push(
-    
-                    <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={tree.id}>
-                        <CardActionArea href={path}>
-                            <CardMedia
-                                component="img"
-                                height="140"
-                                image={treeImg}
-                                alt="picture of project map"
-                            />
-                            <CardContent><Stack direction="row" alignItems="center" gap={1}>
-                                <Typography variant="h1" display="inline">
-                                    {tree.title} •
-                                </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
 
-                                {/*
-                                <br></br>
-                                <Stack direction="row" alignItems="bottom" gap={1}>
-                                    <PersonIcon fontSize="small"></PersonIcon>
-                                    <Typography variant="body2" gutterBottom>
-                                        [Personal]
-                                    </Typography>
-                                </Stack>
+                if (this.validateProjectInOrg(tree['projectId'])) {
+                    const path = "../tree?id=" + tree.id + "&projectId=" + tree['projectId'];
     
-                                <Stack direction="row" alignItems="bottom" gap={1}>
-                                    <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
-                                    <Typography variant="body2">
-                                        [DateModified]
-                                    </Typography>
-                                </Stack>
-                                */}
+                    rows.push(
+        
+                        <Card sx={{ maxWidth: 285, m: 2, }} variant="outlined" key={tree.id}>
+                            <CardActionArea href={path}>
+                                <CardMedia
+                                    component="img"
+                                    height="140"
+                                    image={treeImg}
+                                    alt="picture of project map"
+                                />
+                                <CardContent><Stack direction="row" alignItems="center" gap={1}>
+                                    <Typography variant="h1" display="inline">
+                                        {tree.title} •
+                                    </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
     
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>)
+                                    {/*
+                                    <br></br>
+                                    <Stack direction="row" alignItems="bottom" gap={1}>
+                                        <PersonIcon fontSize="small"></PersonIcon>
+                                        <Typography variant="body2" gutterBottom>
+                                            [Personal]
+                                        </Typography>
+                                    </Stack>
+        
+                                    <Stack direction="row" alignItems="bottom" gap={1}>
+                                        <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
+                                        <Typography variant="body2">
+                                            [DateModified]
+                                        </Typography>
+                                    </Stack>
+                                    */}
+        
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>)
+                }
+
     
             }    
         }
 
+        let sadTrees: JSX.Element | null = null;
+
+        if (rows.length === 0) {
+            sadTrees = <Stack alignItems={'center'}>
+                <Typography >You do not have any {this.props.showTrees ? " trees" : " projects"} here. :(</Typography>
+                {!this.props.showTrees && projects.length > 0 ? "You have projects on your " + projects[0]["name"] + " profile." : null}
+                <Stack alignItems={'center'} marginTop={1}><img src={tooSoonImg} width="50%"></img></Stack>
+                
+            </Stack>
+        }
 
         return (
             <Grid item xs={2}>
                 <Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">{this.props.org ? "Org" : "Personal"}{this.props.showTrees ? " trees" : " projects"}</Typography>
+
+                {sadTrees}
 
                 <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
 
