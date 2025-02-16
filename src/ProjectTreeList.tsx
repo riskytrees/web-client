@@ -243,8 +243,10 @@ class ProjectTreeList extends React.Component<{
 
         if (rows.length === 0) {
             sadTrees = <Stack alignItems={'center'}>
-                <Typography >You do not have any {this.props.showTrees ? " trees" : " projects"} here. :(</Typography>
-                {!this.props.showTrees && projects.length > 0 ? "You have projects on your " + projects[0]["name"] + " profile." : null}
+                <Typography ><b>You do not have any {this.props.showTrees ? " trees" : " projects"} here. :(</b></Typography>
+                {!this.props.showTrees && projects.length > 0 ? "You have projects in a different organization. Try switching?": null}
+                {this.props.showTrees && trees.length > 0 ? "You have trees in a different organization. Try switching?" : null}
+
                 <Stack alignItems={'center'} marginTop={1}><img src={tooSoonImg} width="50%"></img></Stack>
                 
             </Stack>
