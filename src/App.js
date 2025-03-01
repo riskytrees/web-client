@@ -12,6 +12,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@mui/material";
 import ProjectSettingsPage from './ProjectSettingsPage.tsx';
 
+let colorMode = localStorage.getItem("colorMode");
+
+if (colorMode === null) {
+  colorMode = "dark";
+  localStorage.setItem("colorMode", colorMode);
+}
+
 
 export const baseComponents = {
 
@@ -579,7 +586,7 @@ export const baseComponents = {
 const theme = createTheme({
 
   palette: {
-    mode: 'dark',
+    mode: colorMode,
 
 
   },
