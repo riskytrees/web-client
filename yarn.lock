@@ -3394,12 +3394,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.13.5":
-  version: 22.13.5
-  resolution: "@types/node@npm:22.13.5"
+"@types/node@npm:^22.13.13":
+  version: 22.13.13
+  resolution: "@types/node@npm:22.13.13"
   dependencies:
     undici-types: ~6.20.0
-  checksum: 8789d9bc3efd212819fd03f7bbd429901b076703e9852ccf4950c8c7cd300d5d5a05f273d0936cbaf28194485d2bd0c265a1a25390720e353a53359526c28fb3
+  checksum: 763c120725c4817227d3043095fd1e764744b2f3632e3e3c8242e1620a8e6fe1c9eeae38074dee3e39af6b890de142c3b6067f9b31e36635c44f3f5f4f2bb8cf
   languageName: node
   linkType: hard
 
@@ -14947,7 +14947,7 @@ __metadata:
     "@types/file-saver": ^2
     "@types/jest": ^29.5.14
     "@types/lodash.debounce": ^4
-    "@types/node": ^22.13.5
+    "@types/node": ^22.13.13
     "@types/react": ^19.0.8
     "@types/react-dom": ^19.0.4
     "@uiw/react-textarea-code-editor": ^3.1.0
