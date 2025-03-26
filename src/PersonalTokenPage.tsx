@@ -26,7 +26,7 @@ import LogoMark from './img/logomark.svg';
 import personAvatar from './img/person-avatar.png';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Popover from '@mui/material/Popover';
-import { Grid, TextField } from '@mui/material';
+import { FormControl, Grid, Select, TextField } from '@mui/material';
 import OrgList from './OrgList';
 import CreateOrgButton from './CreateOrgButton';
 import bannerback from "./img/bannerback.png";
@@ -36,20 +36,22 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HistoryIcon from '@mui/icons-material/History';
 import AddIcon from '@mui/icons-material/Add';
 import { RiskyApi } from './api';
-
+import InputLabel from '@mui/material/InputLabel';
 class PersonalTokenPage extends React.Component<{
 }, {
   modalOpen: boolean;
   tokenResult: Record<string, string> | null;
+  age: number;
 }> {
 
 
   constructor(props) {
     super(props);
 
-    this.state = { modalOpen: false, tokenResult: null };
+    this.state = { modalOpen: false, tokenResult: null, age: 30 };
 
     this.createToken = this.createToken.bind(this);
+    this.handleAgeChange = this.handleAgeChange.bind(this);
 
   }
 
@@ -59,7 +61,7 @@ class PersonalTokenPage extends React.Component<{
   async createToken() {
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/auth/personal/tokens", {
       method: 'POST',
-      body: JSON.stringify({ expireInDays: 1 }),
+      body: JSON.stringify({ expireInDays: this.state.age }),
     });
 
     if (data['ok'] === true && data['result']['tokenId']) {
@@ -72,6 +74,11 @@ class PersonalTokenPage extends React.Component<{
     }
   }
 
+  async handleAgeChange(event) {
+    this.setState({
+      age: event.target.value
+    })
+  }
 
   render() {
 
@@ -132,6 +139,22 @@ class PersonalTokenPage extends React.Component<{
         <Stack direction="row">
           <Paper variant="riskypane">
             <Typography variant='h1'>Tokens</Typography>
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="demo-select-small-label">Token Expiration</InputLabel>
+              <Select
+                value={this.state.age}
+                label="Age"
+                onChange={this.handleAgeChange}
+              >
+
+                <MenuItem value={1}>1 Day</MenuItem>
+                <MenuItem value={7}>1 Week</MenuItem>
+                <MenuItem value={30}>30 Days</MenuItem>
+                <MenuItem value={90}>90 Days</MenuItem>
+                <MenuItem value={365}>1 Year</MenuItem>
+
+              </Select>
+            </FormControl>
             <Button onClick={this.createToken}>Create Personal API Token</Button>
 
           </Paper>
