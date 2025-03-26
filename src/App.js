@@ -11,6 +11,7 @@ import { Variables } from './variables.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@mui/material";
 import ProjectSettingsPage from './ProjectSettingsPage.tsx';
+import PersonalTokenPage from './PersonalTokenPage.tsx';
 
 let colorMode = localStorage.getItem("colorMode");
 
@@ -618,6 +619,8 @@ function App() {
             <Route path="/tree" element={<TreeViewPage />}>
             </Route>
             <Route path="/login" element={<LoginPage />}>
+            </Route>
+            <Route path="/personal/tokens" element={<PersonalTokenPage />}>
             </Route>
           </Routes>
         </BrowserRouter>

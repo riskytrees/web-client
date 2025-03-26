@@ -1,0 +1,144 @@
+import React from 'react';
+import ProjectTreeList from './ProjectTreeList';
+import CreateProjectButton from './CreateProjectButton';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Home from '@mui/icons-material/Home';
+import TreeViewPane from './SubTreePane';
+import Paper from "@mui/material/Paper"
+import Stack from "@mui/material/Stack"
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
+import Modal from '@mui/material/Modal';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import { RiskyRisk } from './Risk';
+import LogoMark from './img/logomark.svg';
+import personAvatar from './img/person-avatar.png';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import Popover from '@mui/material/Popover';
+import { Grid, TextField } from '@mui/material';
+import OrgList from './OrgList';
+import CreateOrgButton from './CreateOrgButton';
+import bannerback from "./img/bannerback.png";
+import LoginLogo from './img/login_logo.png';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import SettingsIcon from '@mui/icons-material/Settings';
+import HistoryIcon from '@mui/icons-material/History';
+import AddIcon from '@mui/icons-material/Add';
+import { RiskyApi } from './api';
+
+class PersonalTokenPage extends React.Component<{
+}, {
+  modalOpen: boolean;
+  tokenResult: Record<string, string> | null;
+}> {
+
+
+  constructor(props) {
+    super(props);
+
+    this.state = { modalOpen: false, tokenResult: null };
+
+    this.createToken = this.createToken.bind(this);
+
+  }
+
+  componentDidMount(): void {
+  }
+
+  async createToken() {
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/auth/personal/tokens", {
+      method: 'POST',
+      body: JSON.stringify({ expireInDays: 1 }),
+    });
+
+    if (data['ok'] === true && data['result']['tokenId']) {
+      this.setState({
+        tokenResult: data['result'],
+        modalOpen: true
+      }, () => {
+      })
+
+    }
+  }
+
+
+  render() {
+
+    return (
+      <>
+        <AppBar>
+          <Grid container>
+            <Grid item xs={4} marginTop="5.75px">
+              <Stack spacing={2} direction="row">
+                <Box></Box>
+                <Button aria-describedby="actionButton" variant='inlineNavButton'><img src={LogoMark} width="25px"></img></Button>
+
+              </Stack>
+            </Grid>
+
+            <Grid item xs={4} marginTop="5.75px">
+              <Stack alignContent="center">
+                <Box display="flex" justifyContent="center" alignItems="center" >
+                  <Button variant='inlineNavButton' endIcon={<Home />} onClick={() => {
+                    window.location.href = "/";
+                  }}>Home</Button>
+                </Box>
+
+              </Stack>
+            </Grid>
+          </Grid>
+        </AppBar>
+
+
+        <Modal
+          open={this.state.modalOpen}
+          onClose={() => {
+            this.setState({
+              modalOpen: false,
+              tokenResult: null
+            })
+          }}
+        >
+
+          <Box className="riskyModal">
+            <Typography variant="h1">New Token</Typography>
+            <Typography color='primary'>Please store the following token. It will only be shown one time. </Typography>
+            <Box height={"20px"}></Box>
+            <TextField slotProps={{
+              input: {
+                readOnly: true,
+              },
+            }} label="Token ID" value={this.state.tokenResult ? this.state.tokenResult['tokenId'] : ''}></TextField>
+            <Box height={"20px"}></Box>
+            <TextField slotProps={{
+              input: {
+                readOnly: true,
+              },
+            }} label="Token" value={this.state.tokenResult ? this.state.tokenResult['personalToken'] : ''}></TextField>
+          </Box>
+        </Modal>
+
+        <Stack direction="row">
+          <Paper variant="riskypane">
+            <Typography variant='h1'>Tokens</Typography>
+            <Button onClick={this.createToken}>Create Personal API Token</Button>
+
+          </Paper>
+        </Stack>
+      </>
+    )
+  }
+}
+
+export default PersonalTokenPage;
