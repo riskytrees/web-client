@@ -35,6 +35,7 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HistoryIcon from '@mui/icons-material/History';
 import AddIcon from '@mui/icons-material/Add';
+import KeyIcon from '@mui/icons-material/Key';
 import { RiskyApi } from './api';
 
 class HomePage extends React.Component<{
@@ -53,7 +54,7 @@ class HomePage extends React.Component<{
     super(props);
     let savedSelectedOrg = localStorage.getItem(HomePage.SELECTED_ORG_KEY);
     savedSelectedOrg = savedSelectedOrg ? JSON.parse(savedSelectedOrg) : null;
-  
+
     this.state = { modalOpen: false, orgModalOpen: false, orgs: [], orgSelecterOpen: false, selectedOrg: savedSelectedOrg, filterToTrees: false };
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -116,7 +117,7 @@ class HomePage extends React.Component<{
     return null;
   }
 
-  orgSelected(org) {  
+  orgSelected(org) {
     this.setState({
       selectedOrg: org
     }, () => {
@@ -127,7 +128,7 @@ class HomePage extends React.Component<{
   handleClose() {
     this.setState({ modalOpen: false })
   }
-  
+
 
   handleOrgOpen() {
     this.setState({ orgModalOpen: true })
@@ -145,7 +146,7 @@ class HomePage extends React.Component<{
         orgs: data['result']['orgs']
       }, () => {
 
-        if (this.state.selectedOrg && !this.state.orgs.some((element) => element.id === this.state.selectedOrg.id) ) {
+        if (this.state.selectedOrg && !this.state.orgs.some((element) => element.id === this.state.selectedOrg.id)) {
           this.setState({
             selectedOrg: null
           });
@@ -192,21 +193,21 @@ class HomePage extends React.Component<{
 
         <ListItem disablePadding>
           <ListItemButton>
-          <SettingsIcon /><Box width={"5px"}></Box><ListItemText primary="Org Settings" onClick={this.settingsClicked} />
+            <SettingsIcon /><Box width={"5px"}></Box><ListItemText primary="Org Settings" onClick={this.settingsClicked} />
           </ListItemButton>
         </ListItem>
       </List>
     }
 
     return (
-      <> 
+      <>
         <AppBar>
           <Grid container>
             <Grid item xs={4} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
                 <Button aria-describedby="actionButton" variant='inlineNavButton'><img src={LogoMark} width="25px"></img></Button>
-                
+
               </Stack>
             </Grid>
 
@@ -226,7 +227,7 @@ class HomePage extends React.Component<{
           <Paper variant="riskypane">
 
             <Box sx={{}}>
-            <Box height='12px'></Box>
+              <Box height='12px'></Box>
               <Button id="primaryButton" onClick={this.handleOpen} startIcon={<AddIcon />} variant="primaryButton" sx={{}}>New Project</Button>
               <Box height='16px'></Box>
               <Button id="orgButton" onClick={this.handleOrgOpen} startIcon={<AddIcon />} variant="secondaryButton">New Org</Button>
@@ -258,7 +259,7 @@ class HomePage extends React.Component<{
                   <Typography variant="h2">Enter Project Name</Typography>
                   <Box height={"20px"}></Box>
                   <Stack direction="column" spacing={2} alignItems="right" justifyContent="center">
-                    <CreateProjectButton org={this.getOrgId()}/>
+                    <CreateProjectButton org={this.getOrgId()} />
                   </Stack>
                 </Box>
               </Modal>
@@ -269,9 +270,18 @@ class HomePage extends React.Component<{
               </nav>
               <Divider />
               <nav aria-label="secondary mailbox folders">
-                  {
-                    orgSidebarList
-                  }
+                {
+                  orgSidebarList
+                }
+                <List>
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <KeyIcon /><Box width={"5px"}></Box><ListItemText primary="Personal Tokens" onClick={() => {
+                        window.location.href = "/personal/tokens"
+                      }} />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
               </nav>
             </Box>
 
