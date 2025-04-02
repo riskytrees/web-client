@@ -36,6 +36,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HistoryIcon from '@mui/icons-material/History';
 import AddIcon from '@mui/icons-material/Add';
 import KeyIcon from '@mui/icons-material/Key';
+import DescriptionIcon from '@mui/icons-material/Description';
 import { RiskyApi } from './api';
 
 class HomePage extends React.Component<{
@@ -281,10 +282,15 @@ class HomePage extends React.Component<{
                       }} />
                     </ListItemButton>
                   </ListItem>
+                    <ListItemButton>
+                      <DescriptionIcon /><Box width={"5px"}></Box><ListItemText primary="API Documentation" onClick={() => {
+                        window.location.href = "https://riskytrees.github.io/api-definition/"
+                      }} />
+                    </ListItemButton>
                 </List>
               </nav>
             </Box>
-
+            
           </Paper>
           <Paper variant="projectarea">
             <Box height={'24px'}></Box>
