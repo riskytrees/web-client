@@ -22,7 +22,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
-    "ts-retry": "^5.0.1",
+    "ts-retry": "^6.0.0",
     "typescript": "^5.8.3",
     "vis-data": "^7.1.9",
     "vis-network": "^9.1.9",
