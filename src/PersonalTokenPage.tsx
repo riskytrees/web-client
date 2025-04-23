@@ -42,20 +42,35 @@ class PersonalTokenPage extends React.Component<{
   modalOpen: boolean;
   tokenResult: Record<string, string> | null;
   age: number;
+  tokenList: Array<Record<string, string>>;
 }> {
 
 
   constructor(props) {
     super(props);
 
-    this.state = { modalOpen: false, tokenResult: null, age: 30 };
+    this.state = { modalOpen: false, tokenResult: null, age: 30, tokenList: [] };
 
     this.createToken = this.createToken.bind(this);
     this.handleAgeChange = this.handleAgeChange.bind(this);
+    this.revokeToken = this.revokeToken.bind(this);
 
   }
 
-  componentDidMount(): void {
+  async loadTokens() {
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/auth/personal/tokens", {
+      method: 'GET',
+    });
+
+    if (data['ok'] === true && data['result']) {
+      this.setState({
+        tokenList: data['result']
+      });
+    }
+  }
+
+  async componentDidMount() {
+    this.loadTokens()
   }
 
   async createToken() {
@@ -69,8 +84,21 @@ class PersonalTokenPage extends React.Component<{
         tokenResult: data['result'],
         modalOpen: true
       }, () => {
+        this.loadTokens()
       })
 
+    }
+  }
+
+  async revokeToken(tokenId: string) {
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + `/auth/personal/tokens/${tokenId}`, {
+      method: 'DELETE',
+    });
+
+    if (data['ok'] === true) {
+      this.setState((prevState) => ({
+        tokenList: prevState.tokenList.filter(token => token.tokenId !== tokenId)
+      }));
     }
   }
 
@@ -137,7 +165,7 @@ class PersonalTokenPage extends React.Component<{
         </Modal>
 
         <Stack direction="row">
-          <Paper variant="riskypane">
+          <Paper sx={{marginLeft: 3, marginTop: 10, padding: 1}}>
             <Typography variant='h1'>Tokens</Typography>
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
               <InputLabel id="demo-select-small-label">Token Expiration</InputLabel>
@@ -157,6 +185,14 @@ class PersonalTokenPage extends React.Component<{
             </FormControl>
             <Button onClick={this.createToken}>Create Personal API Token</Button>
 
+            <List>
+              {this.state.tokenList && this.state.tokenList.map(token => (
+                <ListItem key={token.tokenId}>
+                  <ListItemText primary={`Token ID: ${token.tokenId}`} />
+                  <Button onClick={() => this.revokeToken(token.tokenId)}>Revoke</Button>
+                </ListItem>
+              ))}
+            </List>
           </Paper>
         </Stack>
       </>
