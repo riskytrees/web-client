@@ -90,7 +90,7 @@ class PersonalTokenPage extends React.Component<{
     }
   }
 
-  async revokeToken(tokenId) {
+  async revokeToken(tokenId: string) {
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + `/auth/personal/tokens/${tokenId}`, {
       method: 'DELETE',
     });
