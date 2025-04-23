@@ -42,14 +42,14 @@ class PersonalTokenPage extends React.Component<{
   modalOpen: boolean;
   tokenResult: Record<string, string> | null;
   age: number;
-  tokenList: Array<Record<string, string>> | null;
+  tokenList: Array<Record<string, string>>;
 }> {
 
 
   constructor(props) {
     super(props);
 
-    this.state = { modalOpen: false, tokenResult: null, age: 30, tokenList: null };
+    this.state = { modalOpen: false, tokenResult: null, age: 30, tokenList: [] };
 
     this.createToken = this.createToken.bind(this);
     this.handleAgeChange = this.handleAgeChange.bind(this);
