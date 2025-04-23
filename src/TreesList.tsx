@@ -96,25 +96,6 @@ class TreesList extends React.Component<{
               <Typography variant="h1" display="inline">
                 {tree.title} •
               </Typography> <Typography variant="body1" display="inline">{subtree} subtree {subtree == 1 ? '' : 's'}</Typography></Stack>
-
-              {/*
-                <br></br>
-              
-              <Stack direction="row" alignItems="bottom" gap={1}>
-                <PersonIcon fontSize="small"></PersonIcon>
-                <Typography variant="body2" gutterBottom>
-                  [Personal]
-                </Typography>
-              </Stack>
-
-              <Stack direction="row" alignItems="bottom" gap={1}>
-                <CalendarMonthIcon fontSize="small"></CalendarMonthIcon>
-                <Typography variant="body2">
-                  [DateModified]
-                </Typography>
-              </Stack>
-
-              */}
             </CardContent>
           </CardActionArea>
         </Card>)
@@ -123,7 +104,7 @@ class TreesList extends React.Component<{
 
     return (
 
-      <Grid item xs={2}><Stack direction="row" padding="15px" alignItems="Center"><IconButton onClick={this.handleBackClick} >{<ArrowBackIcon />}</IconButton><Typography variant="h1" display="inline" margin="18px" >{this.props.projectName}</Typography></Stack>
+      <Grid size={2}><Stack direction="row" padding="15px" alignItems="Center"><IconButton onClick={this.handleBackClick} >{<ArrowBackIcon />}</IconButton><Typography variant="h1" display="inline" margin="18px" >{this.props.projectName}</Typography></Stack>
         <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
           {rows}
         </Stack>

@@ -144,7 +144,7 @@ async handleDeleteProject() {
       <>
         <AppBar>
           <Grid container>
-            <Grid item xs={4} marginTop="5.75px">
+            <Grid size={4} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
                 <Button aria-describedby="actionButton" onClick={this.handleActionPanelOpen} variant='inlineNavButton' ><img src={LogoMark} width="25px"></img></Button>
@@ -152,7 +152,7 @@ async handleDeleteProject() {
               </Stack>
             </Grid>
 
-            <Grid item xs={4} marginTop="5.75px">
+            <Grid size={4} marginTop="5.75px">
               <Stack alignContent="center">
                 <Box display="flex" justifyContent="center" alignItems="center" >
                   <Button variant='inlineNavButton' onClick={this.handleModalOpen} endIcon={<ArrowDropDownIcon />}>{this.state['projectName']}</Button>

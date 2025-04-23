@@ -47,7 +47,7 @@ class ProjectsList extends React.Component<{
       // We need counts of the trees in each project
       const treeCountMap = {};
       for (const project of data['result']['projects']) {
-        const numTrees = await this.getNumTreesInProject(project.projectId );
+        const numTrees = await this.getNumTreesInProject(project.projectId);
         treeCountMap[project.projectId] = numTrees;
       }
 
@@ -75,7 +75,7 @@ class ProjectsList extends React.Component<{
     const rows: JSX.Element[] = [];
 
     for (const project of projects) {
-      
+
 
       if ((!this.props.org && !project.orgId) || this.props.org === project.orgId) {
         const path = "/projects?id=" + project.projectId;
@@ -92,7 +92,7 @@ class ProjectsList extends React.Component<{
               <CardContent><Stack direction="row" alignItems="center" gap={1}>
                 <Typography variant="h1" display="inline">
                   {project.name} •
-                </Typography> <Typography variant="body1" display="inline">{ this.state['treeCountMap'][project.projectId] } Tree{ this.state['treeCountMap'][project.projectId] > 1 ? 's' : '' }</Typography></Stack>
+                </Typography> <Typography variant="body1" display="inline">{this.state['treeCountMap'][project.projectId]} Tree{this.state['treeCountMap'][project.projectId] > 1 ? 's' : ''}</Typography></Stack>
 
                 {/*
                   <br></br>
@@ -118,46 +118,46 @@ class ProjectsList extends React.Component<{
     }
 
     return (
-      <Grid item xs={2}>
+      <Grid size={2}>
         <Typography variant="h1" display="block" margin="18px" padding="15px 15px 15px 0px">{this.props.org ? "Org Projects" : "Your Projects"}</Typography>
 
         <Grid container>
 
-          <Grid item>
-          <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<PersonOutlineOutlinedIcon fontSize="60"/>} endIcon={<ArrowDropDownIcon /> } justifyContent="space-between">My Organization</Button>
-                <Popover
-                  id="orgSelecter"
-                  anchorReference="anchorPosition"
-                  anchorPosition={{ top: 50, left: 0 }}
-                  open={this.state.orgSelecterOpen}
-                  onClose={this.orgSelecterClose}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                >
+          <Grid>
+            <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<PersonOutlineOutlinedIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">My Organization</Button>
+            <Popover
+              id="orgSelecter"
+              anchorReference="anchorPosition"
+              anchorPosition={{ top: 50, left: 0 }}
+              open={this.state.orgSelecterOpen}
+              onClose={this.orgSelecterClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+            >
 
-                  <Stack>
-                    <List component="nav">
-                      <ListItem>
-                        <ListItemButton onClick={this.goBackToProjects}>
-                          <ListItemText primary="Back to Trees" />
-                        </ListItemButton>
-                      </ListItem>
-                    </List>
-                  </Stack>
+              <Stack>
+                <List component="nav">
+                  <ListItem>
+                    <ListItemButton onClick={this.goBackToProjects}>
+                      <ListItemText primary="Back to Trees" />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </Stack>
 
-                </Popover>
+            </Popover>
           </Grid>
           <Stack alignContent="right" direction="row" marginLeft="auto">
             <Box display="flex" justifyContent="right" alignItems="right" >
-            <Grid item>
-            <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon /> } justifyContent="space-between">Recent</Button>
-          </Grid>
-          <Grid item marginRight="14px">
-      <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon /> } justifyContent="space-between">Trees</Button>
-      </Grid>
-          </Box>
+              <Grid>
+                <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
+              </Grid>
+              <Grid marginRight="14px">
+                <Button aria-describedby="orgSelecter" onClick={this.orgSelecter} variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Trees</Button>
+              </Grid>
+            </Box>
           </Stack>
         </Grid>
 

@@ -125,7 +125,7 @@ class ConfigPicker extends React.Component<{
         return (
             <>
                 <Grid container>
-                    <Grid item xs={10}>
+                    <Grid size={10}>
                         <Item>
                         <FormControl fullWidth size='small'>
                             <InputLabel id="config-dropdown-label">Config</InputLabel>
@@ -145,7 +145,7 @@ class ConfigPicker extends React.Component<{
                         </Item>
 
                     </Grid>
-                    <Grid item xs={1}>
+                    <Grid size={1}>
                         <Item>
                         <IconButton onClick={this.editClicked}>
                             <EditIcon></EditIcon>
@@ -153,7 +153,7 @@ class ConfigPicker extends React.Component<{
 
                         </Item>
                     </Grid>
-                    <Grid item  xs={1}>
+                    <Grid size={1}>
                         <Item>
                         <IconButton onClick={this.addClicked}>
                             <AddIcon></AddIcon>

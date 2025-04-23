@@ -204,7 +204,7 @@ class HomePage extends React.Component<{
       <>
         <AppBar>
           <Grid container>
-            <Grid item xs={4} marginTop="5.75px">
+            <Grid size={4} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
                 <Button aria-describedby="actionButton" variant='inlineNavButton'><img src={LogoMark} width="25px"></img></Button>
@@ -212,7 +212,7 @@ class HomePage extends React.Component<{
               </Stack>
             </Grid>
 
-            <Grid item xs={4} marginTop="5.75px">
+            <Grid size={4} marginTop="5.75px">
               <Stack alignContent="center">
                 <Box display="flex" justifyContent="center" alignItems="center" >
                   <Button variant='inlineNavButton' endIcon={<Home />}>Home</Button>
@@ -296,7 +296,7 @@ class HomePage extends React.Component<{
             <Box height={'24px'}></Box>
             <Grid container>
 
-              <Grid item>
+              <Grid>
                 <Button aria-describedby="orgSelecter" onClick={this.orgSelecterClicked} variant='inlineFilterButton' startIcon={<PersonOutlineOutlinedIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">{this.state.selectedOrg ? this.state.selectedOrg.name : "Personal"}</Button>
                 <Popover
                   id="orgSelecter"
@@ -325,7 +325,7 @@ class HomePage extends React.Component<{
                       <Button variant='inlineFilterButton' startIcon={<HistoryIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between">Recent</Button>
                     </Grid>
                   */}
-                  <Grid item marginRight="14px">
+                  <Grid marginRight="14px">
                     <Button variant='inlineFilterButton' startIcon={<AccountTreeIcon fontSize="60" />} endIcon={<ArrowDropDownIcon />} justifyContent="space-between" onClick={this.projectTreePickerClicked}> {this.state.filterToTrees ? "Trees" : "Projects"}</Button>
 
                   </Grid>

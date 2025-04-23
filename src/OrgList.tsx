@@ -105,7 +105,7 @@ class OrgList extends React.Component {
 
     return (
       <>
-      <Grid item xs={2}>
+      <Grid size={2}>
       
         <Stack display="flex-row" direction="row" justifyContent="" flexWrap="wrap">
 

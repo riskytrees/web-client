@@ -298,7 +298,7 @@ class OrgSettingsPage extends React.Component<{
 
               </Stack>
 
-              <Grid item xs={2}>
+              <Grid size={2}>
 
 
                 <Stack display="flex-row" direction="row" justifyContent="start" flexWrap="wrap">

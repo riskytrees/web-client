@@ -946,7 +946,7 @@ class TreeViewPage extends React.Component<{
 
         <AppBar>
           <Grid container>
-            <Grid item xs={5} marginTop="5.75px">
+            <Grid size={5} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
 
@@ -1048,12 +1048,12 @@ class TreeViewPage extends React.Component<{
               </Stack>
             </Grid>
 
-            <Grid item xs={2} marginTop="5.75px" sx={{ maxWidth: "220px" }}>
+            <Grid size={2} marginTop="5.75px" sx={{ maxWidth: "220px" }}>
               <Stack alignContent="center" sx={{ maxWidth: "220px" }}>
                 <Button variant='inlineNavButton' onClick={this.handleOpen} endIcon={<ArrowDropDownIcon />}>{this.getTreeName()}</Button>
               </Stack>
             </Grid>
-            <Grid item xs={5} marginTop="10px">
+            <Grid size={5} marginTop="10px">
 
               <Stack spacing={2} direction="row" justifyContent="flex-end" >
 

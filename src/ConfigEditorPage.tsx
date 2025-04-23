@@ -211,8 +211,8 @@ class ConfigEditorPage extends React.Component<{
 
                 <AppBar>
                     <Grid container>
-                        <Grid item xs={5} marginTop="10px" sx={{ maxWidth: "220px" }}><IconButton onClick={this.handleBackClick} >{<ArrowBackIcon />}</IconButton></Grid>
-                        <Grid item xs={2} marginTop="5.75px" sx={{ maxWidth: "220px" }}>
+                        <Grid size={5} marginTop="10px" sx={{ maxWidth: "220px" }}><IconButton onClick={this.handleBackClick} >{<ArrowBackIcon />}</IconButton></Grid>
+                        <Grid size={2} marginTop="5.75px" sx={{ maxWidth: "220px" }}>
                             <Stack alignContent="center" sx={{ maxWidth: "220px" }}>
                                 <Button variant='inlineNavButton' onClick={() => {
                                     this.setState({
@@ -221,7 +221,7 @@ class ConfigEditorPage extends React.Component<{
                                 }} endIcon={<ArrowDropDownIcon />}>{this.getConfigName()}</Button>
                             </Stack>
                         </Grid>
-                        <Grid item xs={5}></Grid>
+                        <Grid size={5}></Grid>
                     </Grid>
                 </AppBar>
 
