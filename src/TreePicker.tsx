@@ -76,11 +76,11 @@ class TreePicker extends React.Component<{
               {this.generateOptions()}
               <Typography>From Community</Typography>
               <Grid container>
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField id="customNodeId" label="Node ID" size="small"></TextField>
                 </Grid>
-                <Grid item xs={1}></Grid>
-                <Grid item xs={3}>
+                <Grid size={1}></Grid>
+                <Grid size={3}>
                   <Button onClick={() => {
                     const nodeId = document.getElementById("customNodeId").value;
                     if (nodeId && nodeId !== '') {

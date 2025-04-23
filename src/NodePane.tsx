@@ -284,13 +284,13 @@ class NodePane extends React.Component<{
         if (relevantAttributes.includes(key)) {
           attributes.push(
             <Grid key={"container_" + key} container spacing={1}>
-              <Grid key={"item_" + key} item xs={9} >
+              <Grid key={"item_" + key} size={9} >
                 <TextField disabled={!readOnly} id={key} key={key}  sx={{
           marginBottom: '24px',
         }} label={key} onChange={this.handleAttributeChange} variant="outlined" size="small" value={this.getAttributeValue(value)} /> 
   
               </Grid>      
-              <Grid item xs={3}>
+              <Grid size={3}>
                 <IconButton disabled={!readOnly} onClick={() => {
                   this.deleteAttribute(key);
                 }}><DeleteIcon /></IconButton>
@@ -310,14 +310,14 @@ class NodePane extends React.Component<{
     return (
       <>
       <Grid container spacing={1}>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField label="Name" variant="outlined" size="small" id='newAttributeNameField' value={this.state.addAttributeName} onChange={(event) => {
             this.setState({
               addAttributeName: event.target.value
             })
           }} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField label="Value" variant="outlined" size="small" id='newAttributeValueField' value={this.state.addAttributeValue} onChange={(event) => {
             this.setState({
               addAttributeValue: event.target.value
@@ -325,10 +325,10 @@ class NodePane extends React.Component<{
           }} />
         </Grid>
         
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Button disabled={this.state.addAttributeName === '' || this.state.addAttributeValue === ''} fullWidth={true} variant="addButton" startIcon={<AddIcon />} onClick={this.createAttribute}>Add Attribute</Button>
         </Grid>
-        <Grid item xs={2}> </Grid>
+        <Grid size={2}> </Grid>
 
       </Grid>
 

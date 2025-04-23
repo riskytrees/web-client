@@ -86,7 +86,7 @@ class PersonalTokenPage extends React.Component<{
       <>
         <AppBar>
           <Grid container>
-            <Grid item xs={4} marginTop="5.75px">
+            <Grid size={4} marginTop="5.75px">
               <Stack spacing={2} direction="row">
                 <Box></Box>
                 <Button aria-describedby="actionButton" variant='inlineNavButton'><img src={LogoMark} width="25px"></img></Button>
@@ -94,7 +94,7 @@ class PersonalTokenPage extends React.Component<{
               </Stack>
             </Grid>
 
-            <Grid item xs={4} marginTop="5.75px">
+            <Grid size={4} marginTop="5.75px">
               <Stack alignContent="center">
                 <Box display="flex" justifyContent="center" alignItems="center" >
                   <Button variant='inlineNavButton' endIcon={<Home />} onClick={() => {
