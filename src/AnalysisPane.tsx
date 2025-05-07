@@ -33,6 +33,7 @@ class AnalysisPane extends React.Component<{
 
     this.getSimpleRisk = this.getSimpleRisk.bind(this);
     this.getImpactfulCountermeasures = this.getImpactfulCountermeasures.bind(this);
+    this.getTopAttackPath = this.getTopAttackPath.bind(this);
   }
 
   componentDidMount() {
@@ -75,10 +76,29 @@ class AnalysisPane extends React.Component<{
     return "Unknown"
   }
 
+  getTopAttackPath() {
+    const attackPath = this.props.riskEngine.getDominatingAttackPath(this.props.rootNodeId, this.props.selectedModel);
+
+    let result: JSX.Element[] = [];
+
+    for (const pathPart of attackPath) {
+      const contribution = pathPart.contribution;
+      const displayValue = contribution?.computed[contribution.interface.primary];
+      result.push(<Stack sx={{
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+      }} direction="row">
+        <Typography>{pathPart.name}</Typography>
+        <Typography>{displayValue}</Typography>
+      </Stack>)
+    }
+
+    return result;
+  }
+
 
   render() {
     const risk = this.props.riskEngine.computeRiskForNode(this.props.rootNodeId, this.props.selectedModel)
-    console.log(risk)
 
     let likelihoodCard: JSX.Element | null = null;
     if (risk && risk['computed'] && risk['computed']['likelihoodOfSuccess']) {
@@ -99,7 +119,7 @@ class AnalysisPane extends React.Component<{
     let primaryCard: JSX.Element | null = null;
     if (risk && risk['computed'] && risk['interface']['primary'] && risk['computed'][risk['interface']['primary']]) {
       const primaryKey = risk['interface']['primary'];
-      riskCard = <Paper>
+      primaryCard = <Paper>
         <Typography variant="h1">{risk['computed'][primaryKey]}</Typography>
         <Typography>{primaryKey}</Typography>
       </Paper>
@@ -109,13 +129,15 @@ class AnalysisPane extends React.Component<{
       <>
         <Paper variant="rightriskypane">
           <Stack>
-            <Typography variant="h1" sx={{marginBottom: 3}}>Analysis</Typography>
+            <Typography variant="h1" sx={{ marginBottom: 3 }}>Analysis</Typography>
 
+            {primaryCard}
             {riskCard}
             {likelihoodCard}
 
-            <Paper sx={{marginTop: 1}}>
+            <Paper sx={{ marginTop: 1 }}>
               <Typography variant="h2">Top Attack Path</Typography>
+              {this.getTopAttackPath()}
             </Paper>
 
           </Stack>
