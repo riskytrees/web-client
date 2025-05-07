@@ -37,7 +37,7 @@ describe('Analysis pane', () => {
       // Click analysis button
       cy.get('body').should('contain', 'Show Analysis')
       cy.contains('Show Analysis').click()
-      cy.get('body').should('contain', 'Total Tree Risk')
+      cy.get('body').should('contain', 'Top Attack Path')
       cy.get('body').should('contain', 'Close Analysis')
       cy.contains('Close Analysis').click()
       cy.get('body').should('contain', 'Show Analysis')
