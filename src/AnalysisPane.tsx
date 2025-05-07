@@ -117,7 +117,9 @@ class AnalysisPane extends React.Component<{
     }
 
     let primaryCard: JSX.Element | null = null;
-    if (risk && risk['computed'] && risk['interface']['primary'] && risk['computed'][risk['interface']['primary']]) {
+
+    // Only use this if the others don't exist
+    if (!likelihoodCard && !riskCard && risk && risk['computed'] && risk['interface']['primary'] && risk['computed'][risk['interface']['primary']]) {
       const primaryKey = risk['interface']['primary'];
       primaryCard = <Paper>
         <Typography variant="h1">{risk['computed'][primaryKey]}</Typography>
