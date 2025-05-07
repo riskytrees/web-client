@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { NodeRiskResult, RiskyRisk } from './Risk';
-import { LibraryAdd } from '@mui/icons-material';
+import { Label, LibraryAdd } from '@mui/icons-material';
 import Paper from "@mui/material/Paper";
 import TreePicker from './TreePicker';
 import { RiskyApi } from './api';
@@ -77,23 +77,45 @@ class AnalysisPane extends React.Component<{
 
 
   render() {
+    const risk = this.props.riskEngine.computeRiskForNode(this.props.rootNodeId, this.props.selectedModel)
+    console.log(risk)
 
+    let likelihoodCard: JSX.Element | null = null;
+    if (risk && risk['computed'] && risk['computed']['likelihoodOfSuccess']) {
+      likelihoodCard = <Paper>
+        <Typography variant="h1">{risk['computed']['likelihoodOfSuccess'] * 100}%</Typography>
+        <Typography>Likelihood of Attack</Typography>
+      </Paper>
+    }
+
+    let riskCard: JSX.Element | null = null;
+    if (risk && risk['computed'] && risk['computed']['risk']) {
+      riskCard = <Paper>
+        <Typography variant="h1">${risk['computed']['risk'] * 100}</Typography>
+        <Typography>Risk Attack</Typography>
+      </Paper>
+    }
+
+    let primaryCard: JSX.Element | null = null;
+    if (risk && risk['computed'] && risk['interface']['primary'] && risk['computed'][risk['interface']['primary']]) {
+      const primaryKey = risk['interface']['primary'];
+      riskCard = <Paper>
+        <Typography variant="h1">{risk['computed'][primaryKey]}</Typography>
+        <Typography>{primaryKey}</Typography>
+      </Paper>
+    }
 
     return (
       <>
         <Paper variant="rightriskypane">
           <Stack>
-            <Typography variant="h1">Analysis</Typography>
+            <Typography variant="h1" sx={{marginBottom: 3}}>Analysis</Typography>
 
-            <Paper>
-              <Typography variant="h3">Total Tree Risk:</Typography>
-              {this.getSimpleRisk()}
-            </Paper>
+            {riskCard}
+            {likelihoodCard}
 
-
-            <Paper>
-              <Typography variant="h3">Most Impactful Countermeasures:</Typography>
-              {this.getImpactfulCountermeasures()}
+            <Paper sx={{marginTop: 1}}>
+              <Typography variant="h2">Top Attack Path</Typography>
             </Paper>
 
           </Stack>
