@@ -248,7 +248,7 @@ class TreeViewer extends React.Component<{
               const risk = this.props.riskEngine.computeRiskForNode(child, this.props.selectedModel);
               if (risk) {
                 const riskAsValue = risk.computed[risk.interface.primary];
-                if (riskAsValue) {
+                if (riskAsValue && ! isNaN(riskAsValue)) {
                   label = '' + riskAsValue.toFixed(2);
                   const averageRisk = this.props.riskEngine.computeAveragePrimaryRiskValue(this.props.selectedModel);
                   let diff = riskAsValue / averageRisk;

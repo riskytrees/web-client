@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { NodeRiskResult, RiskyRisk } from './Risk';
-import { LibraryAdd } from '@mui/icons-material';
+import { Label, LibraryAdd } from '@mui/icons-material';
 import Paper from "@mui/material/Paper";
 import TreePicker from './TreePicker';
 import { RiskyApi } from './api';
@@ -33,6 +33,7 @@ class AnalysisPane extends React.Component<{
 
     this.getSimpleRisk = this.getSimpleRisk.bind(this);
     this.getImpactfulCountermeasures = this.getImpactfulCountermeasures.bind(this);
+    this.getTopAttackPath = this.getTopAttackPath.bind(this);
   }
 
   componentDidMount() {
@@ -75,25 +76,68 @@ class AnalysisPane extends React.Component<{
     return "Unknown"
   }
 
+  getTopAttackPath() {
+    const attackPath = this.props.riskEngine.getDominatingAttackPath(this.props.rootNodeId, this.props.selectedModel);
+
+    let result: JSX.Element[] = [];
+
+    for (const pathPart of attackPath) {
+      const contribution = pathPart.contribution;
+      const displayValue = contribution?.computed[contribution.interface.primary];
+      result.push(<Stack sx={{
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+      }} direction="row">
+        <Typography>{pathPart.name}</Typography>
+        <Typography>{displayValue}</Typography>
+      </Stack>)
+    }
+
+    return result;
+  }
+
 
   render() {
+    const risk = this.props.riskEngine.computeRiskForNode(this.props.rootNodeId, this.props.selectedModel)
 
+    let likelihoodCard: JSX.Element | null = null;
+    if (risk && risk['computed'] && risk['computed']['likelihoodOfSuccess']) {
+      likelihoodCard = <Paper>
+        <Typography variant="h1">{risk['computed']['likelihoodOfSuccess'] * 100}%</Typography>
+        <Typography>Likelihood of Attack</Typography>
+      </Paper>
+    }
+
+    let riskCard: JSX.Element | null = null;
+    if (risk && risk['computed'] && risk['computed']['risk']) {
+      riskCard = <Paper>
+        <Typography variant="h1">${risk['computed']['risk'] * 100}</Typography>
+        <Typography>Risk Attack</Typography>
+      </Paper>
+    }
+
+    let primaryCard: JSX.Element | null = null;
+    if (risk && risk['computed'] && risk['interface']['primary'] && risk['computed'][risk['interface']['primary']]) {
+      const primaryKey = risk['interface']['primary'];
+      primaryCard = <Paper>
+        <Typography variant="h1">{risk['computed'][primaryKey]}</Typography>
+        <Typography>{primaryKey}</Typography>
+      </Paper>
+    }
 
     return (
       <>
         <Paper variant="rightriskypane">
           <Stack>
-            <Typography variant="h1">Analysis</Typography>
+            <Typography variant="h1" sx={{ marginBottom: 3 }}>Analysis</Typography>
 
-            <Paper>
-              <Typography variant="h3">Total Tree Risk:</Typography>
-              {this.getSimpleRisk()}
-            </Paper>
+            {primaryCard}
+            {riskCard}
+            {likelihoodCard}
 
-
-            <Paper>
-              <Typography variant="h3">Most Impactful Countermeasures:</Typography>
-              {this.getImpactfulCountermeasures()}
+            <Paper sx={{ marginTop: 1 }}>
+              <Typography variant="h2">Top Attack Path</Typography>
+              {this.getTopAttackPath()}
             </Paper>
 
           </Stack>

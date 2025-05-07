@@ -5,6 +5,11 @@ export interface NodeRiskResult {
     interface: Record<string, any>
 }
 
+export interface AttackPathComponent {
+    name: string | undefined;
+    contribution: NodeRiskResult | null;
+}
+
 export class RiskyRisk {
     constructor(private treeMap: Record<string, TreeData>, private rootTreeId: string | null, private cache: Record<string, Record<string, any> | null> ) {
         this.cache = {
@@ -51,8 +56,35 @@ export class RiskyRisk {
 
         return result;
     }
+    
+    getDominatingAttackPath(nodeId: string, riskModel: string): AttackPathComponent[] {
+        const node = this.getNode(nodeId);
+        const thisRisk = this.computeRiskForNode(nodeId, riskModel);
 
-    computeAveragePrimaryRiskValue(riskModel: string) {
+        let result = [{
+            name: node?.title,
+            contribution: thisRisk
+        }]
+
+        let maxRisk = 0;
+        let maxId = null;
+        for (const child of node?.children) {
+            let childRisk = this.computeRiskForNode(child, riskModel);
+
+            if (maxRisk === 0 || childRisk['computed'][childRisk['interface']['primary']] > maxRisk['computed'][maxRisk['interface']['primary']]) {
+                maxRisk = childRisk;
+                maxId = child;
+            }
+        }
+
+        if (maxId) {
+            return result.concat(this.getDominatingAttackPath(maxId, riskModel));
+        } else {
+            return result;
+        }
+    }
+
+    computeAveragePrimaryRiskValue(riskModel: string)  {
         let sumOfRisks = 0;
         let counter = 0;
 
