@@ -71,7 +71,7 @@ export class RiskyRisk {
         for (const child of node?.children) {
             let childRisk = this.computeRiskForNode(child, riskModel);
 
-            if (childRisk['computed'][childRisk['interface']['primary']] > maxRisk) {
+            if (maxRisk === 0 || childRisk['computed'][childRisk['interface']['primary']] > maxRisk['computed'][maxRisk['interface']['primary']]) {
                 maxRisk = childRisk;
                 maxId = child;
             }
