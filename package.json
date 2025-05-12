@@ -21,7 +21,7 @@
     "lodash.debounce": "^4.0.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.5",
+    "react-router-dom": "^7.6.0",
     "ts-retry": "^6.0.0",
     "typescript": "^5.8.3",
     "vis-data": "^7.1.9",
