@@ -3612,12 +3612,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ws@npm:^8.5.1":
-  version: 8.5.4
-  resolution: "@types/ws@npm:8.5.4"
+"@types/ws@npm:^8.5.5":
+  version: 8.18.1
+  resolution: "@types/ws@npm:8.18.1"
   dependencies:
     "@types/node": "*"
-  checksum: fefbad20d211929bb996285c4e6f699b12192548afedbe4930ab4384f8a94577c9cd421acaad163cacd36b88649509970a05a0b8f20615b30c501ed5269038d1
+  checksum: 0331b14cde388e2805af66cad3e3f51857db8e68ed91e5b99750915e96fe7572e58296dc99999331bbcf08f0ff00a227a0bb214e991f53c2a5aca7b0e71173fa
   languageName: node
   linkType: hard
 
@@ -15042,7 +15042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-middleware@npm:^5.3.1":
+"webpack-dev-middleware@npm:^5.3.4":
   version: 5.3.4
   resolution: "webpack-dev-middleware@npm:5.3.4"
   dependencies:
@@ -15058,8 +15058,8 @@ __metadata:
   linkType: hard
 
 "webpack-dev-server@npm:^4.6.0":
-  version: 4.13.1
-  resolution: "webpack-dev-server@npm:4.13.1"
+  version: 4.15.2
+  resolution: "webpack-dev-server@npm:4.15.2"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
@@ -15067,7 +15067,7 @@ __metadata:
     "@types/serve-index": ^1.9.1
     "@types/serve-static": ^1.13.10
     "@types/sockjs": ^0.3.33
-    "@types/ws": ^8.5.1
+    "@types/ws": ^8.5.5
     ansi-html-community: ^0.0.8
     bonjour-service: ^1.0.11
     chokidar: ^3.5.3
@@ -15089,7 +15089,7 @@ __metadata:
     serve-index: ^1.9.1
     sockjs: ^0.3.24
     spdy: ^4.0.2
-    webpack-dev-middleware: ^5.3.1
+    webpack-dev-middleware: ^5.3.4
     ws: ^8.13.0
   peerDependencies:
     webpack: ^4.37.0 || ^5.0.0
@@ -15100,7 +15100,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: f70611544b7d964a31eb3d934d7c2b376b97e6927a89e03b2e21cfa5812bb639625cd18fd350de1604ba6c455b324135523a894032f28c69d90d90682e4f3b7d
+  checksum: 123507129cb4d55fdc5fabdd177574f31133605748372bb11353307b7a583ef25c6fd27b6addf56bf070ba44c88d5da861771c2ec55f52405082ec9efd01f039
   languageName: node
   linkType: hard
 
