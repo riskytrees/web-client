@@ -25,6 +25,7 @@ class NodePane extends React.Component<{
   triggerAddDeleteNode: Function;
   onNodeChanged: Function;
   onNodeFoldToggle: Function;
+  onRecommendNodes: Function;
   currentNodeRisk: NodeRiskResult;
   selectedModel: string;
 }, {
@@ -37,10 +38,11 @@ class NodePane extends React.Component<{
   selectedTreeId: string | null;
   addAttributeName: string;
   addAttributeValue: string;
+  recommendations: string[];
 }> {
   constructor(props) {
     super(props);
-    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false, selectedTreeId: null, addAttributeName: '', addAttributeValue: '' };
+    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false, selectedTreeId: null, addAttributeName: '', addAttributeValue: '', recommendations: [] };
 
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
@@ -59,6 +61,8 @@ class NodePane extends React.Component<{
     this.pickedSubtreeCallback = this.pickedSubtreeCallback.bind(this);
     this.addAttributesBasedOnSelectedModel = this.addAttributesBasedOnSelectedModel.bind(this);
     this.loadTreeIdForThisNode = this.loadTreeIdForThisNode.bind(this);
+    this.handleRecommendNode = this.handleRecommendNode.bind(this);
+    this.handleUseRecommendation = this.handleUseRecommendation.bind(this);
   }
 
   debouncedTriggerOnNodeChanged = debounce(this.triggerOnNodeChanged, 500);
@@ -76,6 +80,15 @@ class NodePane extends React.Component<{
   async handleAddNode(event) {
     if (this.props.triggerAddDeleteNode) {
       this.props.triggerAddDeleteNode(this.state['selectedTreeId'], this.state.nodeId, true);
+    }
+  }
+
+  async handleRecommendNode(event) {
+    if (this.props.onRecommendNodes) {
+      let result = await this.props.onRecommendNodes(this.state['selectedTreeId'], this.state.nodeId);
+      this.setState({
+        recommendations: result
+      })
     }
   }
 
@@ -428,6 +441,15 @@ class NodePane extends React.Component<{
     }
   }
 
+  handleUseRecommendation = (rec: string) => {
+    this.setState({
+      nodeTitle: rec,
+      recommendations: []
+    }, () => {
+      this.debouncedTriggerOnNodeChanged();
+    });
+  }
+
   render() {
     const commandOrControlSymbol = window.navigator.userAgent.toLowerCase().includes("mac") ? "⌘" : "Ctrl"
 
@@ -446,6 +468,8 @@ class NodePane extends React.Component<{
 
     const jumpToSubtree = !readOnly ? <Link href={urlLink}>Go to subtree</Link> : null;
 
+    
+
     return (
       <>
       <Paper variant="rightriskypane">
@@ -455,6 +479,24 @@ class NodePane extends React.Component<{
       <Box height={"24px"}></Box>
 
       <TextField id="nodeNameField" disabled={!readOnly} label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
+      {/* Show recommendations if available */}
+      {Array.isArray(this.state.recommendations) && this.state.recommendations.length > 0 && (
+        <Box>
+          <Typography variant="h2">Recommendations</Typography>
+            {this.state.recommendations.map((rec, idx) => (
+                <Grid container >
+                  <Grid><Button variant="outlined" size="small" onClick={() => this.handleUseRecommendation(rec)}>Use</Button></Grid>
+
+                  <Grid><Typography variant="body2" >{rec}</Typography></Grid>
+
+                </Grid>
+            ))}
+        </Box>
+      )}
+      <Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleRecommendNode}>Recommend</Button>
+      <Box height={"5px"}></Box>
+
+      
       <Box height={"24px"}></Box>
       <FormControl size="small">
         <InputLabel id="node-type-dropdown-label">Node Type</InputLabel>
@@ -496,6 +538,7 @@ class NodePane extends React.Component<{
 
       <Button variant="addButton" disabled={!readOnly} startIcon={<AddIcon />} onClick={this.handleAddNode}>Add Node ({"+"})</Button>
       <Box height={"5px"}></Box>
+
       <Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleAddSubtree}>Add Subtree</Button>
       <TreePicker enabled={this.state.showSubtreeDialog} onSubmit={this.pickedSubtreeCallback} onCancel={this.canceledSubtreeCallback}></TreePicker>
       <Box height={"5px"}></Box>

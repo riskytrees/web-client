@@ -95,6 +95,7 @@ class TreeViewPage extends React.Component<{
     this.pastePartialTree = this.pastePartialTree.bind(this);
     this.onNodeFoldToggle = this.onNodeFoldToggle.bind(this);
     this.findParentOfNode = this.findParentOfNode.bind(this);
+    this.onRecommendNodes = this.onRecommendNodes.bind(this);
 
     this.riskEngine = new RiskyRisk(this.state.treeMap, null);
     this.searchEngine = new TreeSearch(this.state.treeMap, null);
@@ -142,6 +143,25 @@ class TreeViewPage extends React.Component<{
         selectedModel: data.result.modelId
       })
     }
+  }
+
+  async onRecommendNodes(treeId: string, nodeId: string) {
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/recommend", {
+      method: 'POST',
+      body: JSON.stringify({
+        steps: ['Test']
+      })
+    });
+
+    if (data.ok) {
+      let suggestions = [];
+      for (const suggestion of data.result['suggestions']) {
+        suggestions.push(suggestion['title']);
+      }
+      return suggestions
+    }
+
+    return []
   }
 
   handleZoomChange(event) {
@@ -892,7 +912,7 @@ class TreeViewPage extends React.Component<{
       </FormControl>
     }
 
-    let rightPane: JSX.Element = <NodePane onNodeFoldToggle={this.onNodeFoldToggle} selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />;
+    let rightPane: JSX.Element = <NodePane onRecommendNodes={this.onRecommendNodes} onNodeFoldToggle={this.onNodeFoldToggle} selectedModel={this.state.selectedModel} triggerAddDeleteNode={this.onAddOrDeleteNode} onNodeChanged={this.onNodeChanged} currentNode={this.state.selectedNode} currentNodeRisk={this.riskEngine.computeRiskForNode(this.state.selectedNode ? this.state.selectedNode.id : null, this.state.selectedModel)} />;
 
     if (this.state.analysisModeEnabled) {
       const queryString = window.location.search;
