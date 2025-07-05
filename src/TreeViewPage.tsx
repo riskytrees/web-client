@@ -146,9 +146,20 @@ class TreeViewPage extends React.Component<{
   }
 
   async getPathForRecommendation(nodeId: string, treeId: string) {
-    let currentNode = this.getRawNodeFromTree(nodeId, treeId)
+    let nodes = this.searchEngine.findPathToNode(treeId, nodeId);
 
-    return [currentNode?.label]
+    let titles = [];
+
+    for (const node of nodes) {
+      const label = this.getRawNodeFromTree(node, treeId)?.label;
+      titles.push(label)
+    }
+
+    // We don't want to include ourself, since that might be unlabeled.
+
+    titles.pop();
+
+    return titles
   }
 
   async onRecommendNodes(treeId: string, nodeId: string) {
