@@ -145,11 +145,17 @@ class TreeViewPage extends React.Component<{
     }
   }
 
+  async getPathForRecommendation(nodeId: string, treeId: string) {
+    let currentNode = this.getRawNodeFromTree(nodeId, treeId)
+
+    return [currentNode?.label]
+  }
+
   async onRecommendNodes(treeId: string, nodeId: string) {
     let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/nodes/recommend", {
       method: 'POST',
       body: JSON.stringify({
-        steps: ['Test']
+        steps: await this.getPathForRecommendation(nodeId, treeId)
       })
     });
 
