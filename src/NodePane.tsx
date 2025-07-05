@@ -480,6 +480,7 @@ class NodePane extends React.Component<{
 
       <TextField id="nodeNameField" disabled={!readOnly} label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
       {/* Show recommendations if available */}
+      {/* Disabling feature for now while we wait to get endpoint to check plan 
       {Array.isArray(this.state.recommendations) && this.state.recommendations.length > 0 && (
         <Box>
           <Typography variant="h2">Recommendations</Typography>
@@ -495,6 +496,7 @@ class NodePane extends React.Component<{
       )}
       <Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleRecommendNode}>Recommend</Button>
       <Box height={"5px"}></Box>
+      */}
 
       
       <Box height={"24px"}></Box>
