@@ -39,10 +39,11 @@ class NodePane extends React.Component<{
   addAttributeName: string;
   addAttributeValue: string;
   recommendations: string[];
+  onRecommendPlan: boolean;
 }> {
   constructor(props) {
     super(props);
-    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false, selectedTreeId: null, addAttributeName: '', addAttributeValue: '', recommendations: [] };
+    this.state = { nodeId: null, nodeTitle: '', nodeDescription: '', modelAttributes: null, conditionAttribute: '', showSubtreeDialog: false, selectedTreeId: null, addAttributeName: '', addAttributeValue: '', recommendations: [], onRecommendPlan: false };
 
     this.handleNodeNameChange = this.handleNodeNameChange.bind(this);
     this.handleNodeDescriptionChange = this.handleNodeDescriptionChange.bind(this);
@@ -63,6 +64,7 @@ class NodePane extends React.Component<{
     this.loadTreeIdForThisNode = this.loadTreeIdForThisNode.bind(this);
     this.handleRecommendNode = this.handleRecommendNode.bind(this);
     this.handleUseRecommendation = this.handleUseRecommendation.bind(this);
+    this.checkRecommendPlan = this.checkRecommendPlan.bind(this);
   }
 
   debouncedTriggerOnNodeChanged = debounce(this.triggerOnNodeChanged, 500);
@@ -198,8 +200,24 @@ class NodePane extends React.Component<{
     }
   }
 
+  async checkRecommendPlan() {
+    let data = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/orgs", {});
+
+    if (data['ok'] === true && data['result']['orgs']) {
+      for (const org of data['result']['orgs']) {
+        if (org.plan !== 'standard') {
+          this.setState({
+            onRecommendPlan: true
+          })
+        }
+      }
+    }
+  }
+
   componentDidMount() {
     const element = document.getElementById("nodeNameField");
+
+    this.checkRecommendPlan();
   }
 
   componentDidUpdate(prevProps) {
@@ -468,7 +486,27 @@ class NodePane extends React.Component<{
 
     const jumpToSubtree = !readOnly ? <Link href={urlLink}>Go to subtree</Link> : null;
 
-    
+    let recommendationStuff: JSX.Element[] = [];
+
+    if (this.state.onRecommendPlan) {
+      if (Array.isArray(this.state.recommendations) && this.state.recommendations.length > 0) {
+        recommendationStuff = [<Box>
+            <Typography variant="h2">Recommendations</Typography>
+              {this.state.recommendations.map((rec, idx) => (
+                  <Grid container >
+                    <Grid><Button variant="outlined" size="small" onClick={() => this.handleUseRecommendation(rec)}>Use</Button></Grid>
+
+                    <Grid><Typography variant="body2" >{rec}</Typography></Grid>
+
+                  </Grid>
+              ))}
+          </Box>]
+      }
+
+      recommendationStuff.push(<Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleRecommendNode}>Recommend</Button>)
+      recommendationStuff.push(<Box height={"5px"}></Box>)
+          
+    }
 
     return (
       <>
@@ -479,25 +517,8 @@ class NodePane extends React.Component<{
       <Box height={"24px"}></Box>
 
       <TextField id="nodeNameField" disabled={!readOnly} label="Node Name" onChange={this.handleNodeNameChange}  variant="outlined" size="small" value={this.state.nodeTitle} />
-      {/* Show recommendations if available */}
-      {/* Disabling feature for now while we wait to get endpoint to check plan 
-      {Array.isArray(this.state.recommendations) && this.state.recommendations.length > 0 && (
-        <Box>
-          <Typography variant="h2">Recommendations</Typography>
-            {this.state.recommendations.map((rec, idx) => (
-                <Grid container >
-                  <Grid><Button variant="outlined" size="small" onClick={() => this.handleUseRecommendation(rec)}>Use</Button></Grid>
 
-                  <Grid><Typography variant="body2" >{rec}</Typography></Grid>
-
-                </Grid>
-            ))}
-        </Box>
-      )}
-      <Button variant="addButton" disabled={!readOnly} startIcon={<LibraryAdd />} onClick={this.handleRecommendNode}>Recommend</Button>
-      <Box height={"5px"}></Box>
-      */}
-
+      {recommendationStuff}
       
       <Box height={"24px"}></Box>
       <FormControl size="small">
