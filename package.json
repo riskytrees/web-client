@@ -7,7 +7,7 @@
     "@jy95/material-ui-image": "^4.0.9",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
     "@textea/json-viewer": "^4.0.1",
