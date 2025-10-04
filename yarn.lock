@@ -15004,17 +15004,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vis-network@npm:^9.1.9":
-  version: 9.1.9
-  resolution: "vis-network@npm:9.1.9"
+"vis-network@npm:^10.0.2":
+  version: 10.0.2
+  resolution: "vis-network@npm:10.0.2"
   peerDependencies:
     "@egjs/hammerjs": ^2.0.0
-    component-emitter: ^1.3.0
+    component-emitter: ^1.3.0 || ^2.0.0
     keycharm: ^0.2.0 || ^0.3.0 || ^0.4.0
-    uuid: ^3.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
-    vis-data: ^6.3.0 || ^7.0.0
-    vis-util: ^5.0.1
-  checksum: df51b11f9c385c211cbbcd37c79718a623b48b0841c6eef881a8ed8693dc00895436c88ae11c8d4f23b35e5c9edfc15c5c9a4689a9dce0c70eea2530d2cb2246
+    uuid: ^3.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^13.0.0
+    vis-data: ">=8.0.0"
+    vis-util: ">=6.0.0"
+  checksum: 8b72adb7cbc251a1ce89afecbd0da811747b55aff1bddee3e1398dde47df6ed1314b8eb2b779372fe45fb37fdfd8b3da2570d2bc2965ae16a02b1b5957664add
   languageName: node
   linkType: hard
 
@@ -15095,7 +15095,7 @@ __metadata:
     ts-retry: ^6.0.0
     typescript: ^5.8.3
     vis-data: ^7.1.9
-    vis-network: ^9.1.9
+    vis-network: ^10.0.2
     web-vitals: ^4.2.4
   languageName: unknown
   linkType: soft
