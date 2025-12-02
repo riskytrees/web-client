@@ -140,7 +140,7 @@ class TreeViewPage extends React.Component<{
   }
 
   componentDidMount() {
-    this.loadTree()
+    this.loadTree(true)
     this.loadPublicity()
     this.getListOfModels();
     this.getCurrentModel();
@@ -376,7 +376,7 @@ class TreeViewPage extends React.Component<{
     return result;
   }
 
-  async loadTree() {
+  async loadTree(firstLoad: boolean = false) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -396,7 +396,7 @@ class TreeViewPage extends React.Component<{
       // Find all node IDs that are references to subtrees (children not present in their own tree)
       const collapsedIds = this.state.collapsedDownNodeIds;
 
-      if (collapsedIds.length === 0) {
+      if (firstLoad) {
         for (const tId in treeMap) {
           const tree = treeMap[tId];
           if (tree && tree.nodes) {
