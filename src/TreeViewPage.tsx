@@ -32,9 +32,8 @@ import { TreeSearch } from './TreeSearch';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from 'process';
 
-class TreeViewPage extends React.Component<{
 
-}, {
+type TreeViewPageState = {
   treeMap: Record<string, TreeData>;
   selectedNode: {
     id: string;
@@ -55,7 +54,10 @@ class TreeViewPage extends React.Component<{
   confirmDeleteOpen: boolean;
   copiedData: Record<string, any>;
   collapsedDownNodeIds: string[];
-}> {
+};
+class TreeViewPage extends React.Component<{
+
+}, TreeViewPageState> {
   riskEngine: RiskyRisk;
   searchEngine: TreeSearch;
 
@@ -394,7 +396,7 @@ class TreeViewPage extends React.Component<{
       treeMap = { ...treeMap, ...result };
 
       // Find all node IDs that are references to subtrees (children not present in their own tree)
-      const collapsedIds = this.state.collapsedDownNodeIds;
+      const collapsedIds = [];
 
       if (firstLoad) {
         for (const tId in treeMap) {
@@ -411,11 +413,15 @@ class TreeViewPage extends React.Component<{
         }
       }
 
+      let updateValues: Record<string, any> = {
+        treeMap
+      };
 
-      this.setState({
-        treeMap,
-        collapsedDownNodeIds: collapsedIds
-      }, () => {
+      if (collapsedIds.length > 0) {
+        updateValues['collapsedDownNodeIds'] = collapsedIds;
+      }
+
+      this.setState(updateValues as TreeViewPageState, () => {
         this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
         this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
       })
