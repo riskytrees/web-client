@@ -63,24 +63,6 @@ class TreeViewPage extends React.Component<{
 
   constructor(props) {
     super(props);
-    // Helper to find subtree references in initial treeMap (empty at first, but will be populated after loadTree)
-    const getInitialCollapsedNodeIds = (treeMap) => {
-      const collapsedIds = [];
-      for (const treeId in treeMap) {
-        const tree = treeMap[treeId];
-        if (tree && tree.nodes) {
-          for (const node of tree.nodes) {
-            for (const childId of node.children) {
-              // If childId is not found in the same tree's nodes, it's a subtree reference
-              if (!tree.nodes.some(n => n.id === childId)) {
-                collapsedIds.push(childId);
-              }
-            }
-          }
-        }
-      }
-      return collapsedIds;
-    };
 
     const initialTreeMap = {};
     this.state = {
@@ -100,7 +82,7 @@ class TreeViewPage extends React.Component<{
       searchIndex: 0,
       confirmDeleteOpen: false,
       copiedData: {},
-      collapsedDownNodeIds: getInitialCollapsedNodeIds(initialTreeMap)
+      collapsedDownNodeIds: []
     };
 
     this.onNodeClicked = this.onNodeClicked.bind(this);
