@@ -383,9 +383,10 @@ class TreeViewPage extends React.Component<{
         for (const tId in treeMap) {
           const tree = treeMap[tId];
           if (tree && tree.nodes) {
+            const nodeIds = new Set(tree.nodes.map(n => n.id));
             for (const node of tree.nodes) {
               for (const childId of node.children) {
-                if (!tree.nodes.some(n => n.id === childId)) {
+                if (!nodeIds.has(childId)) {
                   collapsedIds.push(childId);
                 }
               }
