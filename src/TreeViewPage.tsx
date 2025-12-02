@@ -32,9 +32,8 @@ import { TreeSearch } from './TreeSearch';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from 'process';
 
-class TreeViewPage extends React.Component<{
 
-}, {
+type TreeViewPageState = {
   treeMap: Record<string, TreeData>;
   selectedNode: {
     id: string;
@@ -55,13 +54,35 @@ class TreeViewPage extends React.Component<{
   confirmDeleteOpen: boolean;
   copiedData: Record<string, any>;
   collapsedDownNodeIds: string[];
-}> {
+};
+class TreeViewPage extends React.Component<{
+
+}, TreeViewPageState> {
   riskEngine: RiskyRisk;
   searchEngine: TreeSearch;
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, searchModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false, copiedData: {}, collapsedDownNodeIds: [] };
+
+    this.state = {
+      treeMap: {},
+      selectedNode: null,
+      isPublic: null,
+      modalOpen: false,
+      shareModalOpen: false,
+      searchModalOpen: false,
+      actionModalOpen: false,
+      models: [],
+      selectedModel: "",
+      analysisModeEnabled: false,
+      zoomLevel: 1.0,
+      paneOpen: false,
+      searchQuery: '',
+      searchIndex: 0,
+      confirmDeleteOpen: false,
+      copiedData: {},
+      collapsedDownNodeIds: []
+    };
 
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
@@ -102,7 +123,7 @@ class TreeViewPage extends React.Component<{
   }
 
   componentDidMount() {
-    this.loadTree()
+    this.loadTree(true)
     this.loadPublicity()
     this.getListOfModels();
     this.getCurrentModel();
@@ -338,7 +359,7 @@ class TreeViewPage extends React.Component<{
     return result;
   }
 
-  async loadTree() {
+  async loadTree(firstLoad: boolean = false) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -354,9 +375,35 @@ class TreeViewPage extends React.Component<{
       // Recursively resolve tree imports
       const result = await this.resolveImports(data.result, projectId);
       treeMap = { ...treeMap, ...result };
-      this.setState({
+
+      // Find all node IDs that are references to subtrees (children not present in their own tree)
+      const collapsedIds = [];
+
+      if (firstLoad) {
+        for (const tId in treeMap) {
+          const tree = treeMap[tId];
+          if (tree && tree.nodes) {
+            const nodeIds = new Set(tree.nodes.map(n => n.id));
+            for (const node of tree.nodes) {
+              for (const childId of node.children) {
+                if (!nodeIds.has(childId)) {
+                  collapsedIds.push(childId);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      let updateValues: Record<string, any> = {
         treeMap
-      }, () => {
+      };
+
+      if (collapsedIds.length > 0) {
+        updateValues['collapsedDownNodeIds'] = collapsedIds;
+      }
+
+      this.setState(updateValues as TreeViewPageState, () => {
         this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
         this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
       })
