@@ -64,9 +64,8 @@ class TreeViewPage extends React.Component<{
   constructor(props) {
     super(props);
 
-    const initialTreeMap = {};
     this.state = {
-      treeMap: initialTreeMap,
+      treeMap: {},
       selectedNode: null,
       isPublic: null,
       modalOpen: false,
