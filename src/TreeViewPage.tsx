@@ -61,7 +61,45 @@ class TreeViewPage extends React.Component<{
 
   constructor(props) {
     super(props);
-    this.state = { treeMap: {}, selectedNode: null, isPublic: null, modalOpen: false, shareModalOpen: false, searchModalOpen: false, actionModalOpen: false, models: [], selectedModel: "", analysisModeEnabled: false, zoomLevel: 1.0, paneOpen: false, searchQuery: '', searchIndex: 0, confirmDeleteOpen: false, copiedData: {}, collapsedDownNodeIds: [] };
+    // Helper to find subtree references in initial treeMap (empty at first, but will be populated after loadTree)
+    const getInitialCollapsedNodeIds = (treeMap) => {
+      const collapsedIds = [];
+      for (const treeId in treeMap) {
+        const tree = treeMap[treeId];
+        if (tree && tree.nodes) {
+          for (const node of tree.nodes) {
+            for (const childId of node.children) {
+              // If childId is not found in the same tree's nodes, it's a subtree reference
+              if (!tree.nodes.some(n => n.id === childId)) {
+                collapsedIds.push(childId);
+              }
+            }
+          }
+        }
+      }
+      return collapsedIds;
+    };
+
+    const initialTreeMap = {};
+    this.state = {
+      treeMap: initialTreeMap,
+      selectedNode: null,
+      isPublic: null,
+      modalOpen: false,
+      shareModalOpen: false,
+      searchModalOpen: false,
+      actionModalOpen: false,
+      models: [],
+      selectedModel: "",
+      analysisModeEnabled: false,
+      zoomLevel: 1.0,
+      paneOpen: false,
+      searchQuery: '',
+      searchIndex: 0,
+      confirmDeleteOpen: false,
+      copiedData: {},
+      collapsedDownNodeIds: getInitialCollapsedNodeIds(initialTreeMap)
+    };
 
     this.onNodeClicked = this.onNodeClicked.bind(this);
     this.onNodeChanged = this.onNodeChanged.bind(this);
@@ -354,8 +392,29 @@ class TreeViewPage extends React.Component<{
       // Recursively resolve tree imports
       const result = await this.resolveImports(data.result, projectId);
       treeMap = { ...treeMap, ...result };
+
+      // Find all node IDs that are references to subtrees (children not present in their own tree)
+      const collapsedIds = this.state.collapsedDownNodeIds;
+
+      if (collapsedIds.length === 0) {
+        for (const tId in treeMap) {
+          const tree = treeMap[tId];
+          if (tree && tree.nodes) {
+            for (const node of tree.nodes) {
+              for (const childId of node.children) {
+                if (!tree.nodes.some(n => n.id === childId)) {
+                  collapsedIds.push(childId);
+                }
+              }
+            }
+          }
+        }
+      }
+
+
       this.setState({
-        treeMap
+        treeMap,
+        collapsedDownNodeIds: collapsedIds
       }, () => {
         this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
         this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
