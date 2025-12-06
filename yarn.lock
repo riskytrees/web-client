@@ -14998,13 +14998,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vis-data@npm:^7.1.9":
-  version: 7.1.9
-  resolution: "vis-data@npm:7.1.9"
+"vis-data@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "vis-data@npm:8.0.3"
   peerDependencies:
-    uuid: ^3.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
-    vis-util: ^5.0.1
-  checksum: 10/13cc6774cc225aa8a84d12c29d90188627fe8d937a93080113bd7b30d729fe8d6b2703322b41614ed48ad3f28f66e4090dfb1dce2ae7885a8938c2cffd7eebf3
+    uuid: ^3.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^13.0.0
+    vis-util: ">=6.0.0"
+  checksum: 10/5b011fe0d8e2b95f4826a685a0c5a8e1b532177fe7a3a2e07b66f25f87c7c0943b30b95564e3994038f2ef91d4bf835becd75fca6b31ac0813f33d245621f5da
   languageName: node
   linkType: hard
 
@@ -15098,7 +15098,7 @@ __metadata:
     react-scripts: "npm:^5.0.1"
     ts-retry: "npm:^6.0.0"
     typescript: "npm:^5.9.3"
-    vis-data: "npm:^7.1.9"
+    vis-data: "npm:^8.0.3"
     vis-network: "npm:^10.0.2"
     web-vitals: "npm:^4.2.4"
   languageName: unknown
