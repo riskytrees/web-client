@@ -60,6 +60,8 @@ class TreeViewPage extends React.Component<{
 }, TreeViewPageState> {
   riskEngine: RiskyRisk;
   searchEngine: TreeSearch;
+  autoReloadInterval: NodeJS.Timeout | null = null;
+  isUpdating: boolean = false;
 
   constructor(props) {
     super(props);
@@ -89,7 +91,7 @@ class TreeViewPage extends React.Component<{
     this.onAddOrDeleteNode = this.onAddOrDeleteNode.bind(this);
     this.onCopyOrPasteNode = this.onCopyOrPasteNode.bind(this);
     this.localTreeNodeUpdate = this.localTreeNodeUpdate.bind(this);
-    this.updateTree = this.updateTree.bind(this);
+    this.updateTreeV2 = this.updateTreeV2.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleSubtreeClicked = this.handleSubtreeClicked.bind(this);
     this.handleActionPanelOpen = this.handleActionPanelOpen.bind(this);
@@ -118,7 +120,7 @@ class TreeViewPage extends React.Component<{
     this.findParentOfNode = this.findParentOfNode.bind(this);
     this.onRecommendNodes = this.onRecommendNodes.bind(this);
 
-    this.riskEngine = new RiskyRisk(this.state.treeMap, null);
+    this.riskEngine = new RiskyRisk(this.state.treeMap, null, {});
     this.searchEngine = new TreeSearch(this.state.treeMap, null);
   }
 
@@ -128,7 +130,13 @@ class TreeViewPage extends React.Component<{
     this.getListOfModels();
     this.getCurrentModel();
 
-    setInterval(this.loadTree, 10000)
+    this.autoReloadInterval = setInterval(this.loadTree, 10000)
+  }
+
+  componentWillUnmount() {
+    if (this.autoReloadInterval) {
+      clearInterval(this.autoReloadInterval)
+    }
   }
 
   exportTree() {
@@ -276,6 +284,7 @@ class TreeViewPage extends React.Component<{
 
   // Only acts on root tree
   async populateModelAttributes(modelId) {
+    this.isUpdating = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -316,7 +325,7 @@ class TreeViewPage extends React.Component<{
 
     this.setState({
       treeMap: treeMap
-    }, () => this.updateTree(treeId));
+    }, () => this.updateTreeV2(treeId, treeData));
   }
 
   findParentOfNode(nodeId: string, treeData: TreeData) {
@@ -360,6 +369,10 @@ class TreeViewPage extends React.Component<{
   }
 
   async loadTree(firstLoad: boolean = false) {
+    if (this.isUpdating) {
+      return;
+    }
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -428,28 +441,32 @@ class TreeViewPage extends React.Component<{
   }
 
   // Called when any portion of the tree is updated and needs to be synced
-  async updateTree(treeIdToUpdate: string, reloadAll: boolean = false) {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
+  async updateTreeV2(treeIdToUpdate: string, treeData: TreeData, reloadAll: boolean = false) {
+    try {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
 
-    const projectId = urlParams.get('projectId');
-    const treeId = urlParams.get('id');
+      const projectId = urlParams.get('projectId');
+      const treeId = urlParams.get('id');
 
-    this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
-    this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
+      this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+      this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
 
-    let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeIdToUpdate, {
-      method: 'PUT',
-      body: JSON.stringify(this.state.treeMap[treeIdToUpdate])
-    })
-
-    if (reloadAll) {
-      await this.loadTree();
+      let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeIdToUpdate, {
+        method: 'PUT',
+        body: JSON.stringify(treeData)
+      })
+    } finally {
+      this.isUpdating = false;
+      if (reloadAll) {
+        await this.loadTree();
+      }
     }
-
   }
 
   localTreeNodeUpdate(treeIdToUpdate: string, newNodeData) {
+    this.isUpdating = true;
+
     for (const [idx, node] of this.state.treeMap[treeIdToUpdate].nodes.entries()) {
       if (node.id === newNodeData.id) {
         const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeIdToUpdate]));
@@ -462,7 +479,7 @@ class TreeViewPage extends React.Component<{
         this.setState({
           treeMap: treeMap,
           selectedNode: this.state.selectedNode
-        }, () => this.updateTree(treeIdToUpdate));
+        }, () => this.updateTreeV2(treeIdToUpdate, treeData));
       }
     }
   }
@@ -504,6 +521,8 @@ class TreeViewPage extends React.Component<{
   }
 
   async pastePartialTree(treeId: string, nodeId: string) {
+    this.isUpdating = true;
+
     if (this.state.copiedData && this.state.copiedData['id']) {
       const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeId]));
 
@@ -538,7 +557,7 @@ class TreeViewPage extends React.Component<{
       this.setState({
         treeMap: treeMap,
         selectedNode: this.state.selectedNode
-      }, () => this.updateTree(treeId, true));
+      }, () => this.updateTreeV2(treeId, treeData, true));
     }
   }
 
@@ -687,6 +706,7 @@ class TreeViewPage extends React.Component<{
   }
 
   async onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
+    this.isUpdating = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const treeId = urlParams.get('id');
@@ -756,7 +776,7 @@ class TreeViewPage extends React.Component<{
       this.setState({
         treeMap: treeMap,
         selectedNode: this.state.selectedNode
-      }, () => this.updateTree(treeIdToUpdate, subtreeNodeId !== null));
+      }, () => this.updateTreeV2(treeIdToUpdate, treeData, subtreeNodeId !== null));
 
     } else {
     }
@@ -887,6 +907,7 @@ class TreeViewPage extends React.Component<{
   }
 
   handleTreeNameChanged(event) {
+    this.isUpdating = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -902,7 +923,7 @@ class TreeViewPage extends React.Component<{
 
     this.setState({
       treeMap: treeMap
-    }, () => this.updateTree(treeId));
+    }, () => this.updateTreeV2(treeId, treeData));
 
   }
 
