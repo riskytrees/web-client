@@ -133,6 +133,12 @@ class TreeViewPage extends React.Component<{
     this.autoReloadInterval = setInterval(this.loadTree, 10000)
   }
 
+  componentWillUnmount() {
+    if (this.autoReloadInterval) {
+      clearInterval(this.autoReloadInterval)
+    }
+  }
+
   exportTree() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -363,9 +369,7 @@ class TreeViewPage extends React.Component<{
 
   async loadTree(firstLoad: boolean = false) {
     if (this.isUpdating) {
-      setTimeout(() => {
-        this.loadTree(firstLoad)
-      }, 1000);
+      
       return;
     }
 
@@ -438,24 +442,26 @@ class TreeViewPage extends React.Component<{
 
   // Called when any portion of the tree is updated and needs to be synced
   async updateTreeV2(treeIdToUpdate: string, treeData: TreeData, reloadAll: boolean = false) {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
+    try {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
 
-    const projectId = urlParams.get('projectId');
-    const treeId = urlParams.get('id');
+      const projectId = urlParams.get('projectId');
+      const treeId = urlParams.get('id');
 
-    this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
-    this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
+      this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
+      this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
 
-    let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeIdToUpdate, {
-      method: 'PUT',
-      body: JSON.stringify(treeData)
-    })
-
-    if (reloadAll) {
-      await this.loadTree();
+      let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeIdToUpdate, {
+        method: 'PUT',
+        body: JSON.stringify(treeData)
+      })
+    } finally {
+      this.isUpdating = false;
+      if (reloadAll) {
+        await this.loadTree();
+      }
     }
-    this.isUpdating = false;
   }
 
   localTreeNodeUpdate(treeIdToUpdate: string, newNodeData) {
