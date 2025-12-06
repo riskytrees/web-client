@@ -284,6 +284,7 @@ class TreeViewPage extends React.Component<{
 
   // Only acts on root tree
   async populateModelAttributes(modelId) {
+    this.isUpdating = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
@@ -369,7 +370,6 @@ class TreeViewPage extends React.Component<{
 
   async loadTree(firstLoad: boolean = false) {
     if (this.isUpdating) {
-      
       return;
     }
 
@@ -521,6 +521,8 @@ class TreeViewPage extends React.Component<{
   }
 
   async pastePartialTree(treeId: string, nodeId: string) {
+    this.isUpdating = true;
+
     if (this.state.copiedData && this.state.copiedData['id']) {
       const treeData = JSON.parse(JSON.stringify(this.state.treeMap[treeId]));
 
@@ -704,6 +706,7 @@ class TreeViewPage extends React.Component<{
   }
 
   async onAddOrDeleteNode(treeIdToUpdate: string, parentNodeId, isAddAction, subtreeNodeId: string | null = null) {
+    this.isUpdating = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const treeId = urlParams.get('id');
@@ -904,6 +907,7 @@ class TreeViewPage extends React.Component<{
   }
 
   handleTreeNameChanged(event) {
+    this.isUpdating = true;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
