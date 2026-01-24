@@ -416,7 +416,13 @@ class TreeViewPage extends React.Component<{
         updateValues['collapsedDownNodeIds'] = collapsedIds;
       }
 
-      this.setState(updateValues as TreeViewPageState, () => {
+      this.setState(updateValues as TreeViewPageState, async () => {
+        // Refresh selected node from server to get any updates
+        if (this.state.selectedNode) {
+          this.setState({
+            selectedNode: this.getRawNodeFromTree(this.state.selectedNode.id, await this.getTreeIdFromNodeId(this.state.selectedNode.id))
+          })
+        }
         this.riskEngine = new RiskyRisk(this.state.treeMap, treeId);
         this.searchEngine = new TreeSearch(this.state.treeMap, treeId);
       })
@@ -456,6 +462,11 @@ class TreeViewPage extends React.Component<{
         method: 'PUT',
         body: JSON.stringify(treeData)
       })
+
+      // Refresh selected node from server to get any updates
+      this.setState({
+        selectedNode: this.getRawNodeFromTree(this.state.selectedNode ? this.state.selectedNode.id : null, treeIdToUpdate)
+      })
     } finally {
       this.isUpdating = false;
       if (reloadAll) {
@@ -477,8 +488,7 @@ class TreeViewPage extends React.Component<{
         const treeMap = { ...this.state.treeMap };
         treeMap[treeIdToUpdate] = treeData;
         this.setState({
-          treeMap: treeMap,
-          selectedNode: this.state.selectedNode
+          treeMap: treeMap
         }, () => this.updateTreeV2(treeIdToUpdate, treeData));
       }
     }

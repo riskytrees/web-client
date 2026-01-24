@@ -139,23 +139,15 @@ class NodePane extends React.Component<{
   async handleNodeNameChange(event) {
     await this.setState({
       nodeTitle: event.target.value,
-      nodeDescription: this.state.nodeDescription,
-      nodeId: this.state.nodeId,
-      modelAttributes: this.state.modelAttributes
-    });
+    }, () => this.debouncedTriggerOnNodeChanged() );
 
-    this.debouncedTriggerOnNodeChanged();
+    
   }
 
   async handleNodeDescriptionChange(event) {
     await this.setState({
-      nodeTitle: this.state.nodeTitle,
       nodeDescription: event.target.value,
-      nodeId: this.state.nodeId,
-      modelAttributes: this.state.modelAttributes
-    });
-
-    this.debouncedTriggerOnNodeChanged();
+    }, () => this.debouncedTriggerOnNodeChanged());
   }
 
   async handleAttributeChange(event) {
@@ -172,9 +164,6 @@ class NodePane extends React.Component<{
 
 
     this.setState({
-      nodeTitle: this.state.nodeTitle,
-      nodeDescription: this.state.nodeDescription,
-      nodeId: this.state.nodeId,
       modelAttributes: newModelAttributes,
       conditionAttribute: this.state.conditionAttribute
     }, () => this.debouncedTriggerOnNodeChanged() );
