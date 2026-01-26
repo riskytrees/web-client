@@ -130,7 +130,7 @@ class TreeViewPage extends React.Component<{
     this.getListOfModels();
     this.getCurrentModel();
 
-    this.autoReloadInterval = setInterval(this.loadTree, 10000)
+    //this.autoReloadInterval = setInterval(this.loadTree, 10000)
   }
 
   componentWillUnmount() {
@@ -565,8 +565,7 @@ class TreeViewPage extends React.Component<{
       treeMap[treeId] = treeData;
 
       this.setState({
-        treeMap: treeMap,
-        selectedNode: this.state.selectedNode
+        treeMap: treeMap
       }, () => this.updateTreeV2(treeId, treeData, true));
     }
   }
@@ -784,8 +783,7 @@ class TreeViewPage extends React.Component<{
       treeMap[treeIdToUpdate] = treeData;
 
       this.setState({
-        treeMap: treeMap,
-        selectedNode: this.state.selectedNode
+        treeMap: treeMap
       }, () => this.updateTreeV2(treeIdToUpdate, treeData, subtreeNodeId !== null));
 
     } else {
