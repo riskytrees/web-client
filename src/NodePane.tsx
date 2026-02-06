@@ -67,7 +67,7 @@ class NodePane extends React.Component<{
     this.checkRecommendPlan = this.checkRecommendPlan.bind(this);
   }
 
-  debouncedTriggerOnNodeChanged = debounce(this.triggerOnNodeChanged, 500);
+  debouncedTriggerOnNodeChanged = debounce(this.triggerOnNodeChanged, 1500);
 
   async getTreeIdFromNodeId(nodeId: string) {
     const queryString = window.location.search;
