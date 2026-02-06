@@ -130,7 +130,7 @@ class TreeViewPage extends React.Component<{
     this.getListOfModels();
     this.getCurrentModel();
 
-    //this.autoReloadInterval = setInterval(this.loadTree, 10000)
+    //this.autoReloadInterval = setInterval(this.loadTree, 1000)
   }
 
   componentWillUnmount() {
@@ -461,11 +461,6 @@ class TreeViewPage extends React.Component<{
       let response = await RiskyApi.call(process.env.REACT_APP_API_ROOT_URL + "/projects/" + projectId + "/trees/" + treeIdToUpdate, {
         method: 'PUT',
         body: JSON.stringify(treeData)
-      })
-
-      // Refresh selected node from server to get any updates
-      this.setState({
-        selectedNode: this.getRawNodeFromTree(this.state.selectedNode ? this.state.selectedNode.id : null, treeIdToUpdate)
       })
     } finally {
       this.isUpdating = false;
