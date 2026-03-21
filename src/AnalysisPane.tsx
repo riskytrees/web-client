@@ -19,6 +19,7 @@ import Paper from "@mui/material/Paper";
 import TreePicker from './TreePicker';
 import { RiskyApi } from './api';
 import TreeData from './interfaces/TreeData';
+import { FormatUtils } from './format';
 
 class AnalysisPane extends React.Component<{
   rootNodeId: string,
@@ -89,7 +90,7 @@ class AnalysisPane extends React.Component<{
         alignItems: "flex-start",
       }} direction="row">
         <Typography>{pathPart.name}</Typography>
-        <Typography>{displayValue}</Typography>
+        <Typography>{FormatUtils.numberWithCommas(displayValue)}</Typography>
       </Stack>)
     }
 
@@ -111,7 +112,7 @@ class AnalysisPane extends React.Component<{
     let riskCard: JSX.Element | null = null;
     if (risk && risk['computed'] && risk['computed']['risk']) {
       riskCard = <Paper>
-        <Typography variant="h1">${risk['computed']['risk'] * 100}</Typography>
+        <Typography variant="h1">${FormatUtils.numberWithCommas(risk['computed']['risk'] * 100)}</Typography>
         <Typography>Risk Attack</Typography>
       </Paper>
     }
