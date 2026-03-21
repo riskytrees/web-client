@@ -5,6 +5,7 @@ import Container, { ContainerProps } from "@mui/material/Container";
 import Paper from '@mui/material/Paper';
 import TreeData from './interfaces/TreeData';
 import { RiskyRisk } from './Risk';
+import { FormatUtils } from './format';
 
 const MAX_NODE_TEXT_SIZE = 25
 
@@ -269,7 +270,7 @@ class TreeViewer extends React.Component<{
             edges.push({
               from: node.id,
               to: child,
-              label: label,
+              label: FormatUtils.numberWithCommas(label),
               color: edgeColor,
               width: edgeWidth,
               font: {

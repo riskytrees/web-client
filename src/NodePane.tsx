@@ -20,6 +20,9 @@ import TreePicker from './TreePicker';
 import { RiskyApi } from './api';
 import debounce from 'lodash.debounce';
 import DevicesFoldIcon from '@mui/icons-material/DevicesFold';
+import { FormatUtils } from './format';
+
+
 class NodePane extends React.Component<{
   currentNode: Record<string, any>;
   triggerAddDeleteNode: Function;
@@ -68,6 +71,7 @@ class NodePane extends React.Component<{
   }
 
   debouncedTriggerOnNodeChanged = debounce(this.triggerOnNodeChanged, 1500);
+
 
   async getTreeIdFromNodeId(nodeId: string) {
     const queryString = window.location.search;
@@ -153,13 +157,15 @@ class NodePane extends React.Component<{
   async handleAttributeChange(event) {
     const newModelAttributes = { ...this.state.modelAttributes };
 
+    const targetValue = event.target.value.replace(/,/g, '');
+
     
-    if (event.target.value === '' || Number.isNaN(Number(event.target.value)) || event.target.value.endsWith('.')) {
+    if (targetValue === '' || Number.isNaN(Number(targetValue)) || targetValue.endsWith('.')) {
       newModelAttributes[event.target.id] = {'value_string': event.target.value, 'value_int': null, 'value_float': null};
-    } else if (Number.isInteger(Number(event.target.value)) && !event.target.value.includes('.')) {
-      newModelAttributes[event.target.id] = {'value_string': null, 'value_int': Number(event.target.value), 'value_float': null};
+    } else if (Number.isInteger(Number(targetValue)) && !targetValue.includes('.')) {
+      newModelAttributes[event.target.id] = {'value_string': null, 'value_int': Number(targetValue), 'value_float': null};
     } else {
-      newModelAttributes[event.target.id] = {'value_string': null, 'value_int': null, 'value_float': Number(event.target.value)};
+      newModelAttributes[event.target.id] = {'value_string': null, 'value_int': null, 'value_float': Number(targetValue)};
     }
 
 
@@ -307,7 +313,7 @@ class NodePane extends React.Component<{
               <Grid key={"item_" + key} size={9} >
                 <TextField disabled={!readOnly} id={key} key={key}  sx={{
           marginBottom: '24px',
-        }} label={key} onChange={this.handleAttributeChange} variant="outlined" size="small" value={this.getAttributeValue(value)} /> 
+        }} label={key} onChange={this.handleAttributeChange} variant="outlined" size="small" value={FormatUtils.numberWithCommas(this.getAttributeValue(value))} /> 
   
               </Grid>      
               <Grid size={3}>
@@ -532,7 +538,7 @@ class NodePane extends React.Component<{
 
       <TextField InputProps={{
             readOnly: true,
-          }} label="Computed Risk"  disabled={true} variant="outlined" size="small" value={this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : ''}></TextField>
+          }} label="Computed Risk"  disabled={true} variant="outlined" size="small" value={FormatUtils.numberWithCommas(this.props.currentNodeRisk ? this.props.currentNodeRisk.computed[this.props.currentNodeRisk.interface['primary']] : '')}></TextField>
 
       <Box height={"24px"}></Box>
       <Typography variant="h3">Node Attributes</Typography>
