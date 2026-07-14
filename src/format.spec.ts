@@ -12,4 +12,11 @@ describe('FormatUtils.numberWithCommas', () => {
     it('preserves existing behavior for non-numeric values', () => {
         expect(FormatUtils.numberWithCommas('not-a-number')).toBe('not-a-number');
     });
+
+    it('handles small decimal values like 0.0X correctly', () => {
+        expect(FormatUtils.numberWithCommas(0.01)).toBe('0.01');
+        expect(FormatUtils.numberWithCommas(0.001)).toBe('0.001');
+        expect(FormatUtils.numberWithCommas(0.0001)).toBe('0.0001');
+        expect(FormatUtils.numberWithCommas('0.0001')).toBe('0.0001');
+    });
 });
