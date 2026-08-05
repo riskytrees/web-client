@@ -112,7 +112,7 @@ class AnalysisPane extends React.Component<{
     let riskCard: JSX.Element | null = null;
     if (risk && risk['computed'] && risk['computed']['risk']) {
       riskCard = <Paper>
-        <Typography variant="h1">${FormatUtils.numberWithCommas(risk['computed']['risk'] * 100)}</Typography>
+        <Typography variant="h1">${FormatUtils.numberWithCommas(risk['computed']['risk'])}</Typography>
         <Typography>Risk Attack</Typography>
       </Paper>
     }
