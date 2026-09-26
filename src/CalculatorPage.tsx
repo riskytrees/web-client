@@ -15,6 +15,57 @@ const CHART_WIDTH = 600;
 const CHART_HEIGHT = 300;
 const CHART_PADDING = 50;
 
+export const CALCULATOR_FIELDS = [
+  "confidenceInterval",
+  "impactMin",
+  "impactMax",
+  "likelihoodMin",
+  "likelihoodExpected",
+  "likelihoodMax"
+] as const;
+
+export type CalculatorField = typeof CALCULATOR_FIELDS[number];
+
+// Only plain decimal numbers are accepted, so nothing that could be used for
+// injection ever makes it out of a query parameter and into the page.
+const NUMERIC_PATTERN = /^-?(\d+(\.\d+)?|\.\d+)([eE][-+]?\d+)?$/;
+
+/**
+ * Returns the value only when it is a numeric string, otherwise null.
+ */
+export function sanitizeNumericValue(value: string | null | undefined): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  const trimmed = value.trim();
+
+  if (!NUMERIC_PATTERN.test(trimmed) || !isFinite(parseFloat(trimmed))) {
+    return null;
+  }
+
+  return trimmed;
+}
+
+/**
+ * Reads the calculator fields from the current URL, dropping anything that is
+ * not a numeric value.
+ */
+export function readCalculatorQueryParams(search: string): Partial<Record<CalculatorField, string>> {
+  const params = new URLSearchParams(search);
+  const values: Partial<Record<CalculatorField, string>> = {};
+
+  for (const field of CALCULATOR_FIELDS) {
+    const sanitized = sanitizeNumericValue(params.get(field));
+
+    if (sanitized !== null) {
+      values[field] = sanitized;
+    }
+  }
+
+  return values;
+}
+
 function LossExceedanceCurve(props: { curve: LossExceedancePoint[] }) {
   if (props.curve.length === 0) {
     return null;
@@ -76,29 +127,78 @@ class CalculatorPage extends React.Component<{
   constructor(props) {
     super(props);
 
+    const queryValues = readCalculatorQueryParams(window.location.search);
+
     this.state = {
-      confidenceInterval: "90",
-      impactMin: "",
-      impactMax: "",
-      likelihoodMin: "",
-      likelihoodExpected: "",
-      likelihoodMax: "",
+      confidenceInterval: queryValues.confidenceInterval ?? "90",
+      impactMin: queryValues.impactMin ?? "",
+      impactMax: queryValues.impactMax ?? "",
+      likelihoodMin: queryValues.likelihoodMin ?? "",
+      likelihoodExpected: queryValues.likelihoodExpected ?? "",
+      likelihoodMax: queryValues.likelihoodMax ?? "",
       expectedLoss: null,
       lossExceedanceCurve: [],
       errors: []
     };
 
     this.calculate = this.calculate.bind(this);
+    this.handleFieldChange = this.handleFieldChange.bind(this);
+  }
+
+  componentDidMount() {
+    // A shared link carries every input, so the findings can be reproduced
+    // without having to press Calculate again.
+    const hasEveryInput = CALCULATOR_FIELDS.every(field => sanitizeNumericValue(this.state[field]) !== null);
+
+    if (hasEveryInput && RiskCalculator.validateInputs(this.getInputs()).length === 0) {
+      this.calculate();
+    }
+  }
+
+  handleFieldChange(field: CalculatorField, value: string) {
+    this.setState({ [field]: value } as Pick<CalculatorPage['state'], CalculatorField>, () => {
+      this.updateQueryParams();
+    });
+  }
+
+  /**
+   * Mirrors the current inputs into the URL so the page can be shared. Values
+   * that are not numeric are removed rather than written out.
+   */
+  updateQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+
+    for (const field of CALCULATOR_FIELDS) {
+      const sanitized = sanitizeNumericValue(this.state[field]);
+
+      if (sanitized === null) {
+        params.delete(field);
+      } else {
+        params.set(field, sanitized);
+      }
+    }
+
+    const query = params.toString();
+
+    window.history.replaceState(null, '', query ? `${window.location.pathname}?${query}` : window.location.pathname);
   }
 
   getInputs(): RiskCalculatorInputs {
+    // Anything that is not a plain number becomes NaN so it is rejected by
+    // validateInputs rather than being loosely parsed.
+    const numericValue = (value: string) => {
+      const sanitized = sanitizeNumericValue(value);
+
+      return sanitized === null ? NaN : parseFloat(sanitized);
+    };
+
     return {
-      confidenceInterval: parseFloat(this.state.confidenceInterval),
-      impactMin: parseFloat(this.state.impactMin),
-      impactMax: parseFloat(this.state.impactMax),
-      likelihoodMin: parseFloat(this.state.likelihoodMin),
-      likelihoodExpected: parseFloat(this.state.likelihoodExpected),
-      likelihoodMax: parseFloat(this.state.likelihoodMax)
+      confidenceInterval: numericValue(this.state.confidenceInterval),
+      impactMin: numericValue(this.state.impactMin),
+      impactMax: numericValue(this.state.impactMax),
+      likelihoodMin: numericValue(this.state.likelihoodMin),
+      likelihoodExpected: numericValue(this.state.likelihoodExpected),
+      likelihoodMax: numericValue(this.state.likelihoodMax)
     };
   }
 
@@ -164,7 +264,7 @@ class CalculatorPage extends React.Component<{
                 type="number"
                 size="small"
                 value={this.state.confidenceInterval}
-                onChange={(event) => this.setState({ confidenceInterval: event.target.value })}
+                onChange={(event) => this.handleFieldChange("confidenceInterval", event.target.value)}
               />
               <TextField
                 id="impactMin"
@@ -172,7 +272,7 @@ class CalculatorPage extends React.Component<{
                 type="number"
                 size="small"
                 value={this.state.impactMin}
-                onChange={(event) => this.setState({ impactMin: event.target.value })}
+                onChange={(event) => this.handleFieldChange("impactMin", event.target.value)}
               />
               <TextField
                 id="impactMax"
@@ -180,7 +280,7 @@ class CalculatorPage extends React.Component<{
                 type="number"
                 size="small"
                 value={this.state.impactMax}
-                onChange={(event) => this.setState({ impactMax: event.target.value })}
+                onChange={(event) => this.handleFieldChange("impactMax", event.target.value)}
               />
               <TextField
                 id="likelihoodMin"
@@ -188,7 +288,7 @@ class CalculatorPage extends React.Component<{
                 type="number"
                 size="small"
                 value={this.state.likelihoodMin}
-                onChange={(event) => this.setState({ likelihoodMin: event.target.value })}
+                onChange={(event) => this.handleFieldChange("likelihoodMin", event.target.value)}
               />
               <TextField
                 id="likelihoodExpected"
@@ -196,7 +296,7 @@ class CalculatorPage extends React.Component<{
                 type="number"
                 size="small"
                 value={this.state.likelihoodExpected}
-                onChange={(event) => this.setState({ likelihoodExpected: event.target.value })}
+                onChange={(event) => this.handleFieldChange("likelihoodExpected", event.target.value)}
               />
               <TextField
                 id="likelihoodMax"
@@ -204,7 +304,7 @@ class CalculatorPage extends React.Component<{
                 type="number"
                 size="small"
                 value={this.state.likelihoodMax}
-                onChange={(event) => this.setState({ likelihoodMax: event.target.value })}
+                onChange={(event) => this.handleFieldChange("likelihoodMax", event.target.value)}
               />
               <Button id="calculateButton" variant="primaryButton" onClick={this.calculate}>Calculate</Button>
             </Stack>
