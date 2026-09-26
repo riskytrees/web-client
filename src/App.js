@@ -12,6 +12,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@mui/material";
 import ProjectSettingsPage from './ProjectSettingsPage.tsx';
 import PersonalTokenPage from './PersonalTokenPage.tsx';
+import CalculatorPage from './CalculatorPage.tsx';
 
 let colorMode = localStorage.getItem("colorMode");
 
@@ -621,6 +622,8 @@ function App() {
             <Route path="/login" element={<LoginPage />}>
             </Route>
             <Route path="/personal/tokens" element={<PersonalTokenPage />}>
+            </Route>
+            <Route path="/calculator" element={<CalculatorPage />}>
             </Route>
           </Routes>
         </BrowserRouter>
