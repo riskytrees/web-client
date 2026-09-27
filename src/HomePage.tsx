@@ -36,6 +36,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HistoryIcon from '@mui/icons-material/History';
 import AddIcon from '@mui/icons-material/Add';
 import KeyIcon from '@mui/icons-material/Key';
+import CalculateIcon from '@mui/icons-material/Calculate';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { RiskyApi } from './api';
 
@@ -279,6 +280,13 @@ class HomePage extends React.Component<{
                     <ListItemButton>
                       <KeyIcon /><Box width={"5px"}></Box><ListItemText primary="Personal Tokens" onClick={() => {
                         window.location.href = "/personal/tokens"
+                      }} />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <CalculateIcon /><Box width={"5px"}></Box><ListItemText primary="Risk Calculator" onClick={() => {
+                        window.location.href = "/calculator"
                       }} />
                     </ListItemButton>
                   </ListItem>
